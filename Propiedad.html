@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://destiny.mx/propiedad/">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Proyecto de inversión verificado en Miami: cifras reales, lectura de marca y la estructura correcta antes de firmar. Destiny Real Estate.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Proyecto de inversión en Miami — Destiny Real Estate">
+<meta property="og:description" content="Proyecto de inversión verificado en Miami: cifras reales, lectura de marca y la estructura correcta antes de firmar. Destiny Real Estate.">
+<meta property="og:image" content="https://destiny.mx/wp-content/themes/destiny/assets/img/og-default.jpg">
+<meta property="og:url" content="https://destiny.mx/propiedad/">
+<meta property="og:site_name" content="Destiny Real Estate">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Proyecto de inversión en Miami — Destiny Real Estate">
+<meta name="twitter:description" content="Proyecto de inversión verificado en Miami: cifras reales, lectura de marca y la estructura correcta antes de firmar. Destiny Real Estate.">
+<meta name="twitter:image" content="https://destiny.mx/wp-content/themes/destiny/assets/img/og-default.jpg">
+
+<title>Propiedad — Destiny Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=36">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Destiny Real Estate",
+  "url": "https://destiny.mx/",
+  "logo": "https://destiny.mx/wp-content/themes/destiny/assets/logo-dark.png",
+  "image": "https://destiny.mx/wp-content/themes/destiny/assets/img/og-default.jpg",
+  "description": "Correduría de bienes raíces de lujo en Miami para inversionistas mexicanos y latinoamericanos. Te decimos la verdad antes de que firmes: números reales, riesgos reales y estructura legal correcta.",
+  "areaServed": {
+    "@type": "City",
+    "name": "Miami",
+    "containedInPlace": {
+      "@type": "State",
+      "name": "Florida"
+    }
+  },
+  "telephone": "+52-56-1165-9009",
+  "priceRange": "$$$$",
+  "founder": {
+    "@type": "Person",
+    "name": "Oscar Chapa"
+  },
+  "sameAs": [
+    "https://www.youtube.com/@OscarChapaTheRealtor"
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="index.html">
+    <img class="logo-light" src="assets/logo-light.png" alt="Destiny Real Estate">
+    <img class="logo-dark" src="assets/logo-dark.png" alt="Destiny Real Estate">
+  </a>
+  <div class="nav__links">
+    <a class="nav__link" href="index.html#mapa">Colección</a>
+    <a class="nav__link" href="index.html#zonas">Zonas</a>
+    <a class="nav__link" href="index.html#ventaja">Asesoría</a>
+    <div class="nav__item">
+      <a class="nav__link" href="index.html#firma">La Firma <span class="nav__caret">▾</span></a>
+      <div class="nav__menu">
+        <a href="index.html#firma">Sobre Oscar Chapa <span>→</span></a>
+        <a href="Blog.html">Blog & Análisis <span>→</span></a>
+        <a href="#agenda">Contacto <span>→</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="nav__cta">
+    <a class="btn btn-gold" href="#agenda">Agendar sesión</a>
+    <button class="nav__burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer__top">
+    <img src="assets/logo-light.png" alt="Destiny Real Estate" style="height:24px;width:auto;">
+    <button class="drawer__close" id="drawerClose" aria-label="Cerrar">✕</button>
+  </div>
+  <div class="drawer__links">
+    <a href="index.html#mapa" data-close>Colección</a>
+    <a href="index.html#zonas" data-close>Zonas</a>
+    <a href="index.html#ventaja" data-close>Asesoría</a>
+    <a href="index.html#firma" data-close>La Firma</a>
+  </div>
+  <a class="btn btn-gold" href="#agenda" data-close>Agendar sesión</a>
+</div>
+
+<!-- HERO -->
+<header class="hero hero--prop" data-screen-label="Propiedad Hero">
+  <div class="hero__bg"><img alt="" id="pHeroImg" referrerpolicy="no-referrer"></div>
+  <div class="hero__inner wrap">
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a><span class="sep">/</span>
+      <a href="index.html#mapa">Colección</a><span class="sep">/</span>
+      <a href="#" id="pZoneCrumb">Zona</a>
+    </div>
+    <div class="hero__badges" id="pBadges"></div>
+    <h1 class="h-display" id="pName" style="font-size:clamp(40px,6vw,84px);max-width:16ch;">Propiedad</h1>
+    <div class="prop-meta">
+      <div class="m"><div class="l">Precio</div><div class="v accent" id="pPrice">—</div></div>
+      <div class="m"><div class="l">Recámaras</div><div class="v" id="pBeds">—</div></div>
+      <div class="m"><div class="l">Baños</div><div class="v" id="pBaths">—</div></div>
+      <div class="m"><div class="l">Entrega</div><div class="v" id="pArea">—</div></div>
+    </div>
+    <div class="hero__actions">
+      <a class="btn btn-gold" href="#agenda">Agendar visita privada <span class="ar">→</span></a>
+      <a class="btn btn-ghost" id="reqDossier" href="#agenda">Solicitar dossier del proyecto</a>
+    </div>
+    <div class="hero__scarcity" id="pScarcity"><span class="dot"></span> Preventa · unidades limitadas</div>
+  </div>
+</header>
+
+<!-- FACTS BAR -->
+<div class="factsbar" data-screen-label="Facts">
+  <div class="wrap factsbar__row">
+    <div class="f"><div class="l">Estatus</div><div class="v" id="fStatus">—</div></div>
+    <div class="f"><div class="l">Tipo</div><div class="v" id="fType">—</div></div>
+    <div class="f"><div class="l">Recámaras</div><div class="v" id="fBeds">—</div></div>
+    <div class="f"><div class="l">Renta</div><div class="v" id="fArea">—</div></div>
+    <div class="f"><div class="l">Financiamiento</div><div class="v" id="fFin">Hasta 70%</div></div>
+  </div>
+</div>
+
+<!-- FASE / PLAN DE PAGO / ENTREGA -->
+<section class="section" style="padding-top:clamp(30px,4vw,54px);padding-bottom:0;" data-screen-label="Fase y pago">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px;max-width:58ch;">
+      <span class="eyebrow">Antes de firmar</span>
+      <h2 class="h-2" style="margin-top:14px;">Fase, plan de pago y entrega.</h2>
+    </div>
+    <div class="payinfo reveal d1">
+      <div class="payinfo__card"><div class="payinfo__k">Fase del proyecto</div><div class="payinfo__v" id="pFase">—</div></div>
+      <div class="payinfo__card"><div class="payinfo__k">Entrega estimada</div><div class="payinfo__v" id="pEntrega2">—</div></div>
+      <div class="payinfo__card payinfo__card--wide"><div class="payinfo__k">Plan de pago</div><div class="payinfo__v" id="pPago">—</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="section" style="padding-bottom:0;" data-screen-label="Highlights">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:34px;max-width:58ch;">
+      <span class="eyebrow">Por qué este proyecto</span>
+      <h2 class="h-2" style="margin-top:16px;">Lo que lo hace una inversión, no un capricho.</h2>
+    </div>
+    <div class="hl reveal d1" id="pHighlights"></div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="section" data-screen-label="Galería" style="padding-bottom:clamp(28px,4vw,52px);">
+  <div class="wrap">
+    <div class="gallery reveal" id="pGallery">
+      <div class="big"><img alt="" id="pGalleryImg" referrerpolicy="no-referrer"></div>
+      <div class="ph"><span>Render — lobby</span></div>
+      <div class="ph"><span>Render — amenidades</span></div>
+      <div class="ph"><span>Render — vista</span></div>
+      <div class="ph"><span>Plano tipo</span></div>
+    </div>
+    <p class="note" style="color:var(--ink-soft);margin-top:16px;">Renders y planos del desarrollador disponibles bajo solicitud. Las imágenes oficiales se entregan en tu sesión privada.</p>
+  </div>
+</section>
+
+<!-- SOBRE EL PROYECTO -->
+<section class="section" id="sobre" data-screen-label="Sobre el proyecto" style="padding-top:clamp(28px,4vw,52px);">
+  <div class="wrap split" style="align-items:start;">
+    <div class="reveal">
+      <span class="eyebrow">Sobre el proyecto</span>
+      <h2 class="h-2" style="margin:16px 0 20px;" id="sobreTitle">El desarrollo</h2>
+      <p class="lede" id="pDesc" style="color:var(--ink-soft);">—</p>
+    </div>
+    <div class="reveal d1">
+      <div class="ficha" id="pFicha"></div>
+    </div>
+  </div>
+</section>
+
+<!-- LA LECTURA DESTINY -->
+<section class="section dark" id="lectura" data-screen-label="Lectura Destiny">
+  <div class="wrap lectura">
+    <div class="reveal">
+      <span class="eyebrow">La lectura Destiny</span>
+      <div class="verdict" id="pVerdict">No vendemos el mármol del lobby. Te decimos <em>cómo se arma la compra</em> y qué revisar antes de firmar.</div>
+      <div class="marca-read" id="pMarcaBlock" hidden>
+        <div class="marca-read__tag">Lectura de marca</div>
+        <p id="pMarca"></p>
+        <a class="marca-read__link" href="Marca.html">¿Cuándo el logo vale el sobreprecio? <span>→</span></a>
+      </div>
+      <ul class="checklist">
+        <li><span class="ck">✓</span><span>Negociación con los mayores beneficios para el inversionista: precio off-market y condiciones que no llegan al público.</span></li>
+        <li><span class="ck">✓</span><span>Plusvalía proyectada validada contra ventas comparables de la zona, no contra el brochure.</span></li>
+        <li><span class="ck">✓</span><span>Calidad y track record del desarrollador en entregas anteriores.</span></li>
+        <li><span class="ck">✓</span><span>Demanda real de renta y si el flujo cubre hipoteca, HOA y predial.</span></li>
+        <li><span class="ck">✓</span><span>Estructura legal (LLC + fideicomiso) diseñada antes del cierre para blindar herencia.</span></li>
+      </ul>
+    </div>
+    <div class="reveal d1">
+      <div class="lectura__nums">
+        <div class="n"><div class="big">Desde 20%</div><div class="lab">Enganche inicial</div></div>
+        <div class="n"><div class="big">Hasta 70%</div><div class="lab">Financiamiento disponible</div></div>
+        <div class="n"><div class="big">Desde 6.375%</div><div class="lab">Tasa financiamiento extranjero</div></div>
+        <div class="n"><div class="big">40%</div><div class="lab">Impuesto herencia que evitamos</div></div>
+      </div>
+      <div class="roi">
+        <div class="roi__head">Estima tu renta neta anual</div>
+        <label>Monto de inversión (USD)</label>
+        <input type="range" id="roiRange" min="500000" max="10000000" step="50000" value="1500000">
+        <div class="roi__amt" id="roiAmt">$1,500,000</div>
+        <div class="roi__out">
+          <div><span id="roiLow">—</span><small>Cap rate 6%</small></div>
+          <div><span id="roiHigh">—</span><small>Cap rate 8%</small></div>
+        </div>
+        <p class="roi__disc">Estimación referencial (renta neta anual = monto × cap rate). El número real depende del proyecto, la zona y la estructura de tu compra.</p>
+      </div>
+      <p class="note">Cifras de referencia del marco Destiny para esta categoría de activo. El análisis específico de este proyecto — números reales, comisiones del desarrollador y costos ocultos — se entrega en tu sesión de claridad.</p>
+      <a class="btn btn-primary" href="#agenda" style="margin-top:22px;">Pedir el análisis de este proyecto <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ESTRUCTURA DE COMPRA -->
+<section class="section" data-screen-label="Estructura">
+  <div class="wrap">
+    <div class="reveal" style="max-width:60ch;">
+      <span class="eyebrow">Cómo lo armamos</span>
+      <h2 class="h-1" style="margin-top:18px;">Tu compra, estructurada de principio a fin.</h2>
+    </div>
+    <div class="amen" style="margin-top:44px;border:none;grid-template-columns:repeat(3,1fr);gap:0;" >
+      <div class="adv__card" style="border-top:1px solid var(--line);">
+        <div class="adv__num" style="color:var(--gold);">01</div>
+        <h3 style="font-family:var(--serif);margin:14px 0 12px;">Ingeniería fiscal</h3>
+        <p style="color:var(--ink-soft);font-size:15px;line-height:1.6;">LLC + fideicomiso antes de cerrar para evitar el impuesto federal a la herencia del 40%.</p>
+      </div>
+      <div class="adv__card" style="border-top:1px solid var(--line);">
+        <div class="adv__num" style="color:var(--gold);">02</div>
+        <h3 style="font-family:var(--serif);margin:14px 0 12px;">Financiamiento</h3>
+        <p style="color:var(--ink-soft);font-size:15px;line-height:1.6;">Pre-aprobación con bancos que prestan a extranjeros sin SSN, lista antes del cierre.</p>
+      </div>
+      <div class="adv__card" style="border-top:1px solid var(--line);">
+        <div class="adv__num" style="color:var(--gold);">03</div>
+        <h3 style="font-family:var(--serif);margin:14px 0 12px;">Cierre & renta</h3>
+        <p style="color:var(--ink-soft);font-size:15px;line-height:1.6;">Negociación, cierre, administración de la renta y reporte trimestral del activo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENIDADES -->
+<section class="section" style="padding-top:0;" data-screen-label="Amenidades">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:36px;"><span class="eyebrow">Amenidades</span><h2 class="h-2" style="margin-top:16px;">Servicios de marca premium</h2></div>
+    <div class="amen reveal d1">
+      <div class="a"><span class="dot"></span> Concierge 24/7</div>
+      <div class="a"><span class="dot"></span> Spa & wellness</div>
+      <div class="a"><span class="dot"></span> Gimnasio equipado</div>
+      <div class="a"><span class="dot"></span> Piscina infinity</div>
+      <div class="a"><span class="dot"></span> Valet parking</div>
+      <div class="a"><span class="dot"></span> Seguridad privada</div>
+      <div class="a"><span class="dot"></span> Lounge de residentes</div>
+      <div class="a"><span class="dot"></span> Restaurante / room service</div>
+      <div class="a"><span class="dot"></span> Acceso a playa / marina</div>
+    </div>
+    <p class="note" style="color:var(--ink-soft);margin-top:14px;">La lista definitiva de amenidades varía por proyecto. Confirmamos cada una en tu sesión.</p>
+  </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section class="section dark" data-screen-label="Ubicación">
+  <div class="wrap ubic">
+    <div class="reveal">
+      <span class="eyebrow">Ubicación</span>
+      <h2 class="h-1" style="margin:18px 0 22px;" id="ubicTitle">La zona</h2>
+      <p class="lede" id="ubicDesc">—</p>
+      <a class="btn btn-primary" id="pZoneLink" href="#" style="margin-top:28px;">Ver la zona completa <span class="ar">→</span></a>
+    </div>
+    <div class="ubic__map reveal d1" id="pMap"></div>
+  </div>
+</section>
+
+<!-- RELACIONADOS -->
+<section class="section" data-screen-label="Relacionados">
+  <div class="wrap">
+    <div class="rail__head reveal">
+      <div><span class="eyebrow">Sigue explorando</span><h2 class="h-2" style="margin-top:14px;" id="railTitle">Más proyectos en la zona</h2></div>
+      <a class="btn btn-ghost" href="index.html#mapa">Ver toda la colección <span class="ar">→</span></a>
+    </div>
+    <div class="grid" id="pRail"></div>
+  </div>
+</section>
+
+<!-- CTA / FORM -->
+<section class="section dark" id="agenda" data-screen-label="Agenda">
+  <div class="wrap cta">
+    <div class="cta__left reveal">
+      <span class="eyebrow">Llamada de 30 min</span>
+      <h2 class="h-1" style="margin-top:18px;">¿Te interesa <span class="serif-em" id="ctaName">este proyecto</span>? Empecemos con una llamada honesta.</h2>
+      <p class="lede">Te enviamos el análisis real de este desarrollo — números, comisiones y costos ocultos — y revisamos si encaja con tu capital antes de que firmes nada.</p>
+      <ul class="cta__list">
+        <li>Análisis específico de este proyecto</li>
+        <li>Comparativa con otras opciones de la zona</li>
+        <li>Estructura legal y financiamiento</li>
+        <li>Sin compromiso de compra</li>
+      </ul>
+      <div class="cta__trust">+$1,000M USD vendidos · 290+ clientes · 25 años · Solo 5 lugares por mes</div>
+      <div class="asesor">
+        <img src="assets/img/oscar-asesor.jpg" alt="Oscar Chapa">
+        <div class="who"><div class="n">Oscar Chapa</div><div class="r">Tu asesor · Fundador de Destiny</div></div>
+      </div>
+    </div>
+    <div class="form reveal d1">
+      <form id="agendaForm" data-lead novalidate name="lead" method="POST" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="lead"><p hidden><label>No llenar <input name="bot-field"></label></p>
+        <div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>
+        <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
+        <div class="field"><label>Nombre completo *</label><input type="text" name="nombre" placeholder="Tu nombre" required><span class="err">Ingresa tu nombre.</span></div>
+        <div class="field-row">
+          <div class="field"><label>País de origen *</label><input type="text" name="pais" placeholder="México" required><span class="err">Requerido.</span></div>
+          <div class="field"><label>WhatsApp *</label><input type="tel" name="tel" placeholder="+52 ..." required><span class="err">Requerido.</span></div>
+        </div>
+        <div class="field"><label>Correo electrónico *</label><input type="email" name="email" placeholder="tucorreo@empresa.com" required><span class="err">Ingresa un correo válido.</span></div>
+        <div class="field"><label>Presupuesto (USD) *</label><select name="presupuesto" required><option value="">Selecciona rango</option><option>$500K – $1M USD</option><option>$1M – $2M USD</option><option>$2M – $5M USD</option><option>$5M+ USD</option></select><span class="err">Selecciona un rango.</span></div>
+        <button type="submit" class="btn btn-primary">Agendar mi sesión de claridad <span class="ar">→</span></button>
+        <p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>
+      </form>
+      <div class="form__success" id="formSuccess">
+        <div class="ok">✓</div>
+        <h3 class="h-3">¡Listo, <span id="successName">gracias</span>!</h3>
+        <p>Se abrió <strong>WhatsApp</strong> con tus datos — solo presiona enviar. Oscar o su equipo te responde en menos de 24 horas. ¿No se abrió? Escríbenos al <a href="https://api.whatsapp.com/send?phone=525611659009" target="_blank" rel="noopener" style="color:var(--gold);">+52 56 1165 9009</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="assets/logo-light.png" alt="Destiny Real Estate" style="height:42px;width:auto;margin-bottom:22px;">
+        <p>Más de 25 años curando los activos inmobiliarios de mayor protección patrimonial en Miami para el inversionista mexicano exigente.</p>
+      </div>
+      <div class="foot__col"><h4>Colección</h4><a href="index.html#mapa">Activos de legado</a><a href="index.html#mapa">Rentas & cash flow</a><a href="index.html#mapa">Estilo de vida & playa</a><a href="#agenda">Listados off-market</a></div>
+      <div class="foot__col"><h4>Zonas</h4><a href="Zona.html?z=brickell">Brickell</a><a href="Zona.html?z=sunny-isles">Sunny Isles</a><a href="Zona.html?z=downtown-miami">Downtown</a><a href="Zona.html?z=coral-gables">Coral Gables</a></div>
+      <div class="foot__col"><h4>La Firma</h4><a href="index.html#firma">Sobre Oscar Chapa</a><a href="index.html#ventaja">Asesoría 360°</a><a href="Blog.html">Blog & análisis</a><a href="#agenda">Contacto</a></div>
+    </div>
+    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados.</span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
+  </div>
+</footer>
+
+<div class="stickybar" id="stickybar">
+  <div class="stickybar__in">
+    <div class="stickybar__txt"><b id="sbName">Proyecto</b> &nbsp;·&nbsp; <span id="sbPrice">—</span></div>
+    <div class="stickybar__cta">
+      <a class="btn btn-wa" href="https://api.whatsapp.com/send?phone=5215611659009&amp;text=Me%20interesa%20este%20proyecto%20en%20Miami" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg> WhatsApp</a>
+      <a class="btn btn-gold" href="#agenda">Agendar visita <span class="ar">→</span></a>
+    </div>
+  </div>
+</div>
+
+<a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="assets/data.js?v=43"></script>
+<script src="assets/property.js?v=30"></script>
+</body>
+</html>

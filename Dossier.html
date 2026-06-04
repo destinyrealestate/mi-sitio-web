@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Dossier — Destiny Real Estate</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF9F3; --cream-2:#EDEADD; --paper:#FFFFFF;
+    --ink:#13192A; --ink-2:#1A2E50; --ink-soft:#3F516B;
+    --gold:#C5A058; --gold-bright:#D8BC83; --line:rgba(19,25,42,.14);
+    --serif:"Playfair Display",Georgia,serif; --sans:"Outfit",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{background:#6b6f78;font-family:var(--sans);color:var(--ink);}
+  img{display:block;max-width:100%;}
+  a{color:inherit;}
+
+  /* ===== Página A4 ===== */
+  @page{ size:A4 portrait; margin:0; }
+  .sheet{
+    position:relative; width:210mm; min-height:297mm; margin:0 auto 8mm;
+    background:var(--cream); page-break-after:always;
+    box-shadow:0 8px 40px rgba(0,0,0,.35);
+  }
+  .sheet:last-child{ page-break-after:auto; margin-bottom:0; }
+  .pad{ padding:20mm 18mm; }
+
+  /* ===== Toolbar (solo pantalla) ===== */
+  .toolbar{ position:sticky; top:0; z-index:50; display:flex; gap:12px; align-items:center; justify-content:center;
+    padding:14px; background:rgba(19,25,42,.96); }
+  .toolbar .ttl{ color:#fff; font-weight:600; margin-right:auto; padding-left:8px; letter-spacing:.02em; }
+  .tbtn{ font-family:var(--sans); font-weight:600; font-size:14px; border:0; cursor:pointer;
+    padding:11px 20px; border-radius:3px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+  .tbtn--gold{ background:var(--gold); color:#1a1206; }
+  .tbtn--ghost{ background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35); }
+  @media print{ .toolbar{ display:none !important; } body{ background:#fff; } .sheet{ box-shadow:none; margin:0; } }
+
+  /* ===== Logo Destiny (imagen real) ===== */
+  .dlogo{ height:30px; width:auto; display:block; }
+  .cover__top .dlogo{ height:42px; }
+  .shead .dlogo{ height:28px; }
+  .pad--fill{ display:flex; flex-direction:column; }
+  .featimg{ background-size:cover; background-position:center; border-radius:3px; margin-top:0; break-inside:avoid; }
+
+  /* ===== Plan de pago / fase / entrega ===== */
+  .payblock{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:3px; overflow:hidden; margin:22px 0; background:var(--paper); }
+  .payblock .pb{ padding:15px 18px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .payblock .pb:nth-child(2){ border-right:0; }
+  .payblock .pb--wide{ grid-column:1 / -1; border-right:0; border-bottom:0; }
+  .payblock .pk{ display:block; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:6px; }
+  .payblock .pv{ font-family:var(--serif); font-size:16px; color:var(--ink); line-height:1.35; }
+  .payblock .pb--wide .pv{ font-family:var(--sans); font-size:12px; color:var(--ink-soft); line-height:1.65; }
+
+  /* ===== Portada ===== */
+  .cover{ background:var(--ink); color:var(--cream); overflow:hidden; }
+  .cover__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .cover__img::after{ content:""; }
+  .cover__scrim{ position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,14,24,.55) 0%, rgba(10,14,24,.15) 32%, rgba(10,14,24,.62) 78%, rgba(10,14,24,.92) 100%); }
+  .cover__in{ position:relative; height:297mm; display:flex; flex-direction:column; justify-content:space-between; padding:20mm 18mm; }
+  .cover__top{ display:flex; justify-content:space-between; align-items:flex-start; color:#fff; }
+  .cover__tag{ font-size:9px; letter-spacing:.28em; text-transform:uppercase; text-align:right; opacity:.85; line-height:1.9; }
+  .cover__btm h1{ font-family:var(--serif); font-weight:700; font-size:46px; line-height:1.04; color:#fff; max-width:15ch; }
+  .cover__zone{ font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px; }
+  .cover__badges{ display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 16px; }
+  .cover__badges span{ font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px;
+    border:1px solid rgba(255,255,255,.4); border-radius:2px; color:#fff; }
+  .cover__price{ font-family:var(--serif); font-size:24px; color:#fff; border-top:1px solid rgba(255,255,255,.25); padding-top:16px; }
+  .cover__price small{ display:block; font-family:var(--sans); font-size:10px; letter-spacing:.22em; text-transform:uppercase; opacity:.7; margin-bottom:4px; }
+  .cover__doc{ font-size:9px; letter-spacing:.26em; text-transform:uppercase; opacity:.7; margin-top:20px; }
+
+  /* ===== Encabezado de sección interior ===== */
+  .shead{ display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:24px; }
+  .shead .eyebrow{ font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); font-weight:600; }
+  h2.title{ font-family:var(--serif); font-weight:700; font-size:30px; line-height:1.1; margin-bottom:6px; }
+  .lede{ font-size:13px; line-height:1.7; color:var(--ink-soft); max-width:62ch; }
+  .lede em{ font-style:italic; color:var(--ink-2); }
+
+  /* ===== Ficha técnica ===== */
+  .specs{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--line); border-radius:3px; margin:22px 0; overflow:hidden; }
+  .specs div{ padding:16px 16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .specs div:nth-child(3n){ border-right:0; }
+  .specs .k{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:6px; }
+  .specs .v{ font-family:var(--serif); font-size:17px; color:var(--ink); line-height:1.2; }
+
+  /* ===== Highlights ===== */
+  .hls{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; }
+  .hl{ background:var(--paper); border:1px solid var(--line); border-radius:3px; padding:16px; }
+  .hl .k{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-weight:600; }
+  .hl .v{ font-family:var(--serif); font-size:16px; margin:5px 0 7px; }
+  .hl .d{ font-size:11px; line-height:1.6; color:var(--ink-soft); }
+
+  /* ===== Bloques de texto ===== */
+  .block{ margin-bottom:26px; }
+  .block h3{ font-family:var(--serif); font-size:19px; margin-bottom:10px; }
+  .block p{ font-size:12.5px; line-height:1.75; color:var(--ink-soft); }
+  .marca{ background:var(--ink); color:var(--cream); border-radius:4px; padding:22px 24px; margin-bottom:26px; }
+  .marca .k{ font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold-bright); font-weight:600; margin-bottom:10px; }
+  .marca p{ font-size:12.5px; line-height:1.75; color:rgba(250,249,243,.9); }
+
+  /* ===== Galería (alturas fijas que llenan la hoja; imagen impar a todo el ancho) ===== */
+  .gal{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .gal img{ width:100%; height:var(--gh,76mm); object-fit:cover; border-radius:2px; }
+  .gal .span{ grid-column:1 / -1; }
+
+  /* ===== Contacto ===== */
+  .contact{ background:var(--ink); color:var(--cream); }
+  .contact .pad{ display:flex; flex-direction:column; }
+  .contact h2.title{ color:#fff; }
+  .contact .lede{ color:rgba(250,249,243,.82); }
+  .advisor{ display:flex; gap:18px; align-items:center; margin:30px 0; padding:22px; background:rgba(255,255,255,.06); border-radius:4px; }
+  .advisor img{ width:78px; height:78px; border-radius:50%; object-fit:cover; }
+  .advisor .n{ font-family:var(--serif); font-size:20px; color:#fff; }
+  .advisor .r{ font-size:11px; letter-spacing:.04em; color:var(--gold-bright); margin-top:4px; }
+  .ctas{ display:flex; gap:12px; margin-top:6px; }
+  .ctas a{ font-weight:600; font-size:13px; padding:13px 22px; border-radius:3px; text-decoration:none; }
+  .ctas .gold{ background:var(--gold); color:#1a1206; }
+  .ctas .ghost{ color:#fff; border:1px solid rgba(255,255,255,.4); }
+  .loc{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:24px 0; }
+  .loc .box{ background:rgba(255,255,255,.06); border-radius:4px; padding:18px; }
+  .loc .k{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-bright); font-weight:600; margin-bottom:7px; }
+  .loc .v{ font-size:13px; line-height:1.6; color:#fff; }
+  .disclaimer{ margin-top:auto; padding-top:22px; border-top:1px solid rgba(255,255,255,.18);
+    font-size:8.5px; line-height:1.7; color:rgba(250,249,243,.55); }
+  .foot-mark{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; color:rgba(250,249,243,.65); font-size:9px; letter-spacing:.2em; text-transform:uppercase; }
+
+  #err{ color:#fff; text-align:center; padding:60px 20px; font-size:18px; }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <span class="ttl">Dossier de inversión</span>
+    <a class="tbtn tbtn--ghost" id="pdfBtn" href="#" download>Descargar PDF</a>
+    <button class="tbtn tbtn--gold" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+  <main id="doc"><div id="err" style="display:none">Proyecto no encontrado.</div></main>
+
+  <script src="assets/data.js?v=43"></script>
+  <script src="assets/dossier.js?v=11"></script>
+</body>
+</html>
