@@ -222,6 +222,10 @@ p { text-wrap: pretty; }
 .nav.scrolled .nav__search input::placeholder { color: var(--ink-soft); }
 
 @media (max-width: 620px) { .nav__search { display: none; } }
+/* Pantallas grandes (≥1600px): el menú se centra en el viewport (logo a la izq, buscador+botón a la der). */
+@media (min-width: 1600px) {
+  .nav__links { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin-left: 0; }
+}
 .nav__burger { display: none; flex-direction: column; gap: 5px; padding: 8px; }
 .nav__burger span { width: 24px; height: 1.5px; background: var(--cream); transition: all .3s var(--ease); }
 .nav.scrolled .nav__burger span { background: var(--ink); }
