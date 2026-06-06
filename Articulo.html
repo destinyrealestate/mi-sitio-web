@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '928885525615857');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=928885525615857&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://destiny.mx/articulo/">
@@ -23,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=36">
+<link rel="stylesheet" href="assets/styles.css?v=42">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -64,9 +83,11 @@
   <div class="nav__links">
     <a class="nav__link" href="index.html#mapa">Colección</a>
     <a class="nav__link" href="index.html#zonas">Zonas</a>
+    <a class="nav__link" href="Marca.html">Residencias de marca</a>
     <a class="nav__link" href="index.html#ventaja">Asesoría</a>
+    <a class="nav__link" href="Inversion.html">Inversión</a>
     <div class="nav__item">
-      <a class="nav__link" href="Blog.html">La Firma <span class="nav__caret">▾</span></a>
+      <a class="nav__link" href="index.html#firma">La Firma <span class="nav__caret">▾</span></a>
       <div class="nav__menu">
         <a href="index.html#firma">Sobre Oscar Chapa <span>→</span></a>
         <a href="Blog.html">Blog & Análisis <span>→</span></a>
@@ -74,7 +95,9 @@
       </div>
     </div>
   </div>
-  <div class="nav__cta">
+
+<div class="nav__cta">
+    <form class="nav__search" role="search" action="index.html" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearch" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
     <a class="btn btn-gold" href="index.html#agenda">Agendar sesión</a>
     <button class="nav__burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
@@ -85,13 +108,17 @@
     <img src="assets/logo-light.png" alt="Destiny Real Estate" style="height:24px;width:auto;">
     <button class="drawer__close" id="drawerClose" aria-label="Cerrar">✕</button>
   </div>
+  <form class="drawer__search" role="search" action="index.html" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearchM" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
   <div class="drawer__links">
     <a href="index.html#mapa" data-close>Colección</a>
     <a href="index.html#zonas" data-close>Zonas</a>
+    <a href="Marca.html" data-close>Residencias de marca</a>
     <a href="index.html#ventaja" data-close>Asesoría</a>
-    <a href="Blog.html" data-close>Blog & Análisis</a>
+    <a href="Inversion.html" data-close>Inversión</a>
+    <a href="index.html#firma" data-close>La Firma</a>
   </div>
-  <a class="btn btn-gold" href="index.html#agenda" data-close>Agendar sesión</a>
+
+<a class="btn btn-gold" href="index.html#agenda" data-close>Agendar sesión</a>
 </div>
 
 <!-- ARTÍCULO -->
@@ -183,14 +210,14 @@
       <div class="foot__col"><h4>Zonas</h4><a href="Zona.html?z=brickell">Brickell</a><a href="Zona.html?z=sunny-isles">Sunny Isles</a><a href="Zona.html?z=downtown-miami">Downtown</a><a href="Zona.html?z=coral-gables">Coral Gables</a></div>
       <div class="foot__col"><h4>La Firma</h4><a href="index.html#firma">Sobre Oscar Chapa</a><a href="index.html#como">Asesoría 360°</a><a href="Blog.html">Blog & Análisis</a><a href="index.html#agenda">Contacto</a></div>
     </div>
-    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados.</span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
+    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados. · <a href="privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a></span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
   </div>
 </footer>
 
 <a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
 
-<script src="assets/data.js?v=43"></script>
-<script src="assets/blog-data.js?v=43"></script>
+<script src="assets/data.js?v=44"></script>
+<script src="assets/blog-data.js?v=44"></script>
 <script src="assets/article.js?v=28"></script>
 </body>
 </html>

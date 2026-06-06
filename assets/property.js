@@ -142,9 +142,9 @@
     crumb.href = "Destiny Home.html#mapa";
   }
 
-  // mapa interactivo (Leaflet + OpenStreetMap/CARTO, sin API key) — estilo oscuro, por proyecto/zona
+  // mapa de la propiedad — Google Maps (embed, sin API key)
   const mapEl = $("#pMap");
-  if (mapEl && window.L) {
+  if (mapEl) {
     const ZC = {
       "Brickell": [25.7589, -80.1935], "Sunny Isles": [25.9529, -80.1207],
       "Downtown": [25.7765, -80.1880], "Coral Gables": [25.7460, -80.2580],
@@ -153,13 +153,8 @@
       "Hollywood": [26.0112, -80.1495], "Pompano Beach": [26.2360, -80.1250]
     };
     const center = p.coords || ZC[p.zone] || [25.7617, -80.1918];
-    const map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true }).setView(center, 15);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19, subdomains: "abcd",
-      attribution: '&copy; OpenStreetMap &copy; CARTO'
-    }).addTo(map);
-    L.marker(center).addTo(map).bindPopup(`<b>${p.name}</b><br>${p.zone}, Miami`);
-    setTimeout(() => map.invalidateSize(), 250);
+    const q = encodeURIComponent(p.name + ", " + p.zone + ", FL");
+    mapEl.innerHTML = '<iframe title="Ubicación de ' + p.name + '" src="https://maps.google.com/maps?q=' + q + '&z=15&output=embed" style="width:100%;height:100%;border:0;display:block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>';
   }
 
   // relacionados (misma zona, excluye actual; completa con otros)

@@ -57,35 +57,13 @@
 
   // mapa interactivo de la zona — pines de atractivos por categoría + proyectos Destiny
   const mapEl = $("#zMap");
-  if (mapEl && window.L) {
+  if (mapEl) {
     const ZC = { "Brickell": [25.7589, -80.1935], "Sunny Isles": [25.9529, -80.1207], "Downtown": [25.7765, -80.1880], "Coral Gables": [25.7460, -80.2580], "Wynwood": [25.8045, -80.1990], "North Bay Village": [25.8470, -80.1530], "Bal Harbour": [25.8915, -80.1265], "North Miami": [25.9000, -80.1700], "Hollywood": [26.0112, -80.1495], "Pompano Beach": [26.2360, -80.1250], "Midtown": [25.8076, -80.1925], "Coconut Grove": [25.7270, -80.2420] };
-    const COLORS = { "Gastronomía": "#E0843F", "Cultura & Museos": "#9A6BD0", "Atracciones": "#2E8B6F", "Vida Nocturna": "#33529F", "Restaurantes": "#E0843F", "Entretenimiento": "#33529F", "Escuelas": "#9A6BD0", "Puntos de interés": "#6B7A90" };
     const center = ZC[z.zoneName] || [25.7617, -80.1918];
-    const map = L.map(mapEl, { scrollWheelZoom: false }).setView(center, 14);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { maxZoom: 19, subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO" }).addTo(map);
-    const bounds = [];
-    if (z.poiPins) Object.entries(z.poiPins).forEach(([cat, arr]) => {
-      arr.forEach(([name, lat, lon]) => {
-        L.circleMarker([lat, lon], { radius: 7, weight: 1.5, color: "#0b0f1a", fillColor: COLORS[cat] || "#C5A058", fillOpacity: 0.95 })
-          .addTo(map).bindPopup(`<b>${name}</b><br><span style="color:${COLORS[cat] || "#C5A058"}">${cat}</span>`);
-        bounds.push([lat, lon]);
-      });
-    });
-    D.byZone(z.zoneName).forEach(pr => {
-      if (pr.coords) {
-        L.circleMarker(pr.coords, { radius: 10, weight: 2.5, color: "#13192A", fillColor: "#C5A058", fillOpacity: 1 })
-          .addTo(map).bindPopup(`<b>${pr.name}</b><br><span style="color:#C5A058">Proyecto Destiny</span>`);
-        bounds.push(pr.coords);
-      }
-    });
-    if (bounds.length) map.fitBounds(bounds, { padding: [45, 45], maxZoom: 15 });
+    const q = encodeURIComponent((z.name || z.zoneName) + ", FL");
+    mapEl.innerHTML = '<iframe title="Mapa de ' + (z.name || z.zoneName) + '" src="https://maps.google.com/maps?q=' + q + '&z=14&output=embed" style="width:100%;height:100%;border:0;display:block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>';
     const leg = $("#zMapLegend");
-    if (leg) {
-      const cats = z.poiPins ? Object.keys(z.poiPins) : [];
-      leg.innerHTML = cats.map(c => `<span class="lg"><i style="background:${COLORS[c] || "#C5A058"}"></i>${c}</span>`).join("")
-        + `<span class="lg"><i style="background:#C5A058;outline:2px solid #fff"></i>Proyectos Destiny</span>`;
-    }
-    setTimeout(() => map.invalidateSize(), 250);
+    if (leg) leg.style.display = "none";   // la leyenda era para los pines de Leaflet
   }
 
   // inventario

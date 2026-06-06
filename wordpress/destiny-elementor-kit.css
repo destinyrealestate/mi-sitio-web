@@ -1,0 +1,186 @@
+/* ============================================================
+   DESTINY REAL ESTATE — Kit de diseño para WordPress + Elementor
+   Replica el sistema visual del sitio HTML (styles.css) en el blog.
+
+   CÓMO USARLO (elige una):
+   A) Elementor Pro › plantilla › Avanzado › CSS personalizado (por plantilla).
+   B) Apariencia › Personalizar › CSS adicional (todo el sitio). RECOMENDADO.
+   C) Pegar en el style.css de un tema hijo.
+
+   Requiere cargar las fuentes Playfair Display + Outfit (ver la guía).
+   ============================================================ */
+
+:root {
+  --cream:      #FAF9F3;
+  --cream-2:    #EDEADD;
+  --paper:      #FFFFFF;
+  --ink:        #13192A;
+  --ink-2:      #1A2E50;
+  --ink-soft:   #3F516B;
+  --ink-deep:   #101923;
+  --gold:       #C5A058;
+  --gold-bright:#D8BC83;
+  --bronze:     #896B36;
+  --royal:      #33529F;
+  --line:       rgba(19,25,42,0.14);
+  --line-soft:  rgba(19,25,42,0.08);
+  --serif: "Playfair Display", Georgia, serif;
+  --sans:  "Outfit", system-ui, -apple-system, sans-serif;
+  --r: 2px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---------- Base ---------- */
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--bronze); text-decoration: none; transition: color .25s var(--ease); }
+a:hover { color: var(--gold); }
+
+/* ---------- Títulos ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: clamp(32px, 4.6vw, 56px); }
+h2 { font-size: clamp(26px, 3vw, 40px); }
+h3 { font-size: clamp(20px, 2.1vw, 28px); }
+h4 { font-size: clamp(18px, 1.6vw, 22px); }
+
+/* ---------- Cuerpo del artículo (entry-content / Elementor post content) ----------
+   Cubre la salida estándar de WordPress y el widget de contenido de Elementor. */
+.entry-content,
+.elementor-widget-theme-post-content,
+.destiny-prose {
+  font-family: var(--sans);
+  font-size: 1.0625rem;     /* ~17px */
+  line-height: 1.78;
+  color: var(--ink-soft);
+  max-width: 760px;
+  margin-inline: auto;
+}
+.entry-content > *,
+.elementor-widget-theme-post-content > * { margin-bottom: 1.25em; }
+
+.entry-content h2,
+.elementor-widget-theme-post-content h2 { margin-top: 1.8em; margin-bottom: .5em; color: var(--ink); }
+.entry-content h3,
+.elementor-widget-theme-post-content h3 { margin-top: 1.5em; margin-bottom: .4em; color: var(--ink-2); }
+
+.entry-content strong { color: var(--ink); font-weight: 600; }
+.entry-content em { font-style: italic; }
+
+.entry-content ul, .entry-content ol { padding-left: 1.3em; }
+.entry-content li { margin-bottom: .55em; }
+.entry-content ul li::marker { color: var(--gold); }
+
+/* Citas — acento dorado, fondo marfil profundo */
+.entry-content blockquote,
+.elementor-widget-theme-post-content blockquote {
+  font-family: var(--serif);
+  font-size: 1.15em;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--cream-2);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--r);
+  padding: 22px 26px;
+  margin: 1.8em 0;
+}
+
+/* Tablas editoriales */
+.entry-content table,
+.elementor-widget-theme-post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: .95em;
+  margin: 1.8em 0;
+}
+.entry-content th {
+  background: var(--ink-2);
+  color: var(--cream);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: .9em;
+  letter-spacing: .01em;
+}
+.entry-content td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.entry-content tr:nth-child(even) td { background: rgba(19,25,42,0.02); }
+
+/* Imágenes */
+.entry-content img { border-radius: var(--r); height: auto; }
+
+/* ---------- Botones (Elementor + WordPress) ---------- */
+.elementor-button,
+.wp-block-button__link,
+.destiny-btn {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: .01em;
+  border-radius: var(--r);
+  padding: 15px 30px;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+}
+/* Primario — oro de marca sobre tinta */
+.elementor-button.is-gold,
+.destiny-btn--gold {
+  background: var(--gold);
+  color: var(--ink);
+  border: 1px solid var(--gold);
+}
+.elementor-button.is-gold:hover,
+.destiny-btn--gold:hover { background: var(--gold-bright); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(197,160,88,.28); }
+/* Fantasma — borde sobre fondo claro */
+.destiny-btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.destiny-btn--ghost:hover { border-color: var(--ink); }
+
+/* ---------- Etiquetas / kicker ---------- */
+.destiny-eyebrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ---------- Tarjetas de archivo del blog ---------- */
+.destiny-post-card {
+  background: var(--paper);
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.destiny-post-card:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(19,25,42,.12); }
+.destiny-post-card .title { font-family: var(--serif); font-size: 1.2rem; line-height: 1.25; color: var(--ink); }
+.destiny-post-card .meta { font-family: var(--sans); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+
+/* ---------- Secciones oscuras (CTA) ---------- */
+.destiny-dark {
+  background: var(--ink-deep);
+  color: var(--cream);
+}
+.destiny-dark h1, .destiny-dark h2, .destiny-dark h3 { color: var(--cream); }
+.destiny-dark .destiny-eyebrow { color: var(--gold-bright); }

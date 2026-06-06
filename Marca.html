@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="es-MX">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '928885525615857');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=928885525615857&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://destiny.mx/marca/">
@@ -17,11 +36,11 @@
 <meta name="twitter:image" content="https://destiny.mx/wp-content/themes/destiny/assets/img/og-default.jpg">
 
 <title>Residencias de marca en Miami: ¿cuándo vale el sobreprecio? — Destiny Real Estate</title>
-<meta name="description" content="Miami es el 2º mercado mundial de residencias de marca. Te explicamos cuándo el premium de una marca de lujo SÍ se recupera en renta y reventa — y cuándo solo pagas el membrete. La lectura de un bróker que te dice la verdad antes de firmar.">
+<meta name="description" content="Miami es el 2º mercado mundial de residencias de marca. Te explicamos cuándo el premium de una marca de lujo SÍ se recupera en renta y reventa — y cuándo solo pagas la marca. La lectura de un bróker que te dice la verdad antes de firmar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=36">
+<link rel="stylesheet" href="assets/styles.css?v=42">
 <style>
   #preguntas .adv__grid { grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 900px) { #preguntas .adv__grid { grid-template-columns: 1fr; } }
@@ -41,9 +60,12 @@
   .def__card p { color: rgba(255,255,255,.72); margin-top: 12px; line-height: 1.7; }
   .brandgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
   @media (max-width: 900px) { .brandgrid { grid-template-columns: repeat(2, 1fr); } }
-  .brandgrid .bchip { padding: 18px 16px; border: 1px solid var(--line); border-radius: 12px; }
-  .brandgrid .bchip .bn { font-family: var(--serif); font-size: 18px; color: var(--ink); }
-  .brandgrid .bchip .bt { font-size: 12.5px; color: var(--ink-soft); margin-top: 5px; letter-spacing: .02em; }
+  .brandgrid .bchip { position: relative; display: flex; align-items: flex-end; min-height: 168px; border-radius: 12px; overflow: hidden; background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,.08); transition: transform .4s var(--ease); }
+  .brandgrid .bchip::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,15,26,.10) 35%, rgba(11,15,26,.88) 100%); }
+  .brandgrid .bchip:hover { transform: translateY(-4px); }
+  .brandgrid .bchip__in { position: relative; z-index: 1; padding: 16px 18px; }
+  .brandgrid .bchip .bn { font-family: var(--serif); font-size: 19px; color: #fff; line-height: 1.15; }
+  .brandgrid .bchip .bt { font-size: 12px; color: rgba(255,255,255,.78); margin-top: 4px; letter-spacing: .02em; }
   .src { margin-top: 26px; font-size: 12.5px; letter-spacing: .03em; color: var(--ink-soft); opacity: .8; }
 </style>
 <script type="application/ld+json">
@@ -87,17 +109,20 @@
     <a class="nav__link" href="index.html#mapa">Colección</a>
     <a class="nav__link" href="index.html#zonas">Zonas</a>
     <a class="nav__link" href="Marca.html">Residencias de marca</a>
+    <a class="nav__link" href="index.html#ventaja">Asesoría</a>
     <a class="nav__link" href="Inversion.html">Inversión</a>
     <div class="nav__item">
       <a class="nav__link" href="index.html#firma">La Firma <span class="nav__caret">▾</span></a>
       <div class="nav__menu">
         <a href="index.html#firma">Sobre Oscar Chapa <span>→</span></a>
         <a href="Blog.html">Blog & Análisis <span>→</span></a>
-        <a href="#agenda">Contacto <span>→</span></a>
+        <a href="index.html#agenda">Contacto <span>→</span></a>
       </div>
     </div>
   </div>
-  <div class="nav__cta">
+
+<div class="nav__cta">
+    <form class="nav__search" role="search" action="index.html" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearch" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
     <a class="btn btn-gold" href="#agenda">Agendar sesión</a>
     <button class="nav__burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
@@ -108,14 +133,17 @@
     <img src="assets/logo-light.png" alt="Destiny Real Estate" style="height:24px;width:auto;">
     <button class="drawer__close" id="drawerClose" aria-label="Cerrar">✕</button>
   </div>
+  <form class="drawer__search" role="search" action="index.html" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearchM" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
   <div class="drawer__links">
     <a href="index.html#mapa" data-close>Colección</a>
     <a href="index.html#zonas" data-close>Zonas</a>
     <a href="Marca.html" data-close>Residencias de marca</a>
+    <a href="index.html#ventaja" data-close>Asesoría</a>
     <a href="Inversion.html" data-close>Inversión</a>
     <a href="index.html#firma" data-close>La Firma</a>
   </div>
-  <a class="btn btn-gold" href="#agenda" data-close>Agendar sesión</a>
+
+<a class="btn btn-gold" href="#agenda" data-close>Agendar sesión</a>
 </div>
 
 <!-- HERO -->
@@ -127,7 +155,7 @@
       <span>Residencias de marca</span>
     </div>
     <span class="eyebrow reveal">Residencias de marca</span>
-    <h1 class="h-display reveal d1">¿Cuándo el logo vale el sobreprecio <span class="serif-em">— y cuándo solo pagas el membrete?</span></h1>
+    <h1 class="h-display reveal d1">¿Cuándo el logo vale el sobreprecio <span class="serif-em">— y cuándo solo pagas la marca?</span></h1>
     <p class="lede reveal d2">Miami es el segundo mercado mundial de residencias de marca. La mayoría de nuestra colección lo es. Por eso te decimos lo que ningún brochure te dice: cuándo el premium de una marca se recupera en renta y reventa, y cuándo solo estás pagando el nombre.</p>
     <div class="hero__actions reveal d2">
       <a class="btn btn-gold" href="#marco">Entender el premium <span class="ar">→</span></a>
@@ -146,7 +174,7 @@
   <div class="wrap">
     <div class="reveal" style="max-width:72ch;">
       <span class="eyebrow">El mercado, en datos</span>
-      <h2 class="h-1" style="margin-top:18px;">El membrete se volvió <span class="serif-em">una categoría de inversión.</span></h2>
+      <h2 class="h-1" style="margin-top:18px;">La marca se volvió <span class="serif-em">una categoría de inversión.</span></h2>
       <div class="body-cols" style="margin-top:22px;">
         <p>Una residencia de marca es un desarrollo asociado a una marca de lujo —hotelera, de moda, automotriz o de diseño— que aporta identidad, servicio de hotel y un estándar global al inmueble. El primer caso moderno fue Four Seasons Boston a inicios de los 80; hoy es una de las categorías más dinámicas del lujo.</p>
         <p>Miami es hoy el <strong>segundo mercado más grande del mundo</strong> en este segmento, con más de <strong>40 proyectos branded</strong> entre Brickell, Downtown, Edgewater, Sunny Isles, Surfside, Wynwood y Miami Beach. El segmento crece cerca de <strong>12% al año</strong> a nivel global, con más de 700 desarrollos activos.</p>
@@ -176,7 +204,7 @@
         <p>Es lo que el activo te <strong>devuelve</strong>: apreciación al revender y flujo por renta. La marca <em>sí</em> puede elevar ambos —demanda, ocupación, precio de reventa— pero solo cuando viene con operación real y escasez. No por el nombre solo.</p>
       </div>
     </div>
-    <p class="lede" style="margin-top:34px;max-width:70ch;color:rgba(255,255,255,.8);">Un premium del 30% solo es buena inversión si la renta y la reventa te lo devuelven con creces. <strong style="color:#fff;">A veces lo justifica la operación y la escasez. A veces solo te están vendiendo el membrete.</strong> Nuestro trabajo es decirte cuál de las dos es.</p>
+    <p class="lede" style="margin-top:34px;max-width:70ch;color:rgba(255,255,255,.8);">Un premium del 30% solo es buena inversión si la renta y la reventa te lo devuelven con creces. <strong style="color:#fff;">A veces lo justifica la operación y la escasez. A veces solo te están vendiendo la marca.</strong> Nuestro trabajo es decirte cuál de las dos es.</p>
   </div>
 </section>
 
@@ -185,10 +213,10 @@
   <div class="wrap">
     <div class="reveal" style="max-width:60ch;">
       <span class="eyebrow">Antes de pagar por una marca</span>
-      <h2 class="h-1" style="margin-top:18px;">Tres preguntas que <span class="serif-em">separan el activo del membrete.</span></h2>
+      <h2 class="h-1" style="margin-top:18px;">Tres preguntas que <span class="serif-em">separan el activo de la marca.</span></h2>
     </div>
     <div class="adv__grid reveal d1" style="margin-top:48px;">
-      <div class="adv__card"><div class="adv__num">01</div><h3>¿La marca opera o solo licencia?</h3><p>¿Aporta servicio real —restaurante, concierge, programa de renta, estándar de hotel— o solo presta el nombre y el diseño? La operación sostiene la demanda; el membrete solo, no.</p></div>
+      <div class="adv__card"><div class="adv__num">01</div><h3>¿La marca opera o solo licencia?</h3><p>¿Aporta servicio real —restaurante, concierge, programa de renta, estándar de hotel— o solo presta el nombre y el diseño? La operación sostiene la demanda; la marca sola, no.</p></div>
       <div class="adv__card"><div class="adv__num">02</div><h3>¿El premium se recupera en reventa?</h3><p>Contrastamos el sobreprecio contra ventas comparables reales de la marca en la zona — no contra el render. Te decimos si históricamente se recupera o si se diluye.</p></div>
       <div class="adv__card"><div class="adv__num">03</div><h3>¿La renta cubre el costo de la marca?</h3><p>La marca puede subir la ocupación y la tarifa. Pero también sube el HOA. Calculamos si el flujo neto justifica el premium — o si solo encarece tu costo mensual.</p></div>
     </div>
@@ -226,14 +254,14 @@
       <p class="lede" style="margin-top:18px;color:rgba(255,255,255,.8);">No hablamos de marca desde la teoría. La curamos todos los días: hospitalidad, moda, automotriz y diseño. Por eso podemos decirte, proyecto por proyecto, dónde el sello viene con operación real y dónde es solo el logo.</p>
     </div>
     <div class="brandgrid reveal d1">
-      <div class="bchip"><div class="bn">St. Regis</div><div class="bt">Hospitalidad · Brickell & Bal Harbour</div></div>
-      <div class="bchip"><div class="bn">Cipriani</div><div class="bt">Hospitalidad italiana · Brickell</div></div>
-      <div class="bchip"><div class="bn">Faena</div><div class="bt">Cultura & hospitalidad · Miami River</div></div>
-      <div class="bchip"><div class="bn">Mandarin Oriental</div><div class="bt">Hospitalidad · Brickell</div></div>
-      <div class="bchip"><div class="bn">Four Seasons</div><div class="bt">Hospitalidad · Coconut Grove</div></div>
-      <div class="bchip"><div class="bn">The Standard</div><div class="bt">Lifestyle (Hyatt) · Brickell</div></div>
-      <div class="bchip"><div class="bn">Delano</div><div class="bt">Lifestyle (Ennismore/Accor) · Downtown</div></div>
-      <div class="bchip"><div class="bn">Pagani · Bentley</div><div class="bt">Automotriz & diseño</div></div>
+      <div class="bchip" style="background-image:url('assets/img/stregis-brickell/hero.jpg')"><div class="bchip__in"><div class="bn">St. Regis</div><div class="bt">Hospitalidad · Brickell & Bal Harbour</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/cipriani/hero.jpg')"><div class="bchip__in"><div class="bn">Cipriani</div><div class="bt">Hospitalidad italiana · Brickell</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/faena/hero.jpg')"><div class="bchip__in"><div class="bn">Faena</div><div class="bt">Cultura & hospitalidad · Miami River</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/mandarin/hero.jpg')"><div class="bchip__in"><div class="bn">Mandarin Oriental</div><div class="bt">Hospitalidad · Brickell</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/fourseasons-grove/tower.jpg')"><div class="bchip__in"><div class="bn">Four Seasons</div><div class="bt">Hospitalidad · Coconut Grove</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/thestandard/rooftoppool.jpg')"><div class="bchip__in"><div class="bn">The Standard</div><div class="bt">Lifestyle (Hyatt) · Brickell</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/delano/hero.jpg')"><div class="bchip__in"><div class="bn">Delano</div><div class="bt">Lifestyle (Ennismore/Accor) · Downtown</div></div></div>
+      <div class="bchip" style="background-image:url('assets/img/pagani/hero.jpg')"><div class="bchip__in"><div class="bn">Pagani · Bentley</div><div class="bt">Automotriz & diseño</div></div></div>
     </div>
     <div class="reveal d2" style="margin-top:38px;">
       <a class="btn btn-gold" href="index.html#mapa">Ver la colección completa <span class="ar">→</span></a>
@@ -292,14 +320,14 @@
       <div class="foot__col"><h4>Inversión</h4><a href="Inversion.html#modelo">Cómo funciona</a><a href="Inversion.html#porque">Por qué nosotros</a><a href="Marca.html">Residencias de marca</a><a href="#agenda">Agendar sesión</a></div>
       <div class="foot__col"><h4>La Firma</h4><a href="index.html#firma">Sobre Oscar Chapa</a><a href="index.html#ventaja">Asesoría 360°</a><a href="Blog.html">Blog & análisis</a><a href="#agenda">Contacto</a></div>
     </div>
-    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados.</span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
-    <p class="foot__legal" style="margin-top:14px;font-size:12px;opacity:.6;max-width:90ch;">No constituye asesoría de inversión garantizada. Las cifras de premium y crecimiento del mercado provienen de fuentes citadas y son rangos de mercado, nunca promesas de rendimiento individual.</p>
+    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados. · <a href="privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a></span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
+    <p class="foot__legal" style="margin-top:2px;font-size:12px;opacity:.6;max-width:90ch;">No constituye asesoría de inversión garantizada. Las cifras de premium y crecimiento del mercado provienen de fuentes citadas y son rangos de mercado, nunca promesas de rendimiento individual.</p>
   </div>
 </footer>
 
 <a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20saber%20si%20una%20residencia%20de%20marca%20vale%20el%20premium.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
 
-<script src="assets/data.js?v=43"></script>
+<script src="assets/data.js?v=44"></script>
 <script>
   (function () {
     if (window.DESTINY && DESTINY.initShell) DESTINY.initShell();

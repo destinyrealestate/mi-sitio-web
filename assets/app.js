@@ -10,8 +10,18 @@
   /* ---------- Inventario ---------- */
   const grid = $("#grid");
   let activeZone = "Todas";
+  let searchQ = "";
+  // normaliza: minúsculas y sin acentos, para búsqueda tolerante
+  const norm = (s) => (s == null ? "" : String(s)).toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
   function renderGrid() {
-    const list = activeZone === "Todas" ? D.PROPS : D.PROPS.filter(p => p.zone === activeZone);
+    let list = activeZone === "Todas" ? D.PROPS : D.PROPS.filter(p => p.zone === activeZone);
+    const terms = norm(searchQ).split(/\s+/).filter(Boolean);
+    if (terms.length) {
+      list = list.filter(p => {
+        const hay = norm([p.name, p.zone, p.developer, p.price, p.arquitecto, p.units, (p.badges || []).join(" "), p.desc].filter(Boolean).join(" "));
+        return terms.every(t => hay.includes(t));   // todas las palabras deben coincidir
+      });
+    }
     grid.innerHTML = list.map(D.cardHTML).join("");
     $("#invCount").textContent = list.length;
     $("#invEmpty").style.display = list.length ? "none" : "block";
@@ -33,6 +43,30 @@
     $$("#zoneFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
     renderGrid();
   });
+
+  // Buscadores de propiedades (nav de escritorio + menú móvil), filtran el grid
+  const searchInputs = $$("#navSearch, #navSearchM");
+  if (searchInputs.length) {
+    const scrollToMapa = function () { const m = document.getElementById("mapa"); if (m) m.scrollIntoView({ behavior: "smooth" }); };
+    // Si llegamos desde otra página con ?q=, pre-carga y baja a la colección
+    const q0 = new URLSearchParams(location.search).get("q");
+    if (q0) { searchQ = q0; searchInputs.forEach(function (i) { i.value = q0; }); setTimeout(scrollToMapa, 350); }
+    searchInputs.forEach(function (input) {
+      input.addEventListener("input", function () {
+        searchQ = input.value;
+        searchInputs.forEach(function (o) { if (o !== input) o.value = input.value; }); // mantiene ambos en sync
+        renderGrid();
+      });
+      const form = input.closest("form");
+      if (form) form.addEventListener("submit", function (e) {
+        e.preventDefault();                 // en el home: filtra y baja (no recarga)
+        renderGrid();
+        const drawer = document.getElementById("drawer");
+        if (drawer) drawer.classList.remove("open");   // cierra el menú móvil
+        scrollToMapa();
+      });
+    });
+  }
 
   /* ---------- Zonas ---------- */
   $("#zonesList").innerHTML = D.ZONES.map(z => `
