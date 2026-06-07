@@ -41,7 +41,34 @@ fbq('track', 'PageView');
 
 <style>
 /* ============ Blog Home — diseño split ============ */
-body{ background: #B0B4B5 !important; }
+body{ background: #FAF9F3 !important; }
+
+/* Forzar header SIEMPRE con estilo "scrolled" del sitio principal (cream bg + logo dark + links oscuros) */
+nav.nav, nav.nav.scrolled{
+  background: #FAF9F3 !important;
+  box-shadow: 0 1px 0 rgba(19,25,42,.06) !important;
+}
+nav.nav .logo-light{ display:none !important; }
+nav.nav .logo-dark{ display:inline-block !important; }
+nav.nav .nav__link,
+nav.nav .nav__link span,
+nav.nav .nav__caret{
+  color: #13192A !important;
+}
+nav.nav .nav__menu{
+  background:#FAF9F3 !important;
+}
+nav.nav .nav__menu a{
+  color:#13192A !important;
+}
+nav.nav .nav__search{
+  background: rgba(19,25,42,.05) !important;
+  color:#13192A !important;
+}
+nav.nav .nav__search input{ color:#13192A !important; }
+nav.nav .nav__search input::placeholder{ color: rgba(19,25,42,.5) !important; }
+nav.nav .nav__search svg{ color:#13192A !important; }
+
 .bloghome-hero{ padding: 96px 0 64px; }
 .bloghome-hero .wrap{ display:grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: stretch; }
 @media (max-width: 980px){ .bloghome-hero .wrap{ grid-template-columns: 1fr; } }
