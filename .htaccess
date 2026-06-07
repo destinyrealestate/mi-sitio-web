@@ -1,0 +1,18 @@
+# ============================================================
+# Destiny Real Estate — Apache rewrites (sitio estático Hostinger)
+# Migración blog: Articulo.html y Blog.html → /blog/ (WordPress)
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Articulo.html?post={slug}  ó  ?art={slug}  →  /blog/{slug}/
+  RewriteCond %{QUERY_STRING} (^|&)(post|art)=([a-z0-9\-]+) [NC]
+  RewriteRule ^Articulo\.html$ /blog/%3/? [R=301,L,NE]
+
+  # Articulo.html sin slug  →  /blog/
+  RewriteRule ^Articulo\.html$ /blog/ [R=301,L,NC]
+
+  # Blog.html  →  /blog/
+  RewriteRule ^Blog\.html$ /blog/ [R=301,L,NC]
+</IfModule>
