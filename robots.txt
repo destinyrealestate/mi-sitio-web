@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://destiny.mx/sitemap.xml
-Sitemap: https://destiny.mx/blog/sitemap_index.xml
+Sitemap: https://blog.destiny.mx/sitemap_index.xml

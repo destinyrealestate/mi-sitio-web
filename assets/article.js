@@ -42,10 +42,10 @@
       .then(html => { prose.innerHTML = html; })
       .catch(() => {
         prose.innerHTML = `<p>Este análisis se está preparando para su lectura completa en el sitio.</p>
-        <p>Mientras tanto, agenda una <a href="index.html#agenda">sesión de claridad</a> y te lo enviamos directo, o explora los demás <a href="/blog/">análisis disponibles</a>.</p>`;
+        <p>Mientras tanto, agenda una <a href="index.html#agenda">sesión de claridad</a> y te lo enviamos directo, o explora los demás <a href="https://blog.destiny.mx/">análisis disponibles</a>.</p>`;
       });
   } else {
-    prose.innerHTML = `<p>No encontramos ese análisis. Vuelve al <a href="/blog/">blog</a>.</p>`;
+    prose.innerHTML = `<p>No encontramos ese análisis. Vuelve al <a href="https://blog.destiny.mx/">blog</a>.</p>`;
   }
 
   // Relacionados (3, excluyendo el actual)
