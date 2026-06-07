@@ -83,7 +83,7 @@ fbq('track', 'PageView');
 <body>
 
 <!-- ===================== NAV ===================== -->
-<nav class="nav" id="nav" data-screen-label="Nav">
+<nav class="nav scrolled" id="nav" data-screen-label="Nav">
   <a class="nav__logo" href="https://destiny.mx/">
     <img class="logo-light" src="https://destiny.mx/assets/logo-light.png" alt="Destiny Real Estate">
     <img class="logo-dark" src="https://destiny.mx/assets/logo-dark.png" alt="Destiny Real Estate">
@@ -242,14 +242,20 @@ fbq('track', 'PageView');
     return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
   };
 
+  function normalizeUrl(url) {
+    if (!url) return url;
+    // Fix URLs viejas mal escapadas: //wp-content, www.destiny.mx → blog.destiny.mx
+    return url
+      .replace(/^https?:\/\/(www\.)?destiny\.mx\/+wp-content\//, 'https://blog.destiny.mx/wp-content/')
+      .replace(/^https?:\/\/(www\.)?destiny\.mx\/wp-content\//, 'https://blog.destiny.mx/wp-content/');
+  }
+
   function getFeaturedImg(post, fallbackIdx) {
     try {
       const fm = post._embedded?.["wp:featuredmedia"]?.[0];
-      if (fm?.source_url) return fm.source_url;
+      if (fm?.source_url) return normalizeUrl(fm.source_url);
     } catch (e) {}
-    // Intentar extraer primera <img> del contenido
-    const m = (post.content?.rendered || "").match(/<img[^>]+src="([^"]+)"/);
-    if (m && m[1]) return m[1];
+    // Fallback al pool de imágenes del repo (más confiable que extraer del content)
     return FALLBACK_IMAGES[fallbackIdx % FALLBACK_IMAGES.length];
   }
 
