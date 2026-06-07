@@ -1,0 +1,19 @@
+# ============================================================
+# Destiny Real Estate — Apache rewrites (sitio estático Hostinger)
+# Migración blog: WP movido a blog.destiny.mx (side-by-side)
+# Las URLs viejas redirigen al subdominio del blog.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Articulo.html?post={slug}  ó  ?art={slug}  →  https://blog.destiny.mx/blog/tips-invertir/{slug}/
+  RewriteCond %{QUERY_STRING} (^|&)(post|art)=([a-z0-9\-]+) [NC]
+  RewriteRule ^Articulo\.html$ https://blog.destiny.mx/blog/tips-invertir/%3/? [R=301,L,NE]
+
+  # Articulo.html sin slug  →  blog.destiny.mx
+  RewriteRule ^Articulo\.html$ https://blog.destiny.mx/ [R=301,L,NC]
+
+  # Blog.html  →  blog.destiny.mx
+  RewriteRule ^Blog\.html$ https://blog.destiny.mx/ [R=301,L,NC]
+</IfModule>
