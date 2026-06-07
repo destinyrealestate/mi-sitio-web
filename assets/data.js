@@ -3,7 +3,7 @@
    ============================================================ */
 window.DESTINY = (function () {
   "use strict";
-  const BASE = "https://destiny.mx/wp-content/uploads/";
+  const BASE = "https://blog.destiny.mx/wp-content/uploads/";
 
   /* ---------- Integración HubSpot (Forms API) ----------
      Pega tu Portal ID y Form GUID (HubSpot › Marketing › Formularios › Compartir › API).
