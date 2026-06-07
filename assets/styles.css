@@ -410,6 +410,36 @@ p { text-wrap: pretty; }
 .cta__trust { font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(250,249,243,.5); padding-top: 26px; border-top: 1px solid var(--line-light); }
 
 .form { background: var(--paper); color: var(--ink); padding: clamp(30px,3.4vw,48px); border-radius: var(--r); }
+/* Cipriani: formulario Zoho (embed HTML/CSS) vestido con el diseño de Destiny */
+.form--zoho .zf-tempFrmWrapper { margin-bottom: 18px; }
+.form--zoho .zf-labelName { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.form--zoho .zf-important { color: var(--gold); font-style: normal; }
+.form--zoho input:not([type="hidden"]),
+.form--zoho select {
+  width: 100%; font-family: var(--sans); font-size: 15px; color: var(--ink);
+  padding: 13px 14px; background: var(--cream); border: 1px solid var(--line-soft);
+  border-radius: var(--r); transition: border-color .3s var(--ease), background .3s var(--ease);
+}
+.form--zoho input:not([type="hidden"]):focus,
+.form--zoho select:focus { outline: none; border-color: var(--gold); background: var(--paper); }
+.form--zoho input::placeholder { color: rgba(90,82,73,.55); }
+/* Dropdowns: flecha propia y look del campo nativo */
+.form--zoho select {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2313192A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px;
+}
+/* Nombre: dos columnas con sub-etiquetas discretas */
+.form--zoho .zf-nameWrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form--zoho .zf-nameWrapper > span { display: block; }
+.form--zoho .zf-nameWrapper > span > label { display: block; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); opacity: .65; margin-top: 6px; }
+/* Teléfono: ocultar la sub-etiqueta "Number" de Zoho */
+.form--zoho .zf-phwrapper > span > label { display: none; }
+/* Errores y botón */
+.form--zoho .zf-errorMessage { font-size: 11.5px; color: #B4453A; margin-top: 6px; }
+.form--zoho button[type="submit"] { width: 100%; justify-content: center; margin-top: 8px; }
+.form--zoho .zf-clearBoth { clear: both; }
+@media (max-width: 560px) { .form--zoho .zf-nameWrapper { grid-template-columns: 1fr; } }
 .form__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
 .form__head h3 { font-size: 28px; }
 .form__sub { font-size: 13px; color: var(--gold); font-weight: 600; }

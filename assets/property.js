@@ -6,7 +6,7 @@
   const D = window.DESTINY;
   const $ = (s) => document.querySelector(s);
   const params = new URLSearchParams(location.search);
-  const slug = params.get("p");
+  const slug = params.get("p") || (document.body && document.body.dataset.prop) || "";
   const p = D.get(slug) || D.PROPS[1]; // default: Faena
 
   const STATUS = ["En construcción", "Pre-venta", "Entrega inmediata", "Cerca de la playa"];
@@ -70,7 +70,7 @@
   set("#pBaths", p.ba || "—");
   set("#pArea", p.entrega || area);
   const crumb = $("#pZoneCrumb");
-  crumb.textContent = p.zone;
+  if (crumb) crumb.textContent = p.zone;
 
   // facts bar
   const type = p.badges.find(b => !STATUS.includes(b)) || "Residencia de lujo";
@@ -108,6 +108,7 @@
 
   // Botón "Solicitar dossier" → modo dossier en el formulario (entrega diferida)
   (function () {
+    if (p.slug === "cipriani-residences") return; // Cipriani usa el Zoho Form: sin modo dossier
     const form = $("#agendaForm");
     if (!form) return;
     form.setAttribute("data-context", p.name); // contexto por defecto = este proyecto
@@ -128,18 +129,95 @@
     });
   })();
 
+  // Cipriani: reemplaza el formulario nativo por el formulario de Zoho (embed HTML & CSS),
+  // estilizado con el diseño de Destiny y con redirección propia a gracias.html al enviar.
+  // Solo este proyecto; la plantilla Propiedad.html no cambia para las demás propiedades.
+  if (p.slug === "cipriani-residences") {
+    const ACTION = "https://forms.zohopublic.com/destinyrealestate/form/CIPRIANIFORM27052026V1/formperma/JCvyo0oDu2n3lJMr3KKMq_VjsrkTpcXMygi6kd5JRFc/htmlRecords/submit";
+    const nativeForm = $("#agendaForm");
+    // Puede haber VARIAS instancias del formulario en una landing ([data-zoho-form]);
+    // en la página de propiedad normal, se usa la tarjeta del form de agenda.
+    let cards = Array.prototype.slice.call(document.querySelectorAll("[data-zoho-form]"));
+    if (!cards.length && nativeForm) { const c0 = nativeForm.closest(".form"); if (c0) cards = [c0]; }
+
+    const buildForm = function (idx) {
+      const fid = "zfForm" + idx;
+      return '' +
+        '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
+        '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
+        '<form action="' + ACTION + '" name="' + fid + '" id="' + fid + '" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">' +
+          '<input type="hidden" name="zf_referrer_name" value="">' +
+          '<input type="hidden" name="zf_redirect_url" value="">' +
+          '<input type="hidden" name="zc_gad" value="">' +
+          '<div class="zf-tempFrmWrapper zf-name"><label class="zf-labelName">Nombre <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv zf-twoType"><div class="zf-nameWrapper">' +
+              '<span><input type="text" maxlength="255" name="Name_First" placeholder="Tu nombre" required/><label>Nombre</label></span>' +
+              '<span><input type="text" maxlength="255" name="Name_Last" placeholder="Tu apellido" required/><label>Apellido</label></span>' +
+              '<div class="zf-clearBoth"></div></div></div></div>' +
+          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">Correo electrónico <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv"><span><input type="email" name="Email" maxlength="255" placeholder="tucorreo@empresa.com" required/></span></div></div>' +
+          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">WhatsApp <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv zf-phonefld"><div class="zf-phwrapper zf-phNumber">' +
+              '<span><input type="text" name="PhoneNumber_countrycode" maxlength="20" placeholder="+52 ..." required/></span>' +
+              '<div class="zf-clearBoth"></div></div></div></div>' +
+          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿Qué buscas en una propiedad? <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice" required>' +
+              '<option value="">Selecciona…</option>' +
+              '<option value="Máxima rentabilidad">Máxima rentabilidad</option>' +
+              '<option value="Vivir en Miami, Florida">Vivir en Miami, Florida</option>' +
+              '<option value="Diversificar patrimonio">Diversificar patrimonio</option></select></div></div>' +
+          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿En qué plazo tienes pensado comprar? <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice1" required>' +
+              '<option value="">Selecciona…</option>' +
+              '<option value="1 a 3 meses">1 a 3 meses</option>' +
+              '<option value="3 a 6 meses">3 a 6 meses</option>' +
+              '<option value="6 a 12 meses">6 a 12 meses</option>' +
+              '<option value="Más de 12 meses">Más de 12 meses</option></select></div></div>' +
+          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿Cuál es tu presupuesto? <em class="zf-important">*</em></label>' +
+            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice2" required>' +
+              '<option value="">Selecciona…</option>' +
+              '<option value="$500K - $1M USD">$500K - $1M USD</option>' +
+              '<option value="$1M - $2M USD">$1M - $2M USD</option>' +
+              '<option value="$2M - $5M USD">$2M - $5M USD</option>' +
+              '<option value="Más de $5M USD">Más de $5M USD</option></select></div></div>' +
+          '<button type="submit" class="btn btn-primary">Agendar mi sesión de claridad <span class="ar">→</span></button>' +
+          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>' +
+        '</form>';
+    };
+
+    cards.forEach(function (card, i) {
+      card.classList.add("form--zoho");
+      card.innerHTML = buildForm(i);
+      const form = card.querySelector("form");
+      const ref = form.querySelector('input[name="zf_referrer_name"]');
+      if (ref) ref.value = p.name;
+      form.addEventListener("submit", function (e) {
+        // Si el submit se dispara, la validación nativa (required) ya pasó.
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        if (btn) { btn.disabled = true; btn.textContent = "Enviando…"; }
+        const done = function () { window.location.href = "gracias.html"; };
+        fetch(form.action, { method: "POST", body: new FormData(form), mode: "no-cors" }).then(done).catch(done);
+      });
+    });
+
+    const dossierBtn = $("#reqDossier");
+    if (dossierBtn) dossierBtn.innerHTML = "Contáctanos";
+  }
+
   // ubicación + zona link
   const zone = D.ZONES.find(z => z.zoneName === p.zone);
+  const zlink = $("#pZoneLink");
   if (zone) {
     set("#ubicTitle", zone.name);
     set("#ubicDesc", zone.long || zone.desc);
-    $("#pZoneLink").href = `Zona.html?z=${zone.slug}`;
-    crumb.href = `Zona.html?z=${zone.slug}`;
+    if (zlink) zlink.href = `Zona.html?z=${zone.slug}`;
+    if (crumb) crumb.href = `Zona.html?z=${zone.slug}`;
   } else {
     set("#ubicTitle", p.zone);
     set("#ubicDesc", `${p.zone} es una de las zonas que cubrimos en Miami. Solicita el análisis de demanda de renta y plusvalía para esta ubicación.`);
-    $("#pZoneLink").href = "Destiny Home.html#zonas";
-    crumb.href = "Destiny Home.html#mapa";
+    if (zlink) zlink.href = "Destiny Home.html#zonas";
+    if (crumb) crumb.href = "Destiny Home.html#mapa";
   }
 
   // mapa de la propiedad — Google Maps (embed, sin API key)
@@ -162,7 +240,8 @@
   if (rel.length < 3) rel = rel.concat(D.PROPS.filter(x => x.slug !== p.slug && x.zone !== p.zone));
   rel = rel.slice(0, 3);
   set("#railTitle", D.byZone(p.zone).length > 1 ? `Más proyectos en ${p.zone}` : "Sigue explorando la colección");
-  $("#pRail").innerHTML = rel.map(D.cardHTML).join("");
+  const railEl = $("#pRail");
+  if (railEl) railEl.innerHTML = rel.map(D.cardHTML).join("");
 
   // scarcity (conservando el punto)
   const SCAR = { "Pre-venta": "Preventa · precios de fase inicial", "En construcción": "En construcción · unidades limitadas", "Entrega inmediata": "Entrega inmediata · disponibilidad final" };
