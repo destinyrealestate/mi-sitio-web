@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '928885525615857');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=928885525615857&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://blog.destiny.mx/">
+<link rel="icon" type="image/png" href="https://destiny.mx/favicon.png?v=2">
+<link rel="apple-touch-icon" href="https://destiny.mx/apple-touch-icon.png?v=2">
+<meta name="description" content="Análisis de inversión inmobiliaria en Miami: mercado, fiscal, residencias de marca y estrategia patrimonial — directo de Oscar Chapa.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog & Análisis — Destiny Real Estate">
+<meta property="og:description" content="Análisis de inversión inmobiliaria en Miami: mercado, fiscal, residencias de marca y estrategia patrimonial — directo de Oscar Chapa.">
+<meta property="og:url" content="https://blog.destiny.mx/">
+<meta property="og:site_name" content="Destiny Real Estate">
+<meta property="og:locale" content="es_MX">
+
+<title>Blog & Análisis — Destiny Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://destiny.mx/assets/styles.css?v=52">
+
+<style>
+/* ============ Blog Home — diseño split ============ */
+.bloghome-hero{ padding: 96px 0 64px; }
+.bloghome-hero .wrap{ display:grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: stretch; }
+@media (max-width: 980px){ .bloghome-hero .wrap{ grid-template-columns: 1fr; } }
+
+/* Destacado izquierda */
+.bloghome-feat{ position: relative; border-radius: 0; overflow: hidden; min-height: 720px; display:flex; flex-direction:column; justify-content:flex-end; padding: 40px; background:#1A2E50; color:#fff; }
+.bloghome-feat__img{ position:absolute; inset:0; background-size:cover; background-position:center; }
+.bloghome-feat__img::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(19,25,42,0) 30%, rgba(19,25,42,.55) 70%, rgba(19,25,42,.95) 100%); }
+.bloghome-feat__body{ position:relative; z-index:1; max-width: 90%; }
+.bloghome-feat__eyebrow{ font-family: 'Outfit', sans-serif; font-size:12px; letter-spacing:.22em; color:#C5A058; text-transform:uppercase; font-weight:500; }
+.bloghome-feat__title{ font-family: 'Playfair Display', serif; font-weight:600; font-size: clamp(28px, 3.4vw, 44px); line-height:1.12; margin: 18px 0 22px; color:#fff; }
+.bloghome-feat__meta{ font-family:'Outfit', sans-serif; font-size:13px; color: rgba(255,255,255,.72); letter-spacing:.04em; }
+.bloghome-feat a{ color:inherit; text-decoration:none; display:block; height:100%; }
+
+/* Cards derecha */
+.bloghome-side{ display:grid; grid-template-rows: repeat(4, 1fr); gap: 18px; }
+.bloghome-card{ background:#1A2E50; color:#fff; padding: 28px 32px; text-decoration:none; display:flex; flex-direction:column; justify-content:space-between; min-height: 165px; transition: background .25s ease; }
+.bloghome-card:hover{ background:#13192A; }
+.bloghome-card__year{ font-family:'Outfit', sans-serif; font-size:12px; letter-spacing:.22em; color:#C5A058; text-transform:uppercase; font-weight:500; }
+.bloghome-card__title{ font-family: 'Playfair Display', serif; font-weight:600; font-size: clamp(18px, 1.5vw, 22px); line-height:1.22; margin: 14px 0 0; color:#fff; }
+.bloghome-card__date{ font-family:'Outfit', sans-serif; font-size:12px; color: rgba(255,255,255,.62); letter-spacing:.04em; margin-top: 14px; }
+
+/* Archivo */
+.bloghome-archive{ padding: 64px 0 96px; }
+.bloghome-archive__head{ margin-bottom: 36px; }
+.bloghome-archive__grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 980px){ .bloghome-archive__grid{ grid-template-columns: 1fr; } }
+.bloghome-item{ display:block; text-decoration:none; color:#13192A; padding: 22px 0; border-top:1px solid rgba(19,25,42,.12); }
+.bloghome-item__year{ font-family:'Outfit', sans-serif; font-size:11px; letter-spacing:.22em; color:#C5A058; text-transform:uppercase; font-weight:500; }
+.bloghome-item__title{ font-family: 'Playfair Display', serif; font-weight:600; font-size: 19px; line-height:1.25; margin: 8px 0; }
+.bloghome-item__date{ font-family:'Outfit', sans-serif; font-size:12px; color: rgba(19,25,42,.55); letter-spacing:.04em; }
+
+/* Skeleton mientras carga */
+.skeleton{ background: linear-gradient(90deg, rgba(0,0,0,.04) 0%, rgba(0,0,0,.08) 50%, rgba(0,0,0,.04) 100%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+@keyframes shimmer { 0%{background-position: 200% 0;} 100%{background-position: -200% 0;} }
+.skel-feat{ min-height:720px; }
+.skel-card{ min-height:165px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="https://destiny.mx/">
+    <img class="logo-light" src="https://destiny.mx/assets/logo-light.png" alt="Destiny Real Estate">
+    <img class="logo-dark" src="https://destiny.mx/assets/logo-dark.png" alt="Destiny Real Estate">
+  </a>
+  <div class="nav__links">
+    <a class="nav__link" href="https://destiny.mx/#mapa">Colección</a>
+    <a class="nav__link" href="https://destiny.mx/#zonas">Zonas</a>
+    <a class="nav__link" href="https://destiny.mx/Marca.html">Residencias de marca</a>
+    <a class="nav__link" href="https://destiny.mx/#ventaja">Asesoría</a>
+    <a class="nav__link" href="https://destiny.mx/Inversion.html">Inversión</a>
+    <div class="nav__item">
+      <a class="nav__link" href="https://destiny.mx/#firma">La Firma <span class="nav__caret">▾</span></a>
+      <div class="nav__menu">
+        <a href="https://oscarchapatherealtor.com/" target="_blank" rel="noopener">Sobre Oscar Chapa <span>→</span></a>
+        <a href="https://blog.destiny.mx/">Blog & Análisis <span>→</span></a>
+        <a href="https://destiny.mx/#agenda">Contacto <span>→</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="nav__cta">
+    <form class="nav__search" role="search" action="https://destiny.mx/" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearch" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
+    <a class="btn btn-gold" href="https://destiny.mx/#agenda">Agendar sesión</a>
+    <button class="nav__burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- mobile drawer -->
+<div class="drawer" id="drawer">
+  <div class="drawer__top">
+    <img src="https://destiny.mx/assets/logo-light.png" alt="Destiny Real Estate" style="height:24px;width:auto;">
+    <button class="drawer__close" id="drawerClose" aria-label="Cerrar">✕</button>
+  </div>
+  <form class="drawer__search" role="search" action="https://destiny.mx/" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="navSearchM" name="q" placeholder="Busca tu propiedad" aria-label="Busca tu propiedad" autocomplete="off"></form>
+  <div class="drawer__links">
+    <a href="https://destiny.mx/#mapa" data-close>Colección</a>
+    <a href="https://destiny.mx/#zonas" data-close>Zonas</a>
+    <a href="https://destiny.mx/Marca.html" data-close>Residencias de marca</a>
+    <a href="https://destiny.mx/#ventaja" data-close>Asesoría</a>
+    <a href="https://destiny.mx/Inversion.html" data-close>Inversión</a>
+    <a href="https://destiny.mx/#firma" data-close>La Firma <small>OSCAR CHAPA</small></a>
+    <a href="https://blog.destiny.mx/" data-close>Blog & Análisis</a>
+  </div>
+  <a class="btn btn-gold" href="https://destiny.mx/#agenda" data-close>Agendar sesión de claridad</a>
+</div>
+
+<span id="top"></span>
+
+<!-- ===================== HERO SPLIT ===================== -->
+<section class="bloghome-hero" data-screen-label="Blog Hero">
+  <div class="wrap">
+    <!-- Destacado -->
+    <article id="featCard" class="bloghome-feat skel-feat skeleton">
+      <!-- llenado por JS -->
+    </article>
+
+    <!-- 4 cards laterales -->
+    <div class="bloghome-side" id="sideCards">
+      <a class="bloghome-card skel-card skeleton"></a>
+      <a class="bloghome-card skel-card skeleton"></a>
+      <a class="bloghome-card skel-card skeleton"></a>
+      <a class="bloghome-card skel-card skeleton"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ARCHIVO ===================== -->
+<section class="bloghome-archive">
+  <div class="wrap">
+    <div class="bloghome-archive__head reveal">
+      <span class="eyebrow">Archivo completo</span>
+      <h2 class="h-2" style="margin-top:14px;">Todos los análisis</h2>
+    </div>
+    <div class="bloghome-archive__grid" id="archiveGrid">
+      <!-- llenado por JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA / FORM ===================== -->
+<section class="section dark" id="agenda" data-screen-label="Agenda">
+  <div class="wrap" style="text-align:center;max-width:760px;margin:0 auto;">
+    <span class="eyebrow center">¿Listo para dar el paso?</span>
+    <h2 class="h-1" style="margin:18px 0 20px;">Del análisis a la <span class="serif-em">acción.</span></h2>
+    <p class="lede" style="margin:0 auto 28px;">Agenda una sesión de claridad de 30 minutos y revisa tu caso con Oscar Chapa — sin costo ni compromiso.</p>
+    <a class="btn btn-gold" href="https://destiny.mx/#agenda">Agendar mi sesión <span class="ar">→</span></a>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="https://destiny.mx/assets/logo-light.png" alt="Destiny Real Estate" style="height:42px;width:auto;margin-bottom:22px;">
+        <p>Más de 25 años curando los activos inmobiliarios de mayor protección patrimonial en Miami para el inversionista mexicano exigente.</p>
+        <div class="foot__social">
+          <a href="https://www.youtube.com/@OscarChapaTheRealtor" target="_blank" rel="noopener" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3-.4-4.4a2.5 2.5 0 00-1.8-1.8C19.4 5.4 12 5.4 12 5.4s-7.4 0-9 .4A2.5 2.5 0 001.4 7.6C1 9 1 12 1 12s0 3 .4 4.4a2.5 2.5 0 001.8 1.8c1.6.4 9 .4 9 .4s7.4 0 9-.4a2.5 2.5 0 001.8-1.8C23 15 23 12 23 12zM9.7 15.3V8.7l5.7 3.3z"/></svg></a>
+          <a href="https://www.instagram.com/destinyrealestatemx/" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/destinyrealestatemx/" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3 1-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14V9z"/></svg></a>
+          <a href="https://linkedin.com/company/destiny-real-estate-méxico/" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 8A1.5 1.5 0 106.5 5a1.5 1.5 0 000 3zM5 10h3v9H5zM10 10h3v1.3c.5-.8 1.5-1.5 3-1.5 2.5 0 3 1.7 3 4V19h-3v-4c0-1-.4-1.8-1.4-1.8S13 14 13 15.2V19h-3z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot__col">
+        <h4>Colección</h4>
+        <a href="https://destiny.mx/#mapa">Activos de legado</a>
+        <a href="https://destiny.mx/#mapa">Rentas & cash flow</a>
+        <a href="https://destiny.mx/#mapa">Estilo de vida & playa</a>
+        <a href="https://destiny.mx/#agenda">Listados off-market</a>
+      </div>
+      <div class="foot__col">
+        <h4>Zonas</h4>
+        <a href="https://destiny.mx/#zonas">Brickell</a>
+        <a href="https://destiny.mx/#zonas">Sunny Isles</a>
+        <a href="https://destiny.mx/#zonas">Downtown</a>
+        <a href="https://destiny.mx/#zonas">Coral Gables</a>
+        <a href="https://destiny.mx/#zonas">Wynwood</a>
+      </div>
+      <div class="foot__col">
+        <h4>La Firma</h4>
+        <a href="https://oscarchapatherealtor.com/" target="_blank" rel="noopener">Sobre Oscar Chapa</a>
+        <a href="https://destiny.mx/#como">Asesoría 360°</a>
+        <a href="https://destiny.mx/#faq">Preguntas frecuentes</a>
+        <a href="https://blog.destiny.mx/">Blog & análisis</a>
+        <a href="https://destiny.mx/#agenda">Contacto</a>
+      </div>
+    </div>
+    <div class="foot__bot">
+      <span>© 2026 Destiny Real Estate. Todos los derechos reservados. · <a href="https://destiny.mx/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a></span>
+      <span>Miami · FL · USA — Ciudad de México · MX</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny." target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
+
+<script>
+// ============ Render del blog ============
+(function () {
+  const API = "https://blog.destiny.mx/wp-json/wp/v2/posts";
+  const FALLBACK_IMG = "https://destiny.mx/assets/img/blog-skyline2.jpg";
+
+  // Imágenes default del repo para destacar visualmente cuando no hay featured image en WP
+  const FALLBACK_IMAGES = [
+    "https://destiny.mx/assets/img/blog-skyline2.jpg",
+    "https://destiny.mx/assets/img/hero-bluehour.jpg",
+    "https://destiny.mx/assets/img/stregis-brickell/pool.jpg",
+    "https://destiny.mx/assets/img/cipriani/pool.jpg",
+    "https://destiny.mx/assets/img/delano/rooftoppool.jpg"
+  ];
+
+  const stripTags = (html) => (html || "").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#8220;|&#8221;/g, '"').replace(/&#8217;/g, "'").trim();
+
+  const fmtDate = (iso) => {
+    const months = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+    const d = new Date(iso);
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  };
+
+  function getFeaturedImg(post, fallbackIdx) {
+    try {
+      const fm = post._embedded?.["wp:featuredmedia"]?.[0];
+      if (fm?.source_url) return fm.source_url;
+    } catch (e) {}
+    // Intentar extraer primera <img> del contenido
+    const m = (post.content?.rendered || "").match(/<img[^>]+src="([^"]+)"/);
+    if (m && m[1]) return m[1];
+    return FALLBACK_IMAGES[fallbackIdx % FALLBACK_IMAGES.length];
+  }
+
+  fetch(API + "?per_page=50&_embed&_fields=id,date,slug,title,excerpt,link,content,_embedded,_links")
+    .then(r => r.json())
+    .then(posts => {
+      if (!Array.isArray(posts) || !posts.length) {
+        document.getElementById("featCard").innerHTML = "<div style='padding:40px;color:#fff;'>No hay artículos publicados aún.</div>";
+        return;
+      }
+
+      // Destacado (más reciente)
+      const feat = posts[0];
+      const featImg = getFeaturedImg(feat, 0);
+      const featDate = fmtDate(feat.date);
+      const featCard = document.getElementById("featCard");
+      featCard.classList.remove("skeleton", "skel-feat");
+      featCard.innerHTML = `
+        <a href="${feat.link}">
+          <div class="bloghome-feat__img" style="background-image:url('${featImg}');"></div>
+          <div class="bloghome-feat__body">
+            <span class="bloghome-feat__eyebrow">Análisis destacado</span>
+            <h1 class="bloghome-feat__title">${stripTags(feat.title.rendered)}</h1>
+            <div class="bloghome-feat__meta">Oscar Chapa · ${featDate}</div>
+          </div>
+        </a>
+      `;
+
+      // 4 cards laterales (posts 1-4)
+      const side = posts.slice(1, 5);
+      const sideEl = document.getElementById("sideCards");
+      sideEl.innerHTML = side.map((p, i) => {
+        const d = new Date(p.date);
+        return `
+          <a class="bloghome-card" href="${p.link}">
+            <span class="bloghome-card__year">${d.getFullYear()}</span>
+            <h3 class="bloghome-card__title">${stripTags(p.title.rendered)}</h3>
+            <div class="bloghome-card__date">${fmtDate(p.date)}</div>
+          </a>
+        `;
+      }).join("");
+
+      // Archivo completo (resto)
+      const rest = posts.slice(5);
+      const archive = document.getElementById("archiveGrid");
+      archive.innerHTML = rest.map(p => {
+        const d = new Date(p.date);
+        return `
+          <a class="bloghome-item" href="${p.link}">
+            <span class="bloghome-item__year">${d.getFullYear()}</span>
+            <h3 class="bloghome-item__title">${stripTags(p.title.rendered)}</h3>
+            <div class="bloghome-item__date">${fmtDate(p.date)}</div>
+          </a>
+        `;
+      }).join("");
+    })
+    .catch(err => {
+      console.error("Error cargando posts:", err);
+      document.getElementById("featCard").innerHTML = "<div style='padding:40px;color:#fff;'>Error cargando artículos. Recarga la página.</div>";
+    });
+
+  // Burger menu
+  const burger = document.getElementById("burger");
+  const drawer = document.getElementById("drawer");
+  if (burger && drawer) {
+    burger.addEventListener("click", () => drawer.classList.add("open"));
+    document.getElementById("drawerClose")?.addEventListener("click", () => drawer.classList.remove("open"));
+    drawer.querySelectorAll("[data-close]").forEach(a => a.addEventListener("click", () => drawer.classList.remove("open")));
+  }
+
+  // Nav scrolled state
+  const nav = document.getElementById("nav");
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+})();
+</script>
+</body>
+</html>
