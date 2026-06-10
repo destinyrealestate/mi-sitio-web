@@ -1,3 +1,9 @@
+# === Charset UTF-8 (defensa extra; el fix principal es el <meta> en el HTML) ===
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+  AddType "text/html; charset=UTF-8" .html .htm
+</IfModule>
+
 # ============================================================
 # Destiny Real Estate — Apache rewrites (sitio estático Hostinger)
 # Migración blog: WP movido a blog.destiny.mx (side-by-side)
