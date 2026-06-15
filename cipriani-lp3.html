@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<!-- ContentSquare (Hotjar) -->
+<script src="https://t.contentsquare.net/uxa/7dccdd22cb616.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8KK325F2B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J8KK325F2B');
+</script>
+<!-- End Google tag -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '928885525615857');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=928885525615857&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/png" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<meta name="description" content="Cipriani Residences, Brickell — Miami. Solicita el dossier completo y tu sesión de claridad sin costo ni compromiso. Destiny Real Estate.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cipriani Residences — Destiny Real Estate">
+<meta property="og:description" content="La primera torre residencial de la familia Cipriani en Miami. Solicita el dossier completo y tu sesión de claridad.">
+<meta property="og:image" content="https://aliceblue-parrot-804072.hostingersite.com/assets/img/cipriani/hero.jpg">
+<meta property="og:locale" content="es_MX">
+
+<title>Cipriani Residences — Destiny Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=56">
+</head>
+<body data-prop="cipriani-residences" data-lp="3">
+
+<!-- NAV (mínimo: logo + Agendar sesión, alineados al ancho del contenido .wrap) -->
+<nav class="nav" id="nav" data-screen-label="Nav" style="padding-inline:0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+    <a class="nav__logo" href="index.html">
+      <img class="logo-light" src="assets/logo-light.png" alt="Destiny Real Estate">
+      <img class="logo-dark" src="assets/logo-dark.png" alt="Destiny Real Estate">
+    </a>
+    <div class="nav__cta">
+      <a class="btn btn-gold" href="#agenda" style="display:inline-flex;">Agendar sesión</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero hero--prop" data-screen-label="Propiedad Hero">
+  <div class="hero__bg"><img alt="" id="pHeroImg" referrerpolicy="no-referrer"></div>
+  <div class="hero__inner wrap">
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a><span class="sep">/</span>
+      <a href="index.html#mapa">Colección</a><span class="sep">/</span>
+      <a href="#" id="pZoneCrumb">Zona</a>
+    </div>
+    <div class="hero__badges" id="pBadges"></div>
+    <h1 class="h-display" id="pName" style="font-size:clamp(34px,6vw,56px);max-width:16ch;">Cipriani Residences</h1>
+    <div class="prop-meta">
+      <div class="m"><div class="l">Precio</div><div class="v accent" id="pPrice">—</div></div>
+      <div class="m"><div class="l">Recámaras</div><div class="v" id="pBeds">—</div></div>
+      <div class="m"><div class="l">Baños</div><div class="v" id="pBaths">—</div></div>
+      <div class="m"><div class="l">Entrega</div><div class="v" id="pArea">—</div></div>
+    </div>
+    <div class="hero__actions">
+      <a class="btn btn-gold" href="#agenda">Agendar visita privada <span class="ar">→</span></a>
+      <a class="btn btn-ghost" id="reqDossier" href="#agenda">Solicitar dossier del proyecto</a>
+    </div>
+    <div class="hero__scarcity" id="pScarcity"><span class="dot"></span> Preventa · unidades limitadas</div>
+  </div>
+</header>
+
+<!-- FACTS BAR -->
+<div class="factsbar" data-screen-label="Facts">
+  <div class="wrap factsbar__row">
+    <div class="f"><div class="l">Estatus</div><div class="v" id="fStatus">—</div></div>
+    <div class="f"><div class="l">Tipo</div><div class="v" id="fType">—</div></div>
+    <div class="f"><div class="l">Recámaras</div><div class="v" id="fBeds">—</div></div>
+    <div class="f"><div class="l">Renta</div><div class="v" id="fArea">—</div></div>
+    <div class="f"><div class="l">Financiamiento</div><div class="v" id="fFin">Hasta 70%</div></div>
+  </div>
+</div>
+
+<!-- FASE / PLAN DE PAGO / ENTREGA -->
+<section class="section" style="padding-top:clamp(30px,4vw,54px);padding-bottom:0;" data-screen-label="Fase y pago">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px;max-width:58ch;">
+      <span class="eyebrow">Antes de firmar</span>
+      <h2 class="h-2" style="margin-top:14px;">Fase, plan de pago y entrega.</h2>
+    </div>
+    <div class="payinfo reveal d1">
+      <div class="payinfo__card"><div class="payinfo__k">Fase del proyecto</div><div class="payinfo__v" id="pFase">—</div></div>
+      <div class="payinfo__card"><div class="payinfo__k">Entrega estimada</div><div class="payinfo__v" id="pEntrega2">—</div></div>
+      <div class="payinfo__card payinfo__card--wide"><div class="payinfo__k">Plan de pago</div><div class="payinfo__v" id="pPago">—</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / FORM — Propuesta 3 (lean): formulario alto, justo después de la fase -->
+<section class="section dark" id="agenda" data-screen-label="Agenda">
+  <div class="wrap cta">
+    <div class="cta__left reveal">
+      <span class="eyebrow">Llamada de 30 min</span>
+      <h2 class="h-1" style="margin-top:18px;">¿Te interesa <span class="serif-em" id="ctaName">este proyecto</span>? Empecemos con una llamada honesta.</h2>
+      <p class="lede">Te enviamos el análisis real de este desarrollo — números, comisiones y costos ocultos — y revisamos si encaja con tu capital antes de que firmes nada.</p>
+      <ul class="cta__list">
+        <li>Análisis específico de este proyecto</li>
+        <li>Comparativa con otras opciones de la zona</li>
+        <li>Estructura legal y financiamiento</li>
+        <li>Sin compromiso de compra</li>
+      </ul>
+      <div class="cta__trust">+$1,000M USD vendidos · 290+ clientes · 25 años · Solo 5 lugares por mes</div>
+      <div class="asesor">
+        <img src="assets/img/oscar-asesor.jpg" alt="Oscar Chapa">
+        <div class="who"><div class="n">Oscar Chapa</div><div class="r">Tu asesor · Fundador de Destiny</div></div>
+      </div>
+    </div>
+    <div class="form reveal d1" data-zoho-form></div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="section" style="padding-bottom:0;" data-screen-label="Highlights">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:34px;max-width:58ch;">
+      <span class="eyebrow">Por qué este proyecto</span>
+      <h2 class="h-2" style="margin-top:16px;">Lo que lo hace una inversión, no un capricho.</h2>
+    </div>
+    <div class="hl reveal d1" id="pHighlights"></div>
+  </div>
+</section>
+
+<!-- LA LECTURA DESTINY -->
+<section class="section dark" id="lectura" data-screen-label="Lectura Destiny">
+  <div class="wrap lectura">
+    <div class="reveal">
+      <span class="eyebrow">La lectura Destiny</span>
+      <div class="verdict" id="pVerdict">No vendemos el mármol del lobby. Te decimos <em>cómo se arma la compra</em> y qué revisar antes de firmar.</div>
+      <div class="marca-read" id="pMarcaBlock" hidden>
+        <div class="marca-read__tag">Lectura de marca</div>
+        <p id="pMarca"></p>
+        <a class="marca-read__link" href="Marca.html">¿Cuándo el logo vale el sobreprecio? <span>→</span></a>
+      </div>
+      <ul class="checklist">
+        <li><span class="ck">✓</span><span>Negociación con los mayores beneficios para el inversionista: precio off-market y condiciones que no llegan al público.</span></li>
+        <li><span class="ck">✓</span><span>Plusvalía proyectada validada contra ventas comparables de la zona, no contra el brochure.</span></li>
+        <li><span class="ck">✓</span><span>Calidad y track record del desarrollador en entregas anteriores.</span></li>
+        <li><span class="ck">✓</span><span>Demanda real de renta y si el flujo cubre hipoteca, HOA y predial.</span></li>
+        <li><span class="ck">✓</span><span>Estructura legal (LLC + fideicomiso) diseñada antes del cierre para blindar herencia.</span></li>
+      </ul>
+    </div>
+    <div class="reveal d1">
+      <div class="lectura__nums">
+        <div class="n"><div class="big">Desde 20%</div><div class="lab">Enganche inicial</div></div>
+        <div class="n"><div class="big">Hasta 70%</div><div class="lab">Financiamiento disponible</div></div>
+        <div class="n"><div class="big">Desde 6.375%</div><div class="lab">Tasa financiamiento extranjero</div></div>
+        <div class="n"><div class="big">40%</div><div class="lab">Impuesto herencia que evitamos</div></div>
+      </div>
+      <div class="roi">
+        <div class="roi__head">Estima tu renta neta anual</div>
+        <label>Monto de inversión (USD)</label>
+        <input type="range" id="roiRange" min="500000" max="10000000" step="50000" value="1500000">
+        <div class="roi__amt" id="roiAmt">$1,500,000</div>
+        <div class="roi__out">
+          <div><span id="roiLow">—</span><small>Cap rate 6%</small></div>
+          <div><span id="roiHigh">—</span><small>Cap rate 8%</small></div>
+        </div>
+        <p class="roi__disc">Estimación referencial (renta neta anual = monto × cap rate). El número real depende del proyecto, la zona y la estructura de tu compra.</p>
+      </div>
+      <p class="note">Cifras de referencia del marco Destiny para esta categoría de activo. El análisis específico de este proyecto — números reales, comisiones del desarrollador y costos ocultos — se entrega en tu sesión de claridad.</p>
+      <a class="btn btn-primary" href="#agenda" style="margin-top:22px;">Pedir el análisis de este proyecto <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="section" data-screen-label="Galería" style="padding-bottom:clamp(28px,4vw,52px);">
+  <div class="wrap">
+    <div class="gallery reveal" id="pGallery">
+      <div class="big"><img alt="" id="pGalleryImg" referrerpolicy="no-referrer"></div>
+      <div class="ph"><span>Render — lobby</span></div>
+      <div class="ph"><span>Render — amenidades</span></div>
+      <div class="ph"><span>Render — vista</span></div>
+      <div class="ph"><span>Plano tipo</span></div>
+    </div>
+    <div class="reveal d1" style="margin-top:clamp(16px,2.4vw,28px);border-radius:14px;overflow:hidden;background:#000;">
+      <video controls playsinline preload="metadata" poster="assets/img/cipriani/hero.jpg" style="width:100%;height:auto;display:block;">
+        <source src="assets/img/cipriani/cipriani-lifestyle.mp4" type="video/mp4">
+        Tu navegador no puede reproducir este video. <a href="assets/img/cipriani/cipriani-lifestyle.mp4" style="color:var(--gold);">Descárgalo aquí</a>.
+      </video>
+    </div>
+    <p class="note" style="color:var(--ink-soft);margin-top:16px;">Renders y planos del desarrollador disponibles bajo solicitud. Las imágenes oficiales se entregan en tu sesión privada.</p>
+  </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section class="section dark" data-screen-label="Ubicación">
+  <div class="wrap ubic">
+    <div class="reveal">
+      <span class="eyebrow">Ubicación</span>
+      <h2 class="h-1" style="margin:18px 0 22px;" id="ubicTitle">La zona</h2>
+      <p class="lede" id="ubicDesc">—</p>
+      <a class="btn btn-primary" href="#agenda" style="margin-top:28px;">Agendar mi sesión <span class="ar">→</span></a>
+    </div>
+    <div class="ubic__map reveal d1" id="pMap"></div>
+  </div>
+</section>
+
+<!-- FORM final (solo el formulario) — cierre de la página -->
+<section class="section" data-screen-label="Formulario" style="background:var(--paper-2);">
+  <div class="wrap" style="max-width:680px;">
+    <div class="form reveal d1" data-zoho-form></div>
+  </div>
+</section>
+
+<!-- FOOTER (logo + tagline + legal, sin columnas) -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="assets/logo-light.png" alt="Destiny Real Estate" style="height:42px;width:auto;margin-bottom:22px;">
+        <p>Más de 25 años curando los activos inmobiliarios de mayor protección patrimonial en Miami para el inversionista mexicano exigente.</p>
+      </div>
+    </div>
+    <div class="foot__bot"><span>© 2026 Destiny Real Estate. Todos los derechos reservados. · <a href="privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a></span><span>Miami · FL · USA — Ciudad de México · MX</span></div>
+  </div>
+</footer>
+
+<a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
+
+<script src="assets/data.js?v=45"></script>
+<script src="assets/property.js?v=38"></script>
+
+<!-- LIGHTBOX con zoom para la galería (scoped a esta LP) -->
+<style>
+#pGallery img{cursor:zoom-in;}
+.lb3{position:fixed;inset:0;z-index:9999;background:rgba(8,10,12,.95);display:none;align-items:center;justify-content:center;touch-action:none;-webkit-user-select:none;user-select:none;}
+.lb3.open{display:flex;}
+.lb3__stage{position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.lb3__img{max-width:92vw;max-height:88vh;width:auto;height:auto;object-fit:contain;transform-origin:center center;will-change:transform;-webkit-user-drag:none;user-drag:none;cursor:zoom-in;}
+.lb3.zoomed .lb3__img{cursor:grab;}
+.lb3.grabbing .lb3__img{cursor:grabbing;}
+.lb3 button{appearance:none;border:0;background:rgba(255,255,255,.10);color:#fff;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
+.lb3 button:hover{background:var(--gold,#c9a35a);color:#0b0d0f;}
+.lb3__close{position:absolute;top:18px;right:18px;width:46px;height:46px;border-radius:50%;font-size:26px;line-height:1;z-index:3;}
+.lb3__nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;font-size:30px;line-height:1;z-index:3;}
+.lb3__prev{left:18px;}
+.lb3__next{right:18px;}
+.lb3__zoom{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3;}
+.lb3__zoom button{width:46px;height:46px;border-radius:50%;font-size:22px;line-height:1;}
+.lb3__count{position:absolute;bottom:30px;right:24px;color:rgba(255,255,255,.7);font:500 14px 'Outfit',sans-serif;letter-spacing:.02em;z-index:3;}
+@media(max-width:640px){.lb3__nav{width:44px;height:44px;font-size:26px;}.lb3__count{display:none;}}
+</style>
+<script>
+(function(){
+  var gallery = document.getElementById('pGallery');
+  if(!gallery) return;
+
+  // lp3: ocultar renders no deseados de la galería (solo en esta LP).
+  var EXCLUDE = ['kitchen.jpg','bedroom.jpg','bath.jpg','spa.jpg','gym.jpg','living2.jpg'];
+  Array.prototype.slice.call(gallery.querySelectorAll('img')).forEach(function(im){
+    var src = im.getAttribute('src') || '';
+    if(EXCLUDE.some(function(f){ return src.indexOf(f) !== -1; })){
+      var tile = im;
+      while(tile.parentElement && tile.parentElement !== gallery) tile = tile.parentElement;
+      if(tile.parentElement === gallery) tile.remove();
+    }
+  });
+
+  var imgs = function(){ return Array.prototype.slice.call(gallery.querySelectorAll('img')); };
+
+  var lb = document.createElement('div');
+  lb.className = 'lb3'; lb.setAttribute('aria-hidden','true');
+  lb.innerHTML =
+    '<button class="lb3__close" aria-label="Cerrar">×</button>' +
+    '<button class="lb3__nav lb3__prev" aria-label="Anterior">‹</button>' +
+    '<button class="lb3__nav lb3__next" aria-label="Siguiente">›</button>' +
+    '<div class="lb3__stage"><img class="lb3__img" alt="" draggable="false"></div>' +
+    '<div class="lb3__zoom">' +
+      '<button data-z="out" aria-label="Alejar">−</button>' +
+      '<button data-z="reset" aria-label="Restablecer">↺</button>' +
+      '<button data-z="in" aria-label="Acercar">+</button>' +
+    '</div>' +
+    '<div class="lb3__count"></div>';
+  document.body.appendChild(lb);
+
+  var stage = lb.querySelector('.lb3__stage');
+  var img   = lb.querySelector('.lb3__img');
+  var count = lb.querySelector('.lb3__count');
+  var btnPrev = lb.querySelector('.lb3__prev');
+  var btnNext = lb.querySelector('.lb3__next');
+
+  var idx = 0, scale = 1, ox = 0, oy = 0, MIN = 1, MAX = 5;
+  var pointers = new Map(), lastMid = null, startDist = 0, startScale = 1;
+  var moved = 0, downX = 0, downY = 0, downTarget = null, panStart = null;
+
+  function dist(a,b){ var dx=a.x-b.x, dy=a.y-b.y; return Math.sqrt(dx*dx+dy*dy); }
+  function mid(a,b){ return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }; }
+  function apply(){ img.style.transform='translate('+ox+'px,'+oy+'px) scale('+scale+')'; lb.classList.toggle('zoomed', scale>1.01); }
+  function reset(){ scale=1; ox=0; oy=0; apply(); }
+  function clamp(){
+    var r=img.getBoundingClientRect();
+    var maxX=Math.max(0,(r.width-window.innerWidth)/2+40);
+    var maxY=Math.max(0,(r.height-window.innerHeight)/2+40);
+    ox=Math.max(-maxX,Math.min(maxX,ox));
+    oy=Math.max(-maxY,Math.min(maxY,oy));
+  }
+  function zoomTo(ns,cx,cy){
+    ns=Math.max(MIN,Math.min(MAX,ns));
+    var r=img.getBoundingClientRect();
+    var baseCX=r.left+r.width/2-ox, baseCY=r.top+r.height/2-oy;
+    var dx=cx-baseCX, dy=cy-baseCY;
+    ox=dx-(dx-ox)/scale*ns; oy=dy-(dy-oy)/scale*ns;
+    scale=ns; if(scale<=1.01){ ox=0; oy=0; }
+    clamp(); apply();
+  }
+  function setMeta(){
+    var n=imgs().length;
+    btnPrev.style.display=btnNext.style.display=(n>1?'':'none');
+    count.textContent=n>1?((idx+1)+' / '+n):'';
+  }
+  function show(i){
+    var arr=imgs(); if(!arr.length) return;
+    idx=(i+arr.length)%arr.length;
+    img.src=arr[idx].currentSrc||arr[idx].src;
+    img.alt=arr[idx].alt||'';
+    reset(); setMeta();
+  }
+  function open(i){ show(i); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; reset(); }
+
+  gallery.addEventListener('click', function(e){
+    var t=e.target.closest('img'); if(!t||!gallery.contains(t)) return;
+    var arr=imgs(), i=arr.indexOf(t); if(i<0) return;
+    e.preventDefault(); open(i);
+  });
+
+  lb.querySelector('.lb3__close').addEventListener('click', close);
+  btnPrev.addEventListener('click', function(e){ e.stopPropagation(); show(idx-1); });
+  btnNext.addEventListener('click', function(e){ e.stopPropagation(); show(idx+1); });
+  lb.querySelector('[data-z="in"]').addEventListener('click', function(e){ e.stopPropagation(); zoomTo(scale*1.5, window.innerWidth/2, window.innerHeight/2); });
+  lb.querySelector('[data-z="out"]').addEventListener('click', function(e){ e.stopPropagation(); zoomTo(scale/1.5, window.innerWidth/2, window.innerHeight/2); });
+  lb.querySelector('[data-z="reset"]').addEventListener('click', function(e){ e.stopPropagation(); reset(); });
+
+  stage.addEventListener('wheel', function(e){ e.preventDefault(); zoomTo(scale*(e.deltaY<0?1.12:1/1.12), e.clientX, e.clientY); }, {passive:false});
+
+  stage.addEventListener('pointerdown', function(e){
+    pointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    moved=0; downX=e.clientX; downY=e.clientY; downTarget=e.target;
+    if(pointers.size===2){ var p=Array.from(pointers.values()); startDist=dist(p[0],p[1]); startScale=scale; lastMid=mid(p[0],p[1]); }
+    else { panStart={x:e.clientX,y:e.clientY,ox:ox,oy:oy}; }
+  });
+  stage.addEventListener('pointermove', function(e){
+    if(!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+    var p=Array.from(pointers.values());
+    if(pointers.size>=2){
+      var d=dist(p[0],p[1]), m=mid(p[0],p[1]);
+      if(startDist>0) zoomTo(startScale*(d/startDist), m.x, m.y);
+      if(lastMid){ ox+=(m.x-lastMid.x); oy+=(m.y-lastMid.y); clamp(); apply(); }
+      lastMid=m; moved=20;
+    } else if(scale>1.01 && panStart){
+      ox=panStart.ox+(e.clientX-panStart.x); oy=panStart.oy+(e.clientY-panStart.y);
+      moved+=Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY);
+      lb.classList.add('grabbing'); clamp(); apply();
+    } else { moved+=Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY); }
+  });
+  function endP(e){
+    lb.classList.remove('grabbing');
+    pointers.delete(e.pointerId);
+    if(pointers.size<2){ lastMid=null; startDist=0; }
+    if(pointers.size===1){ var r=Array.from(pointers.values())[0]; panStart={x:r.x,y:r.y,ox:ox,oy:oy}; }
+    if(pointers.size===0){
+      if(moved<8){
+        if(downTarget===img){ if(scale>1.01) reset(); else zoomTo(2.5,downX,downY); }
+        else if(downTarget===stage || downTarget===lb){ close(); }
+      }
+      panStart=null;
+    }
+  }
+  stage.addEventListener('pointerup', endP);
+  stage.addEventListener('pointercancel', endP);
+
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowLeft') show(idx-1);
+    else if(e.key==='ArrowRight') show(idx+1);
+    else if(e.key==='+'||e.key==='=') zoomTo(scale*1.3, window.innerWidth/2, window.innerHeight/2);
+    else if(e.key==='-') zoomTo(scale/1.3, window.innerWidth/2, window.innerHeight/2);
+  });
+})();
+</script>
+</body>
+</html>
