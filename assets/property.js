@@ -61,6 +61,16 @@
       for (let i = 0; i < 4; i++) g += `<div class="ph"><span>${labels[i]}</span></div>`;
       gal.innerHTML = g;
     }
+    // video del proyecto (solo proyectos con campo `video`) — al final de la galería
+    if (p.video) {
+      const vid = document.createElement("div");
+      vid.className = "pVideo reveal d1";
+      vid.style.marginTop = "18px";
+      vid.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}" style="width:100%;height:auto;display:block;border-radius:14px;background:#000;">`
+        + `<source src="${p.video}" type="video/mp4">`
+        + `</video>`;
+      gal.insertAdjacentElement("afterend", vid);
+    }
   }
   $("#pBadges").innerHTML = p.badges.map((b, i) =>
     `<span class="badge${(p.gold && i === 0) ? " gold" : ""}">${b}</span>`).join("");
@@ -81,10 +91,52 @@
 
   // sobre el proyecto + ficha técnica
   set("#sobreTitle", p.name);
-  set("#pDesc", p.desc || `${p.name} es uno de los desarrollos verificados por Destiny en ${p.zone}. Solicita la ficha completa — números reales, comisiones del desarrollador y costos ocultos — en tu sesión de claridad.`);
+  const descEl = $("#pDesc");
+  if (descEl) {
+    const descTxt = p.desc || `${p.name} es uno de los desarrollos verificados por Destiny en ${p.zone}. Solicita la ficha completa — números reales, comisiones del desarrollador y costos ocultos — en tu sesión de claridad.`;
+    // Soporta varios párrafos: separar el texto en bloques con doble salto de línea.
+    descEl.innerHTML = descTxt.split(/\n\n+/).map(s => s.trim()).filter(Boolean).join("<br><br>");
+  }
   const ficha = [["Zona", p.zone], ["Tipo", type], ["Modalidad de renta", p.renta ? (p.renta === "corta" ? "Renta corta permitida" : "Renta tradicional (anual)") : ""], ["Recámaras", beds], ["Amenidades", p.amenidades], ["Desarrollador", p.developer], ["Arquitectura", p.arquitecto], ["Unidades", p.units], ["Entrega", p.entrega]].filter(r => r[1]);
   const fichaEl = $("#pFicha");
   if (fichaEl) fichaEl.innerHTML = ficha.map(r => `<div class="row"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join("");
+
+  // Documentos oficiales (fact sheet / brochure) + price list por tipología.
+  // Solo se muestra en proyectos que definen `docs` o `priceTable`; el resto no cambia.
+  (function () {
+    const sec = $("#docs");
+    if (!sec || (!p.docs && !p.priceTable)) return;
+    sec.hidden = false;
+    const docsEl = $("#pDocs");
+    if (docsEl && p.docs) {
+      docsEl.innerHTML = p.docs.map(d => {
+        const ext = d.external ? ' target="_blank" rel="noopener"' : ' download';
+        return `<a class="payinfo__card payinfo__doc" href="${d.href}"${ext} style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:14px;">`
+          + `<span><span class="payinfo__k">${d.sub || "Documento"}</span><span class="payinfo__v" style="display:block;">${d.label}</span></span>`
+          + `<span class="ar" style="color:var(--gold);font-size:20px;">${d.external ? "↗" : "↓"}</span></a>`;
+      }).join("");
+    } else if (docsEl) { docsEl.style.display = "none"; }
+    const priceWrap = $("#pPriceWrap"), priceTbl = $("#pPriceTable");
+    if (priceWrap && priceTbl && p.priceTable) {
+      priceWrap.hidden = false;
+      priceTbl.innerHTML = p.priceTable.map(r =>
+        `<div class="row"><div class="k">${r[0]}</div><div class="v">${r[1]} · <strong>desde ${r[2]}</strong></div></div>`).join("");
+    }
+    // CTA "Solicitar price list completo" → abre el formulario en modo solicitud (como el dossier)
+    const reqPL = $("#reqPriceList"), form = $("#agendaForm");
+    if (reqPL && form && p.slug !== "cipriani-residences") {
+      reqPL.addEventListener("click", () => {
+        form.setAttribute("data-intent", "dossier");
+        form.setAttribute("data-context", p.name + " — price list");
+        const head = form.querySelector(".form__head .h-3");
+        if (head) head.textContent = "Solicita el price list completo";
+        const note = form.querySelector(".form__note");
+        if (note) note.textContent = `Te enviamos el price list completo por unidad de ${p.name} por WhatsApp o correo.`;
+        const submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.innerHTML = 'Solicitar el price list <span class="ar">→</span>';
+      });
+    }
+  })();
 
   // veredicto Lectura Destiny (por proyecto, con fallback)
   const verdictEl = $("#pVerdict");

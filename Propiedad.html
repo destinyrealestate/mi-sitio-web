@@ -208,6 +208,22 @@ fbq('track', 'PageView');
   </div>
 </section>
 
+<!-- DOCUMENTOS / PRICE LIST (solo proyectos con material oficial cargado) -->
+<section class="section" id="docs" data-screen-label="Documentos" hidden style="padding-top:clamp(28px,4vw,52px);">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:30px;max-width:60ch;">
+      <span class="eyebrow">Material oficial</span>
+      <h2 class="h-2" style="margin-top:16px;">Fact sheet, brochure y price list.</h2>
+    </div>
+    <div class="payinfo reveal d1" id="pDocs" style="margin-bottom:8px;"></div>
+    <div class="reveal d1" id="pPriceWrap" hidden style="margin-top:40px;">
+      <h3 style="font-family:var(--serif);font-size:clamp(20px,2.4vw,26px);margin:0 0 18px;">Lista de precios por tipología</h3>
+      <div class="ficha" id="pPriceTable"></div>
+      <p class="note" style="color:var(--ink-soft);margin-top:18px;">Rangos de fase actual; disponibilidad y precios sujetos a cambio sin previo aviso. El <strong>price list completo por unidad</strong> (línea, piso y vista) se entrega en tu sesión. <a href="#agenda" id="reqPriceList" style="color:var(--gold);">Solicitar price list completo →</a></p>
+    </div>
+  </div>
+</section>
+
 <!-- SOBRE EL PROYECTO -->
 <section class="section" id="sobre" data-screen-label="Sobre el proyecto" style="padding-top:clamp(28px,4vw,52px);">
   <div class="wrap split" style="align-items:start;">
@@ -405,7 +421,158 @@ fbq('track', 'PageView');
 
 <a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
 
-<script src="assets/data.js?v=45"></script>
-<script src="assets/property.js?v=38"></script>
+<script src="assets/data.js?v=54"></script>
+<script src="assets/property.js?v=41"></script>
+
+<!-- LIGHTBOX con zoom para la galería — activo en todas las propiedades. -->
+<style>
+#pGallery img{cursor:zoom-in;}
+.lb3{position:fixed;inset:0;z-index:9999;background:rgba(8,10,12,.95);display:none;align-items:center;justify-content:center;touch-action:none;-webkit-user-select:none;user-select:none;}
+.lb3.open{display:flex;}
+.lb3__stage{position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.lb3__img{max-width:92vw;max-height:88vh;width:auto;height:auto;object-fit:contain;transform-origin:center center;will-change:transform;-webkit-user-drag:none;user-drag:none;cursor:zoom-in;}
+.lb3.zoomed .lb3__img{cursor:grab;}
+.lb3.grabbing .lb3__img{cursor:grabbing;}
+.lb3 button{appearance:none;border:0;background:rgba(255,255,255,.10);color:#fff;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
+.lb3 button:hover{background:var(--gold,#c9a35a);color:#0b0d0f;}
+.lb3__close{position:absolute;top:18px;right:18px;width:46px;height:46px;border-radius:50%;font-size:26px;line-height:1;z-index:3;}
+.lb3__nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;font-size:30px;line-height:1;z-index:3;}
+.lb3__prev{left:18px;}
+.lb3__next{right:18px;}
+.lb3__zoom{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3;}
+.lb3__zoom button{width:46px;height:46px;border-radius:50%;font-size:22px;line-height:1;}
+.lb3__count{position:absolute;bottom:30px;right:24px;color:rgba(255,255,255,.7);font:500 14px 'Outfit',sans-serif;letter-spacing:.02em;z-index:3;}
+@media(max-width:640px){.lb3__nav{width:44px;height:44px;font-size:26px;}.lb3__count{display:none;}}
+</style>
+<script>
+(function(){
+  var gallery = document.getElementById('pGallery');
+  if(!gallery) return;
+
+  var imgs = function(){ return Array.prototype.slice.call(gallery.querySelectorAll('img')); };
+
+  var lb = document.createElement('div');
+  lb.className = 'lb3'; lb.setAttribute('aria-hidden','true');
+  lb.innerHTML =
+    '<button class="lb3__close" aria-label="Cerrar">×</button>' +
+    '<button class="lb3__nav lb3__prev" aria-label="Anterior">‹</button>' +
+    '<button class="lb3__nav lb3__next" aria-label="Siguiente">›</button>' +
+    '<div class="lb3__stage"><img class="lb3__img" alt="" draggable="false"></div>' +
+    '<div class="lb3__zoom">' +
+      '<button data-z="out" aria-label="Alejar">−</button>' +
+      '<button data-z="reset" aria-label="Restablecer">↺</button>' +
+      '<button data-z="in" aria-label="Acercar">+</button>' +
+    '</div>' +
+    '<div class="lb3__count"></div>';
+  document.body.appendChild(lb);
+
+  var stage = lb.querySelector('.lb3__stage');
+  var img   = lb.querySelector('.lb3__img');
+  var count = lb.querySelector('.lb3__count');
+  var btnPrev = lb.querySelector('.lb3__prev');
+  var btnNext = lb.querySelector('.lb3__next');
+
+  var idx = 0, scale = 1, ox = 0, oy = 0, MIN = 1, MAX = 5;
+  var pointers = new Map(), lastMid = null, startDist = 0, startScale = 1;
+  var moved = 0, downX = 0, downY = 0, downTarget = null, panStart = null;
+
+  function dist(a,b){ var dx=a.x-b.x, dy=a.y-b.y; return Math.sqrt(dx*dx+dy*dy); }
+  function mid(a,b){ return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }; }
+  function apply(){ img.style.transform='translate('+ox+'px,'+oy+'px) scale('+scale+')'; lb.classList.toggle('zoomed', scale>1.01); }
+  function reset(){ scale=1; ox=0; oy=0; apply(); }
+  function clamp(){
+    var r=img.getBoundingClientRect();
+    var maxX=Math.max(0,(r.width-window.innerWidth)/2+40);
+    var maxY=Math.max(0,(r.height-window.innerHeight)/2+40);
+    ox=Math.max(-maxX,Math.min(maxX,ox));
+    oy=Math.max(-maxY,Math.min(maxY,oy));
+  }
+  function zoomTo(ns,cx,cy){
+    ns=Math.max(MIN,Math.min(MAX,ns));
+    var r=img.getBoundingClientRect();
+    var baseCX=r.left+r.width/2-ox, baseCY=r.top+r.height/2-oy;
+    var dx=cx-baseCX, dy=cy-baseCY;
+    ox=dx-(dx-ox)/scale*ns; oy=dy-(dy-oy)/scale*ns;
+    scale=ns; if(scale<=1.01){ ox=0; oy=0; }
+    clamp(); apply();
+  }
+  function setMeta(){
+    var n=imgs().length;
+    btnPrev.style.display=btnNext.style.display=(n>1?'':'none');
+    count.textContent=n>1?((idx+1)+' / '+n):'';
+  }
+  function show(i){
+    var arr=imgs(); if(!arr.length) return;
+    idx=(i+arr.length)%arr.length;
+    img.src=arr[idx].currentSrc||arr[idx].src;
+    img.alt=arr[idx].alt||'';
+    reset(); setMeta();
+  }
+  function open(i){ show(i); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; reset(); }
+
+  gallery.addEventListener('click', function(e){
+    var t=e.target.closest('img'); if(!t||!gallery.contains(t)) return;
+    var arr=imgs(), i=arr.indexOf(t); if(i<0) return;
+    e.preventDefault(); open(i);
+  });
+
+  lb.querySelector('.lb3__close').addEventListener('click', close);
+  btnPrev.addEventListener('click', function(e){ e.stopPropagation(); show(idx-1); });
+  btnNext.addEventListener('click', function(e){ e.stopPropagation(); show(idx+1); });
+  lb.querySelector('[data-z="in"]').addEventListener('click', function(e){ e.stopPropagation(); zoomTo(scale*1.5, window.innerWidth/2, window.innerHeight/2); });
+  lb.querySelector('[data-z="out"]').addEventListener('click', function(e){ e.stopPropagation(); zoomTo(scale/1.5, window.innerWidth/2, window.innerHeight/2); });
+  lb.querySelector('[data-z="reset"]').addEventListener('click', function(e){ e.stopPropagation(); reset(); });
+
+  stage.addEventListener('wheel', function(e){ e.preventDefault(); zoomTo(scale*(e.deltaY<0?1.12:1/1.12), e.clientX, e.clientY); }, {passive:false});
+
+  stage.addEventListener('pointerdown', function(e){
+    pointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    moved=0; downX=e.clientX; downY=e.clientY; downTarget=e.target;
+    if(pointers.size===2){ var p=Array.from(pointers.values()); startDist=dist(p[0],p[1]); startScale=scale; lastMid=mid(p[0],p[1]); }
+    else { panStart={x:e.clientX,y:e.clientY,ox:ox,oy:oy}; }
+  });
+  stage.addEventListener('pointermove', function(e){
+    if(!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+    var p=Array.from(pointers.values());
+    if(pointers.size>=2){
+      var d=dist(p[0],p[1]), m=mid(p[0],p[1]);
+      if(startDist>0) zoomTo(startScale*(d/startDist), m.x, m.y);
+      if(lastMid){ ox+=(m.x-lastMid.x); oy+=(m.y-lastMid.y); clamp(); apply(); }
+      lastMid=m; moved=20;
+    } else if(scale>1.01 && panStart){
+      ox=panStart.ox+(e.clientX-panStart.x); oy=panStart.oy+(e.clientY-panStart.y);
+      moved+=Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY);
+      lb.classList.add('grabbing'); clamp(); apply();
+    } else { moved+=Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY); }
+  });
+  function endP(e){
+    lb.classList.remove('grabbing');
+    pointers.delete(e.pointerId);
+    if(pointers.size<2){ lastMid=null; startDist=0; }
+    if(pointers.size===1){ var r=Array.from(pointers.values())[0]; panStart={x:r.x,y:r.y,ox:ox,oy:oy}; }
+    if(pointers.size===0){
+      if(moved<8){
+        if(downTarget===img){ if(scale>1.01) reset(); else zoomTo(2.5,downX,downY); }
+        else if(downTarget===stage || downTarget===lb){ close(); }
+      }
+      panStart=null;
+    }
+  }
+  stage.addEventListener('pointerup', endP);
+  stage.addEventListener('pointercancel', endP);
+
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowLeft') show(idx-1);
+    else if(e.key==='ArrowRight') show(idx+1);
+    else if(e.key==='+'||e.key==='=') zoomTo(scale*1.3, window.innerWidth/2, window.innerHeight/2);
+    else if(e.key==='-') zoomTo(scale/1.3, window.innerWidth/2, window.innerHeight/2);
+  });
+})();
+</script>
 </body>
 </html>
