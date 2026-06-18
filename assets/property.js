@@ -66,7 +66,7 @@
       const vid = document.createElement("div");
       vid.className = "pVideo reveal d1";
       vid.style.marginTop = "18px";
-      vid.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}" style="width:100%;height:auto;display:block;border-radius:14px;background:#000;">`
+      vid.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}" style="width:100%;aspect-ratio:16/9;height:auto;display:block;border-radius:14px;background:#000;object-fit:cover;">`
         + `<source src="${p.video}" type="video/mp4">`
         + `</video>`;
       gal.insertAdjacentElement("afterend", vid);
