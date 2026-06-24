@@ -9,6 +9,24 @@
   const slug = params.get("p") || (document.body && document.body.dataset.prop) || "";
   const p = D.get(slug) || D.PROPS[1]; // default: Faena
 
+  // Proyectos que usan formulario de Zoho (reemplaza el formulario nativo de agenda).
+  // slug → { action: endpoint htmlRecords/submit, phoneField: name del campo de teléfono }.
+  // OJO: el name del teléfono varía por formato del campo en Zoho — Cipriani usa el formato
+  // con código de país (PhoneNumber_countrycode) y Mercedes el de línea simple (PhoneNumber).
+  // Si no coincide, Zoho descarta el envío (campo obligatorio vacío). Las demás propiedades
+  // conservan el formulario nativo.
+  const ZOHO_FORMS = {
+    "cipriani-residences": {
+      action: "https://forms.zohopublic.com/destinyrealestate/form/CIPRIANIFORM27052026V1/formperma/JCvyo0oDu2n3lJMr3KKMq_VjsrkTpcXMygi6kd5JRFc/htmlRecords/submit",
+      phoneField: "PhoneNumber_countrycode"
+    },
+    "mercedes-benz-places-miami": {
+      action: "https://forms.zohopublic.com/destinyrealestate/form/MERCEDESBENZFORM24062026V1/formperma/c3dMS1Rh8GkEltrRpRxJL-qntK-dwdqWElEU3SvmyBo/htmlRecords/submit",
+      phoneField: "PhoneNumber"
+    }
+  };
+  const ZOHO_CFG = ZOHO_FORMS[p.slug] || null;
+
   const STATUS = ["En construcción", "Pre-venta", "Entrega inmediata", "Cerca de la playa"];
   const status = p.badges.find(b => STATUS.includes(b)) || "Disponible";
   const area = p.m2 || "Consultar";
@@ -124,7 +142,7 @@
     }
     // CTA "Solicitar price list completo" → abre el formulario en modo solicitud (como el dossier)
     const reqPL = $("#reqPriceList"), form = $("#agendaForm");
-    if (reqPL && form && p.slug !== "cipriani-residences") {
+    if (reqPL && form && !ZOHO_CFG) {
       reqPL.addEventListener("click", () => {
         form.setAttribute("data-intent", "dossier");
         form.setAttribute("data-context", p.name + " — price list");
@@ -160,7 +178,7 @@
 
   // Botón "Solicitar dossier" → modo dossier en el formulario (entrega diferida)
   (function () {
-    if (p.slug === "cipriani-residences") return; // Cipriani usa el Zoho Form: sin modo dossier
+    if (ZOHO_CFG) return; // proyectos con Zoho Form: sin modo dossier en el form nativo
     const form = $("#agendaForm");
     if (!form) return;
     form.setAttribute("data-context", p.name); // contexto por defecto = este proyecto
@@ -181,11 +199,13 @@
     });
   })();
 
-  // Cipriani: reemplaza el formulario nativo por el formulario de Zoho (embed HTML & CSS),
-  // estilizado con el diseño de Destiny y con redirección propia a gracias.html al enviar.
-  // Solo este proyecto; la plantilla Propiedad.html no cambia para las demás propiedades.
-  if (p.slug === "cipriani-residences") {
-    const ACTION = "https://forms.zohopublic.com/destinyrealestate/form/CIPRIANIFORM27052026V1/formperma/JCvyo0oDu2n3lJMr3KKMq_VjsrkTpcXMygi6kd5JRFc/htmlRecords/submit";
+  // Proyectos con Zoho Form (Cipriani, Mercedes-Benz): reemplaza el formulario nativo por
+  // el de Zoho (embed HTML & CSS), estilizado con el diseño de Destiny y con redirección
+  // propia a gracias.html al enviar. Solo estos proyectos; la plantilla Propiedad.html no
+  // cambia para las demás propiedades.
+  if (ZOHO_CFG) {
+    const ACTION = ZOHO_CFG.action;
+    const PHONE_FIELD = ZOHO_CFG.phoneField;
     const nativeForm = $("#agendaForm");
     // Puede haber VARIAS instancias del formulario en una landing ([data-zoho-form]);
     // en la página de propiedad normal, se usa la tarjeta del form de agenda.
@@ -210,7 +230,7 @@
             '<div class="zf-tempContDiv"><span><input type="email" name="Email" maxlength="255" placeholder="tucorreo@empresa.com" required/></span></div></div>' +
           '<div class="zf-tempFrmWrapper"><label class="zf-labelName">WhatsApp <em class="zf-important">*</em></label>' +
             '<div class="zf-tempContDiv zf-phonefld"><div class="zf-phwrapper zf-phNumber">' +
-              '<span><input type="text" name="PhoneNumber_countrycode" maxlength="20" placeholder="+52 ..." required/></span>' +
+              '<span><input type="text" name="' + PHONE_FIELD + '" maxlength="20" placeholder="+52 ..." required/></span>' +
               '<div class="zf-clearBoth"></div></div></div></div>' +
           '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿Qué buscas en una propiedad? <em class="zf-important">*</em></label>' +
             '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice" required>' +
