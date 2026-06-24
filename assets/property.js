@@ -263,13 +263,31 @@
       const form = card.querySelector("form");
       const ref = form.querySelector('input[name="zf_referrer_name"]');
       if (ref) ref.value = p.name;
-      form.addEventListener("submit", function (e) {
+
+      // IMPORTANTE: Zoho rechaza el envío vía fetch/no-cors (responde 503 y el registro
+      // NUNCA se guarda). Solo acepta un POST nativo. Por eso enviamos con un POST de
+      // formulario real dirigido a un iframe oculto: Zoho guarda el lead y el usuario no
+      // sale de la página; al completarse, lo mandamos a gracias.html.
+      const frameName = "zfTarget" + i;
+      const frame = document.createElement("iframe");
+      frame.name = frameName;
+      frame.style.display = "none";
+      frame.setAttribute("aria-hidden", "true");
+      frame.setAttribute("title", "Zoho Forms");
+      document.body.appendChild(frame);
+      form.target = frameName;
+
+      let submitting = false;
+      form.addEventListener("submit", function () {
         // Si el submit se dispara, la validación nativa (required) ya pasó.
-        e.preventDefault();
+        // NO hacemos preventDefault: dejamos que el POST nativo viaje al iframe.
+        submitting = true;
         const btn = form.querySelector('button[type="submit"]');
         if (btn) { btn.disabled = true; btn.textContent = "Enviando…"; }
-        const done = function () { window.location.href = "gracias.html"; };
-        fetch(form.action, { method: "POST", body: new FormData(form), mode: "no-cors" }).then(done).catch(done);
+      });
+      frame.addEventListener("load", function () {
+        if (!submitting) return; // primer load del iframe vacío (al insertarlo)
+        window.location.href = "gracias.html";
       });
     });
 
