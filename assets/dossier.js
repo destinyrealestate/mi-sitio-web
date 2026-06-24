@@ -97,8 +97,8 @@
   // ---- HIGHLIGHTS + LECTURA DE MARCA + DESCRIPCIÓN + AMENIDADES ----
   const hlsBlock = hls ? `<div class="hls" style="margin-bottom:22px;">${hls}</div>` : "";
   const marcaBlock = p.marca ? `<div class="marca"><div class="k">Lectura de marca · la verdad antes de firmar</div><p>${esc(p.marca)}</p></div>` : "";
-  const descBlock = p.desc ? `<div class="block"><h3>Sobre el proyecto</h3><p>${trunc(p.desc, 620)}</p></div>` : "";
-  const ameBlock = p.amenidades ? `<div class="block"><h3>Amenidades</h3><p>${trunc(p.amenidades, 380)}</p></div>` : "";
+  const descBlock = p.desc ? `<div class="block"><h3>Sobre el proyecto</h3><p>${trunc(p.desc, 500)}</p></div>` : "";
+  const ameBlock = p.amenidades ? `<div class="block"><h3>Amenidades</h3><p>${trunc(p.amenidades, 260)}</p></div>` : "";
   let analysis = "";
   if (hlsBlock || marcaBlock || descBlock || ameBlock) {
     analysis = `
