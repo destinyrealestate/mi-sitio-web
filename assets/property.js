@@ -266,11 +266,24 @@
       // guarda el registro y dispara el webhook (→ Make → correo del dossier).
       if (ZOHO_CFG.iframe) {
         card.classList.add("form--zoho-embed");
+        var zfId = "zfEmbed" + i;
         card.innerHTML =
           '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
           '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
-          '<iframe class="zf-embed" src="' + ZOHO_CFG.iframe + '" title="Formulario de contacto — Destiny Real Estate" ' +
-            'style="width:100%;border:0;min-height:840px;background:#fff;border-radius:8px;display:block;"></iframe>';
+          '<iframe id="' + zfId + '" class="zf-embed" src="' + ZOHO_CFG.iframe + '" title="Formulario de contacto — Destiny Real Estate" ' +
+            'style="width:100%;border:0;height:760px;background:transparent;display:block;"></iframe>';
+        // Zoho publica la altura real del formulario vía postMessage ("formperma|alto").
+        // La escuchamos para ajustar el iframe a su contenido y evitar el hueco vacío.
+        window.addEventListener("message", function (ev) {
+          var d = ev && ev.data;
+          if (!d || typeof d !== "string" || d.indexOf("|") < 0) return;
+          var parts = d.split("|");
+          if (parts.length < 2) return;
+          var ifr = document.getElementById(zfId);
+          if (!ifr || ifr.src.indexOf(parts[0]) < 0) return;
+          var h = parseInt(parts[1], 10);
+          if (h > 0) ifr.style.height = (h + 15) + "px";
+        }, false);
         return;
       }
 
