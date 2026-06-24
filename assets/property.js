@@ -10,19 +10,19 @@
   const p = D.get(slug) || D.PROPS[1]; // default: Faena
 
   // Proyectos que usan formulario de Zoho (reemplaza el formulario nativo de agenda).
-  // slug → { action: endpoint htmlRecords/submit, phoneField: name del campo de teléfono }.
-  // OJO: el name del teléfono varía por formato del campo en Zoho — Cipriani usa el formato
-  // con código de país (PhoneNumber_countrycode) y Mercedes el de línea simple (PhoneNumber).
-  // Si no coincide, Zoho descarta el envío (campo obligatorio vacío). Las demás propiedades
-  // conservan el formulario nativo.
+  // Dos modos:
+  //   - iframe: incrusta el formulario hospedado de Zoho (formperma). Es el ÚNICO método que
+  //     guarda el registro de forma confiable: el POST directo a htmlRecords/submit lo rechaza
+  //     Zoho (503) y el lead nunca se guarda. Por eso Mercedes usa iframe.
+  //   - action/phoneField: método antiguo (form propio → htmlRecords/submit). Se conserva en
+  //     Cipriani hasta migrarlo también a iframe.
   const ZOHO_FORMS = {
     "cipriani-residences": {
       action: "https://forms.zohopublic.com/destinyrealestate/form/CIPRIANIFORM27052026V1/formperma/JCvyo0oDu2n3lJMr3KKMq_VjsrkTpcXMygi6kd5JRFc/htmlRecords/submit",
       phoneField: "PhoneNumber_countrycode"
     },
     "mercedes-benz-places-miami": {
-      action: "https://forms.zohopublic.com/destinyrealestate/form/MERCEDESBENZFORM24062026V1/formperma/c3dMS1Rh8GkEltrRpRxJL-qntK-dwdqWElEU3SvmyBo/htmlRecords/submit",
-      phoneField: "PhoneNumber"
+      iframe: "https://forms.zohopublic.com/destinyrealestate/form/MERCEDESBENZFORM24062026V1/formperma/c3dMS1Rh8GkEltrRpRxJL-qntK-dwdqWElEU3SvmyBo"
     }
   };
   const ZOHO_CFG = ZOHO_FORMS[p.slug] || null;
@@ -259,15 +259,27 @@
 
     cards.forEach(function (card, i) {
       card.classList.add("form--zoho");
+
+      // MODO IFRAME (Mercedes): incrusta el formulario hospedado de Zoho. Es el único método
+      // que guarda el registro de forma confiable — el POST directo a htmlRecords/submit lo
+      // rechaza Zoho (503) y el lead nunca llega. El iframe usa el propio JS de Zoho, así que
+      // guarda el registro y dispara el webhook (→ Make → correo del dossier).
+      if (ZOHO_CFG.iframe) {
+        card.classList.add("form--zoho-embed");
+        card.innerHTML =
+          '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
+          '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
+          '<iframe class="zf-embed" src="' + ZOHO_CFG.iframe + '" title="Formulario de contacto — Destiny Real Estate" ' +
+            'style="width:100%;border:0;min-height:840px;background:#fff;border-radius:8px;display:block;"></iframe>';
+        return;
+      }
+
+      // MODO FORM PROPIO (Cipriani) → htmlRecords/submit con POST nativo a iframe oculto.
       card.innerHTML = buildForm(i);
       const form = card.querySelector("form");
       const ref = form.querySelector('input[name="zf_referrer_name"]');
       if (ref) ref.value = p.name;
 
-      // IMPORTANTE: Zoho rechaza el envío vía fetch/no-cors (responde 503 y el registro
-      // NUNCA se guarda). Solo acepta un POST nativo. Por eso enviamos con un POST de
-      // formulario real dirigido a un iframe oculto: Zoho guarda el lead y el usuario no
-      // sale de la página; al completarse, lo mandamos a gracias.html.
       const frameName = "zfTarget" + i;
       const frame = document.createElement("iframe");
       frame.name = frameName;
@@ -279,8 +291,6 @@
 
       let submitting = false;
       form.addEventListener("submit", function () {
-        // Si el submit se dispara, la validación nativa (required) ya pasó.
-        // NO hacemos preventDefault: dejamos que el POST nativo viaje al iframe.
         submitting = true;
         const btn = form.querySelector('button[type="submit"]');
         if (btn) { btn.disabled = true; btn.textContent = "Enviando…"; }
