@@ -267,11 +267,15 @@
       if (ZOHO_CFG.iframe) {
         card.classList.add("form--zoho-embed");
         var zfId = "zfEmbed" + i;
+        // IMPORTANTE: el parámetro ?zf_rszfm=1 activa que Zoho publique la altura real del
+        // formulario vía postMessage. Sin él, el iframe nunca se auto-ajusta (quedaba hueco).
+        var zfSrc = ZOHO_CFG.iframe + (ZOHO_CFG.iframe.indexOf("?") < 0 ? "?" : "&") + "zf_rszfm=1";
         card.innerHTML =
           '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
           '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
-          '<iframe id="' + zfId + '" class="zf-embed" src="' + ZOHO_CFG.iframe + '" title="Formulario de contacto — Destiny Real Estate" ' +
-            'style="width:100%;border:0;height:760px;background:transparent;display:block;"></iframe>';
+          '<iframe id="' + zfId + '" class="zf-embed" src="' + zfSrc + '" title="Formulario de contacto — Destiny Real Estate" ' +
+            'style="width:100%;border:0;height:740px;background:transparent;display:block;"></iframe>' +
+          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>';
         // Zoho publica la altura real del formulario vía postMessage ("formperma|alto").
         // La escuchamos para ajustar el iframe a su contenido y evitar el hueco vacío.
         window.addEventListener("message", function (ev) {
