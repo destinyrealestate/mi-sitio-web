@@ -598,54 +598,17 @@ fbq('track', 'PageView');
       <div class="cta__trust">+$500M USD vendidos · 290+ clientes · 25 años · Cupo limitado por trimestre</div>
     </div>
 
-    <div class="form reveal d1">
-      <form id="agendaForm" data-lead novalidate name="lead" method="POST" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="lead"><p hidden><label>No llenar <input name="bot-field"></label></p>
-        <div class="form__head">
-          <h3 class="h-3">Agenda tu sesión</h3>
-          <span class="form__sub">Cupo limitado</span>
-        </div>
-        <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
-        <div class="field">
-          <label>Nombre completo *</label>
-          <input type="text" name="nombre" placeholder="Tu nombre" required>
-          <span class="err">Ingresa tu nombre.</span>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>País de origen *</label>
-            <input type="text" name="pais" placeholder="México" required>
-            <span class="err">Requerido.</span>
-          </div>
-          <div class="field">
-            <label>WhatsApp *</label>
-            <input type="tel" name="tel" placeholder="+52 ..." required>
-            <span class="err">Requerido.</span>
-          </div>
-        </div>
-        <div class="field">
-          <label>Correo electrónico *</label>
-          <input type="email" name="email" placeholder="tucorreo@empresa.com" required>
-          <span class="err">Ingresa un correo válido.</span>
-        </div>
-        <div class="field">
-          <label>Presupuesto (USD) *</label>
-          <select name="presupuesto" required>
-            <option value="">Selecciona rango</option>
-            <option>$500K – $1M USD</option>
-            <option>$1M – $2M USD</option>
-            <option>$2M – $5M USD</option>
-            <option>$5M+ USD</option>
-          </select>
-          <span class="err">Selecciona un rango.</span>
-        </div>
-        <button type="submit" class="btn btn-primary">Agendar mi sesión de claridad <span class="ar">→</span></button>
-        <p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>
-      </form>
-      <div class="form__success" id="formSuccess">
-        <div class="ok">✓</div>
-        <h3 class="h-3">¡Listo, <span id="successName">gracias</span>!</h3>
-        <p>Se abrió <strong>WhatsApp</strong> con tus datos — solo presiona enviar. Oscar o su equipo te responde en menos de 24 horas. ¿No se abrió? Escríbenos al <a href="https://api.whatsapp.com/send?phone=525611659009" target="_blank" rel="noopener" style="color:var(--gold);">+52 56 1165 9009</a>.</p>
+    <!-- Formulario Zoho (HOME-TOFU) embebido vía iframe. El iframe es el ÚNICO método que
+         guarda el lead de forma confiable: el POST directo a htmlRecords/submit lo rechaza
+         Zoho (503). El form de Zoho ya está tematizado con el diseño de Destiny. -->
+    <div class="form reveal d1 form--zoho form--zoho-embed">
+      <div class="form__head">
+        <h3 class="h-3">Agenda tu sesión</h3>
+        <span class="form__sub">Cupo limitado</span>
       </div>
+      <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
+      <iframe id="zfAgenda" class="zf-embed" src="https://forms.zohopublic.com/destinyrealestate/form/HOMETOFUFORM27062026V1/formperma/xcBq_2e5ymlSrWlXIAsXK1-s37Q00IexkcGv6F4afxg?zf_rszfm=1" title="Formulario de contacto — Destiny Real Estate" style="width:100%;border:0;height:740px;background:transparent;display:block;"></iframe>
+      <p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>
     </div>
   </div>
 </section>
@@ -710,5 +673,23 @@ fbq('track', 'PageView');
 <script src="assets/data.js?v=54"></script>
 <script src="assets/blog-data.js"></script>
 <script src="assets/app.js?v=8"></script>
+<!-- Auto-resize del iframe Zoho (#agenda): Zoho publica la altura real vía postMessage
+     ("formperma|alto") gracias a ?zf_rszfm=1. La escuchamos para ajustar el alto y evitar
+     el hueco vacío. Mismo mecanismo que el form de Mercedes en property.js. -->
+<script>
+(function () {
+  var zfId = "zfAgenda";
+  window.addEventListener("message", function (ev) {
+    var d = ev && ev.data;
+    if (!d || typeof d !== "string" || d.indexOf("|") < 0) return;
+    var parts = d.split("|");
+    if (parts.length < 2) return;
+    var ifr = document.getElementById(zfId);
+    if (!ifr || ifr.src.indexOf(parts[0]) < 0) return;
+    var h = parseInt(parts[1], 10);
+    if (h > 0) ifr.style.height = (h + 15) + "px";
+  }, false);
+})();
+</script>
 </body>
 </html>
