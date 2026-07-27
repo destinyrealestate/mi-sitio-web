@@ -416,35 +416,30 @@ fbq('track', 'PageView');
 </section>
 
 <!-- ===================== LEAD MAGNET ===================== -->
-<section class="section dark magnet secbg" id="guia" data-screen-label="Guía gratis" style="background-image:url('assets/img/blog-skyline2.jpg');">
+<section class="section dark magnet secbg" id="newsletter" data-screen-label="Newsletter" style="background-image:url('assets/img/blog-skyline2.jpg');">
   <div class="wrap magnet__in">
     <div class="reveal">
-      <span class="eyebrow">Guía gratuita · PDF</span>
-      <h2 class="h-1" style="margin:16px 0 18px;">Cómo proteger tu patrimonio en Miami, <span class="serif-em">sin perder el 40% en herencia.</span></h2>
-      <p class="lede">La guía honesta para el inversionista mexicano: estructura legal, financiamiento, flujo real y el proceso paso a paso. Déjanos tu correo y te la abrimos al instante.</p>
+      <span class="eyebrow">Newsletter · Cada lunes</span>
+      <h2 class="h-1" style="margin:16px 0 18px;">Los números reales de Miami, <span class="serif-em">cada lunes en tu correo.</span></h2>
+      <p class="lede">El mismo análisis con el que Oscar asesora a sus inversionistas: precios por zona, listados off-market antes de que salgan al mercado y las señales que sí mueven el patrimonio. Sin ruido, sin promesas de rendimiento.</p>
       <ul class="magnet__pts">
-        <li>Cómo blindar el activo con LLC + fideicomiso antes de firmar</li>
-        <li>La simulación real de flujo con financiamiento de hasta 70%</li>
-        <li>Qué zona elegir según tu objetivo (flujo, plusvalía o lujo)</li>
-        <li>Los 3 errores que más caro le cuestan al inversionista</li>
+        <li>Análisis de mercado semanal — precios reales por zona, no titulares</li>
+        <li>Listados off-market antes de que lleguen a los portales</li>
+        <li>La fuente de cada dato, siempre citada (transparencia radical)</li>
+        <li>Cancela cuando quieras — un solo correo, un solo día</li>
       </ul>
     </div>
-    <div class="form magnet__form reveal d1">
-      <form data-lead name="lead-guia" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-context="Descarga de guía PDF"><input type="hidden" name="form-name" value="lead-guia"><p hidden><label>No llenar <input name="bot-field"></label></p>
-        <div class="magnet__cover">
-          <div class="doc"></div>
-          <div class="ct"><div class="t">Guía Destiny 2026</div><div class="s">Inversión patrimonial en Miami · 12 págs.</div></div>
-        </div>
-        <div class="field"><label>Nombre *</label><input type="text" name="nombre" placeholder="Tu nombre" required><span class="err">Ingresa tu nombre.</span></div>
-        <div class="field"><label>Correo electrónico *</label><input type="email" name="email" placeholder="tucorreo@empresa.com" required><span class="err">Ingresa un correo válido.</span></div>
-        <button type="submit" class="btn btn-gold">Recibir la guía <span class="ar">→</span></button>
-        <p class="form__secure">🔒 Sin spam. Solo análisis que mueven tu patrimonio.</p>
-      </form>
-      <div class="form__success">
-        <div class="ok">✓</div>
-        <h3 class="h-3">¡Listo, <span id="successName">gracias</span>!</h3>
-        <p>Tu guía se abrió en una pestaña nueva. ¿No se abrió? <a href="Guia.html" target="_blank" style="color:var(--gold);">Ábrela aquí</a>.</p>
+    <!-- Formulario Zoho (NEWSLETTER) embebido vía iframe. El iframe es el ÚNICO método que
+         guarda el lead de forma confiable: el POST directo a htmlRecords/submit lo rechaza
+         Zoho (503). El form de Zoho ya está tematizado con el diseño de Destiny. -->
+    <div class="form reveal d1 form--zoho form--zoho-embed">
+      <div class="form__head">
+        <h3 class="h-3">Suscríbete al newsletter</h3>
+        <span class="form__sub">Gratis</span>
       </div>
+      <p class="form__note">Cada lunes. Cancela cuando quieras.</p>
+      <iframe id="zfNewsletter" class="zf-embed" src="https://forms.zohopublic.com/destinyrealestate/form/FORMNEWSLETTER26072026V1/formperma/DNd2CjkapGZrSv18zq8Eqh1QQoNuuipzKD7mbFWYcPg?zf_rszfm=1" title="Suscripción al newsletter — Destiny Real Estate" style="width:100%;border:0;height:500px;background:transparent;display:block;"></iframe>
+      <p class="form__secure">🔒 Sin spam. Solo análisis que mueven tu patrimonio.</p>
     </div>
   </div>
 </section>
@@ -673,21 +668,23 @@ fbq('track', 'PageView');
 <script src="assets/data.js?v=54"></script>
 <script src="assets/blog-data.js"></script>
 <script src="assets/app.js?v=8"></script>
-<!-- Auto-resize del iframe Zoho (#agenda): Zoho publica la altura real vía postMessage
-     ("formperma|alto") gracias a ?zf_rszfm=1. La escuchamos para ajustar el alto y evitar
-     el hueco vacío. Mismo mecanismo que el form de Mercedes en property.js. -->
+<!-- Auto-resize de los iframes Zoho (#agenda y #newsletter): Zoho publica la altura
+     real vía postMessage ("formperma|alto") gracias a ?zf_rszfm=1. La escuchamos para
+     ajustar el alto de cada iframe y evitar el hueco vacío. Mismo mecanismo que Mercedes
+     en property.js. Recorremos todos los .zf-embed y aplicamos al que coincida por src. -->
 <script>
 (function () {
-  var zfId = "zfAgenda";
   window.addEventListener("message", function (ev) {
     var d = ev && ev.data;
     if (!d || typeof d !== "string" || d.indexOf("|") < 0) return;
     var parts = d.split("|");
     if (parts.length < 2) return;
-    var ifr = document.getElementById(zfId);
-    if (!ifr || ifr.src.indexOf(parts[0]) < 0) return;
     var h = parseInt(parts[1], 10);
-    if (h > 0) ifr.style.height = (h + 15) + "px";
+    if (!(h > 0)) return;
+    var frames = document.querySelectorAll("iframe.zf-embed");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].src.indexOf(parts[0]) > -1) frames[i].style.height = (h + 15) + "px";
+    }
   }, false);
 })();
 </script>
