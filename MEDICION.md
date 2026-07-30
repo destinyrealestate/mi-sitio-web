@@ -161,23 +161,54 @@ Verificación rápida de que el puente funciona: abre
 
 ---
 
-## Cuando exista el contenedor de GTM
+## Google Tag Manager — contenedor `GTM-KW8TPGGG`
 
-Se toca **un solo archivo**, `assets/tags.js`:
+Instalado el 2026-07-30 en **modo convivencia**: GTM carga en paralelo con GA4
+y el Pixel, que siguen disparándose desde `tags.js`. Se eligió así para no
+dejar el sitio sin medición ni un día mientras se arma el contenedor.
 
-1. `GTM_ID = "GTM-XXXXXXX"`
-2. `GA4_ID = ""` y `META_PIXEL_ID = ""` — sus etiquetas pasan a GTM
-3. `CONTENTSQUARE_ID` se queda: necesita carga temprana
+### Dónde está instalado
 
-`tags.js` ya trae la rama de GTM escrita y la lógica de exclusión (si hay GTM,
-no dispara GA4 ni el Pixel por código). No hay que editar ningún HTML.
+| Superficie | Cómo carga | Archivo |
+|---|---|---|
+| destiny.mx (23 HTML) | vía `assets/tags.js` | `assets/tags.js` línea 39 |
+| blog.destiny.mx — artículos y demás rutas WP | fragmento pegado en el `<head>` | `theme-v3/header.php` |
+| blog.destiny.mx**/** (home) | fragmento pegado en el `<head>` | `public_html/blog-home.html` |
 
-Etiquetas a crear en la interfaz de GTM, una por evento de la tabla de arriba,
-con activador de tipo *Evento personalizado* y el nombre exacto del evento.
+El home del blog es un archivo suelto en `public_html`, **no** el
+`blog-home.html` del repo. El `.htaccess` lo sirve solo cuando el host es
+`blog.destiny.mx` y la ruta es `/`. Por eso lleva el fragmento a mano.
 
-**Nota sobre el `<noscript>` del contenedor:** se omite a propósito. Sin
-JavaScript este sitio no muestra ni un proyecto, así que no hay nada que medir
-en esa condición.
+Como `blog.destiny.mx` es subdominio de `destiny.mx`, GA4 mantiene la sesión al
+saltar entre los dos sin configurar medición entre dominios.
+
+### La regla que no se puede romper
+
+Mientras `GTM_ADMINISTRA_ETIQUETAS` sea `false` en `tags.js`, **no crear dentro
+de GTM ninguna etiqueta de GA4 ni del Pixel de Meta**. Si se crean, cada visita
+y cada evento se cuentan dos veces. GTM es hoy el contenedor para lo *nuevo*
+(Google Ads, remarketing, LinkedIn), no un segundo camino para lo que ya sale
+por código.
+
+Los 7 eventos de la tabla de arriba ya llegan al `dataLayer`, así que se pueden
+consumir desde GTM con activadores de tipo *Evento personalizado* y el nombre
+exacto del evento — siempre que el destino sea una plataforma que hoy **no**
+esté midiendo por código.
+
+### Para migrar de verdad a GTM algún día
+
+1. Crear en GTM la etiqueta de configuración de GA4, la del Pixel y los
+   activadores de los 7 eventos.
+2. Publicar el contenedor.
+3. **Recién entonces** poner `GTM_ADMINISTRA_ETIQUETAS = true` en `tags.js`.
+
+Al revés queda un hueco sin datos. `CONTENTSQUARE_ID` se queda siempre en
+código: necesita carga temprana.
+
+**Nota sobre el `<noscript>` del contenedor:** se omite a propósito en
+destiny.mx. Sin JavaScript ese sitio no muestra ni un proyecto, así que no hay
+nada que medir en esa condición. En el blog **sí** se puso: es WordPress y los
+artículos se leen sin JavaScript.
 
 ---
 
@@ -206,7 +237,14 @@ localStorage.removeItem('destiny_consent_v1'); location.reload();
 ## Lo que este código NO resuelve
 
 - Crear los campos ocultos en Zoho Forms y mapearlos a Zoho CRM.
-- Crear el contenedor de GTM y publicar sus etiquetas.
+- Publicar etiquetas dentro del contenedor de GTM (el contenedor ya está
+  instalado y cargando, pero va vacío a propósito — ver la sección de GTM).
+- Unificar los dos Pixels de Meta: destiny.mx usa `27857783360524172` y el blog
+  usa `928885525615857` (este último vía el plugin PixelYourSite y el
+  fragmento inline de `blog-home.html`). Son cuentas distintas: hoy la
+  audiencia del blog y la del sitio no se acumulan.
+- Medir el blog en GA4. `blog.destiny.mx` no carga GA4 ni Consent Mode; hoy es
+  invisible en Analytics.
 - Crear la cuenta de Google Ads y obtener el `AW-`.
 - Recuperar el acceso administrativo a la propiedad GA4 `G-J8KK325F2B`.
 - Verificar las propiedades en Search Console y volver a enviar el sitemap.

@@ -11,23 +11,42 @@
      3. assets/tags.js         (este archivo)
 
    ------------------------------------------------------------
-   CUANDO EXISTA EL CONTENEDOR DE GTM
+   GTM: MODO CONVIVENCIA
    ------------------------------------------------------------
-   Este es el único archivo que hay que tocar:
-     1. Pon el ID en GTM_ID.
-     2. Pon GA4_ID y META_PIXEL_ID en "" — sus etiquetas pasan a
-        administrarse desde la interfaz de GTM.
-     3. Deja CONTENTSQUARE_ID como está: requiere carga temprana.
-   No hay que editar ni un HTML.
+   GTM carga en paralelo con GA4 y el Pixel, que siguen disparándose
+   desde este código. Se eligió así para no dejar el sitio sin medición
+   ni un solo día mientras se construye el contenedor.
+
+   REGLA QUE NO SE PUEDE ROMPER: mientras GTM_ADMINISTRA_ETIQUETAS sea
+   false, NO crear dentro de GTM ninguna etiqueta de GA4 ni del Pixel de
+   Meta. Si se crean, cada visita y cada evento se contarían DOS veces.
+   GTM es aquí el contenedor para lo NUEVO (Google Ads, remarketing,
+   LinkedIn, etc.), no un segundo camino para lo que ya está.
+
+   Para migrar de verdad a GTM el día que se quiera:
+     1. Crear en GTM la etiqueta de configuración de GA4, la del Pixel y
+        los activadores de los 7 eventos personalizados.
+     2. Publicar el contenedor.
+     3. Recién entonces poner GTM_ADMINISTRA_ETIQUETAS en true. GA4 y el
+        Pixel dejan de salir por código y pasan a salir por GTM.
+   El orden importa: al revés queda un hueco sin datos.
+
+   CONTENTSQUARE se queda siempre en código: requiere carga temprana.
    ============================================================ */
 (function () {
   "use strict";
 
-  var GTM_ID = "";                       // ej. "GTM-XXXXXXX" — pendiente de crear el contenedor
+  var GTM_ID = "GTM-KW8TPGGG";
   var GA4_ID = "G-J8KK325F2B";
   var META_PIXEL_ID = "27857783360524172";
   var CONTENTSQUARE_ID = "7dccdd22cb616";
   var GOOGLE_ADS_ID = "";                // ej. "AW-XXXXXXXXX" — pendiente de crear la cuenta
+
+  // false = convivencia: GA4 y Pixel salen por código, GTM va aparte.
+  // true  = GA4 y Pixel se administran desde la interfaz de GTM.
+  var GTM_ADMINISTRA_ETIQUETAS = false;
+
+  var porCodigo = !(GTM_ID && GTM_ADMINISTRA_ETIQUETAS);
 
   window.dataLayer = window.dataLayer || [];
   if (typeof window.gtag !== "function") {
@@ -51,23 +70,23 @@
     // nada que medir en este sitio (todo el contenido de proyecto se pinta por JS).
   }
 
-  /* ---------- GA4 directo (mientras no exista GTM) ---------- */
-  if (GA4_ID && !GTM_ID) {
+  /* ---------- GA4 ---------- */
+  if (GA4_ID && porCodigo) {
     script("https://www.googletagmanager.com/gtag/js?id=" + GA4_ID);
     window.gtag("js", new Date());
     window.gtag("config", GA4_ID);
   }
 
   /* ---------- Etiqueta de Google Ads ---------- */
-  // El enlazador de conversiones se configura desde GTM. Esta rama solo existe
-  // para el caso de que se quiera medir Ads sin GTM.
-  if (GOOGLE_ADS_ID && !GTM_ID) {
+  // Si Ads se administra desde GTM, poner GOOGLE_ADS_ID en "" y crear allá la
+  // etiqueta junto con el enlazador de conversiones.
+  if (GOOGLE_ADS_ID && porCodigo) {
     if (!GA4_ID) script("https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID);
     window.gtag("config", GOOGLE_ADS_ID, { allow_enhanced_conversions: true });
   }
 
   /* ---------- Pixel de Meta ---------- */
-  if (META_PIXEL_ID && !GTM_ID) {
+  if (META_PIXEL_ID && porCodigo) {
     (function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
@@ -86,5 +105,11 @@
     script("https://t.contentsquare.net/uxa/" + CONTENTSQUARE_ID + ".js");
   }
 
-  window.DestinyTags = { GTM_ID: GTM_ID, GA4_ID: GA4_ID, META_PIXEL_ID: META_PIXEL_ID, GOOGLE_ADS_ID: GOOGLE_ADS_ID };
+  window.DestinyTags = {
+    GTM_ID: GTM_ID,
+    GA4_ID: GA4_ID,
+    META_PIXEL_ID: META_PIXEL_ID,
+    GOOGLE_ADS_ID: GOOGLE_ADS_ID,
+    modo: GTM_ID ? (GTM_ADMINISTRA_ETIQUETAS ? "gtm" : "convivencia") : "solo-codigo"
+  };
 })();
