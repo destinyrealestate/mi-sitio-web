@@ -91,7 +91,9 @@
     box.innerHTML =
       '<p>Usamos cookies propias y de terceros para medir el rendimiento del sitio y la efectividad de ' +
       'nuestra publicidad. Puedes rechazarlas sin perder acceso a nada. ' +
-      '<a href="/privacidad.html">Aviso de Privacidad</a>.</p>' +
+      // URL absoluta a propósito: este archivo también se carga desde
+      // blog.destiny.mx, donde /privacidad.html no existe (es WordPress).
+      '<a href="https://destiny.mx/privacidad.html">Aviso de Privacidad</a>.</p>' +
       '<div class="dstBtns">' +
         '<button type="button" data-consent="denied">Rechazar</button>' +
         '<button type="button" class="ok" data-consent="granted">Aceptar</button>' +
