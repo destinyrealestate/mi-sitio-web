@@ -169,18 +169,31 @@ dejar el sitio sin medición ni un día mientras se arma el contenedor.
 
 ### Dónde está instalado
 
-| Superficie | Cómo carga | Archivo |
+Las tres superficies cargan **la misma cadena**, y ningún ID vive fuera de
+`assets/tags.js`:
+
+| Superficie | Cómo carga la cadena | Archivo a editar |
 |---|---|---|
-| destiny.mx (23 HTML) | vía `assets/tags.js` | `assets/tags.js` línea 39 |
-| blog.destiny.mx — artículos y demás rutas WP | fragmento pegado en el `<head>` | `theme-v3/header.php` |
-| blog.destiny.mx**/** (home) | fragmento pegado en el `<head>` | `public_html/blog-home.html` |
+| destiny.mx (23 HTML) | `/assets/…` | ya inyectado por `patch-head.py` |
+| blog.destiny.mx — artículos y demás rutas WP | `https://destiny.mx/assets/…` | `theme-v3/header.php` |
+| blog.destiny.mx**/** (home) | `https://destiny.mx/assets/…` | `public_html/blog-home.html` |
 
 El home del blog es un archivo suelto en `public_html`, **no** el
 `blog-home.html` del repo. El `.htaccess` lo sirve solo cuando el host es
-`blog.destiny.mx` y la ruta es `/`. Por eso lleva el fragmento a mano.
+`blog.destiny.mx` y la ruta es `/`. Editar el del repo no cambia nada ahí.
+
+En el blog los tres scripts van **después** del `<meta charset>`: si se ponen
+antes, el bloque de comentarios empuja el charset fuera del primer kilobyte y
+WordPress renderiza los acentos rotos.
 
 Como `blog.destiny.mx` es subdominio de `destiny.mx`, GA4 mantiene la sesión al
-saltar entre los dos sin configurar medición entre dominios.
+saltar entre los dos sin configurar medición entre dominios, y las cookies de
+`attribution.js` (dominio `.destiny.mx`) cruzan solas.
+
+**El plugin `PixelYourSite` quedó desactivado** el 2026-07-30. Disparaba un
+Pixel distinto (`928885525615857`) y además forzaba Consent Mode con todo en
+`granted`, pisando a `consent.js`. Si se reactiva habrá pixel doble y el
+consentimiento dejará de respetarse.
 
 ### La regla que no se puede romper
 
@@ -239,12 +252,9 @@ localStorage.removeItem('destiny_consent_v1'); location.reload();
 - Crear los campos ocultos en Zoho Forms y mapearlos a Zoho CRM.
 - Publicar etiquetas dentro del contenedor de GTM (el contenedor ya está
   instalado y cargando, pero va vacío a propósito — ver la sección de GTM).
-- Unificar los dos Pixels de Meta: destiny.mx usa `27857783360524172` y el blog
-  usa `928885525615857` (este último vía el plugin PixelYourSite y el
-  fragmento inline de `blog-home.html`). Son cuentas distintas: hoy la
-  audiencia del blog y la del sitio no se acumulan.
-- Medir el blog en GA4. `blog.destiny.mx` no carga GA4 ni Consent Mode; hoy es
-  invisible en Analytics.
+- Los eventos de `tracking.js` (WhatsApp, descargas, scroll, etc.) **no** corren
+  en el blog: ahí solo se carga la cadena del `<head>`, no `tracking.js`. El
+  blog mide vistas de página, no interacciones.
 - Crear la cuenta de Google Ads y obtener el `AW-`.
 - Recuperar el acceso administrativo a la propiedad GA4 `G-J8KK325F2B`.
 - Verificar las propiedades en Search Console y volver a enviar el sitemap.
