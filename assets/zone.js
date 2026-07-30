@@ -8,13 +8,18 @@
   const params = new URLSearchParams(location.search);
   const z = D.getZone(params.get("z")) || D.ZONES[0]; // default: Brickell
 
+  // El desarrollo de la página lo consumen tracking.js y zoho-embed.js.
+  if (document.body) document.body.setAttribute("data-desarrollo", "zona-" + z.slug);
+
   const set = (sel, val) => { const e = $(sel); if (e) e.textContent = val; };
   document.title = `${z.name} — Inversión en Miami | Destiny Real Estate`;
 
   // SEO dinámico de la zona
   (function () {
     const DOM = "https://destiny.mx";
-    const url = `${DOM}/zona/?z=${z.slug}`;
+    // Canónica hacia una URL que responda 200. /zona/?z= era la ruta de
+    // WordPress y hoy solo existe como redirección 301.
+    const url = `${DOM}/Zona.html?z=${z.slug}`;
     const desc = (z.desc || `Inversión inmobiliaria en ${z.name}, Miami.`).replace(/<[^>]*>/g, "").slice(0, 180);
     const meta = (sel, a, v) => { const e = document.querySelector(sel); if (e) e.setAttribute(a, v); };
     meta('link[rel="canonical"]', "href", url);
@@ -22,6 +27,14 @@
     meta('meta[property="og:title"]', "content", `${z.name} — Inversión en Miami | Destiny`);
     meta('meta[property="og:description"]', "content", desc);
     meta('meta[name="description"]', "content", desc);
+
+    // BreadcrumbList: inicio → zona.
+    const bc = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: DOM + "/" },
+      { "@type": "ListItem", position: 2, name: z.name, item: url }
+    ]};
+    const sc = document.createElement("script"); sc.type = "application/ld+json";
+    sc.textContent = JSON.stringify(bc); document.head.appendChild(sc);
   })();
 
   // hero

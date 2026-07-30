@@ -1,36 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
 <meta charset="UTF-8">
-<!-- ContentSquare (Hotjar) -->
-<script src="https://t.contentsquare.net/uxa/7dccdd22cb616.js"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8KK325F2B"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-J8KK325F2B');
-</script>
-<!-- End Google tag -->
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '27857783360524172');
-fbq('track', 'PageView');
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=27857783360524172&ev=PageView&noscript=1"/>
-</noscript>
-<!-- End Meta Pixel Code -->
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
+<script src="/assets/consent.js?v=1"></script>
+<script src="/assets/attribution.js?v=1"></script>
+<link rel="preconnect" href="https://forms.zohopublic.com" crossorigin>
+<link rel="dns-prefetch" href="https://forms.zohopublic.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://connect.facebook.net">
+<link rel="dns-prefetch" href="https://t.contentsquare.net">
+<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
+<script src="/assets/tags.js?v=1"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,follow">
@@ -49,7 +30,7 @@ fbq('track', 'PageView');
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css?v=56">
 </head>
-<body data-prop="cipriani-residences" data-lp="2">
+<body data-prop="cipriani-residences" data-lp="2" data-desarrollo="cipriani-residences" data-page-type="proyecto">
 
 <!-- NAV (mínimo: logo + Agendar sesión, alineados al ancho del contenido .wrap) -->
 <nav class="nav" id="nav" data-screen-label="Nav" style="padding-inline:0;">
@@ -66,7 +47,7 @@ fbq('track', 'PageView');
 
 <!-- HERO -->
 <header class="hero hero--prop" data-screen-label="Propiedad Hero">
-  <div class="hero__bg"><img alt="" id="pHeroImg" referrerpolicy="no-referrer"></div>
+  <div class="hero__bg"><img fetchpriority="high" alt="" id="pHeroImg" referrerpolicy="no-referrer"></div>
   <div class="hero__inner wrap">
     <div class="breadcrumb">
       <a href="index.html">Inicio</a><span class="sep">/</span>
@@ -303,5 +284,9 @@ fbq('track', 'PageView');
 
 <script src="assets/data.js?v=45"></script>
 <script src="assets/property.js?v=38"></script>
+<!-- CAPA DE MEDICIÓN -->
+<script src="/assets/zoho-embed.js?v=1"></script>
+<script src="/assets/tracking.js?v=1"></script>
+<!-- FIN CAPA DE MEDICIÓN -->
 </body>
 </html>

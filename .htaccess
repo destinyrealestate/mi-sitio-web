@@ -22,4 +22,52 @@ AddDefaultCharset UTF-8
 
   # Blog.html  →  blog.destiny.mx
   RewriteRule ^Blog\.html$ https://blog.destiny.mx/ [R=301,L,NC]
+
+  # ----------------------------------------------------------
+  # Rutas cortas de campaña. Se dictan a cámara y van en las
+  # biografías: no pueden cambiar nunca.
+  #   destiny.mx/agenda  destiny.mx/club  destiny.mx/radar  destiny.mx/scorecard
+  # Reescritura interna: la URL visible NO cambia (responde 200).
+  # ----------------------------------------------------------
+  RewriteRule ^(agenda|club|radar|scorecard)$   $1.html   [L]
+  # Con diagonal final → un solo salto a la versión sin diagonal.
+  RewriteRule ^(agenda|club|radar|scorecard)/$  /$1       [R=301,L]
+
+  # ----------------------------------------------------------
+  # Rescate de las rutas de la era WordPress.
+  # Estaban en el sitemap y en las canónicas, y hoy responden 404.
+  # Un solo salto: origen → destino final.
+  # ----------------------------------------------------------
+  RewriteRule ^marca/?$      /Marca.html      [R=301,L]
+  RewriteRule ^inversion/?$  /Inversion.html  [R=301,L]
+
+  # /propiedad/?proj={slug}  →  /Propiedad.html?p={slug}
+  RewriteCond %{QUERY_STRING} (?:^|&)proj=([a-z0-9\-]+)
+  RewriteRule ^propiedad/?$  /Propiedad.html?p=%1  [R=301,L]
+  RewriteRule ^propiedad/?$  /#mapa  [R=301,L,NE]
+
+  # /zona/?z={slug}  →  /Zona.html?z={slug}
+  RewriteCond %{QUERY_STRING} (?:^|&)z=([a-z0-9\-]+)
+  RewriteRule ^zona/?$  /Zona.html?z=%1  [R=301,L]
+  RewriteRule ^zona/?$  /#zonas  [R=301,L,NE]
+</IfModule>
+
+# ============================================================
+# Caché de estáticos. El HTML no se cachea de forma agresiva
+# para que un redespliegue se vea de inmediato.
+# ============================================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                 "access plus 1 year"
+  ExpiresByType application/javascript   "access plus 1 year"
+  ExpiresByType text/javascript          "access plus 1 year"
+  ExpiresByType image/jpeg               "access plus 6 months"
+  ExpiresByType image/png                "access plus 6 months"
+  ExpiresByType image/webp               "access plus 6 months"
+  ExpiresByType image/avif               "access plus 6 months"
+  ExpiresByType image/svg+xml            "access plus 6 months"
+  ExpiresByType video/mp4                "access plus 6 months"
+  ExpiresByType application/pdf          "access plus 1 month"
+  ExpiresByType text/html                "access plus 0 seconds"
+  ExpiresByType application/xml          "access plus 0 seconds"
 </IfModule>

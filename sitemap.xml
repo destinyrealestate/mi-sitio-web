@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://destiny.mx/</loc><priority>1.0</priority></url>
-  <url><loc>https://destiny.mx/marca/</loc><priority>0.8</priority></url>
-  <url><loc>https://destiny.mx/inversion/</loc><priority>0.8</priority></url>
-  <url><loc>https://destiny.mx/privacidad.html</loc><priority>0.3</priority></url>
-  <url><loc>https://blog.destiny.mx/</loc><priority>0.9</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=frida-kahlo-wynwood-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=bentley-residences-miami</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=one-twenty-brickell-signature</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=delano-residences-miami</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=the-standard-residences-brickell</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=four-seasons-private-residences-coconut-grove</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=w-pompano-beach</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=faena-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=icon-beach-hollywood</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=continuum-club-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=rivage-bal-harbour</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=jem-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=pagani-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=st-regis-sunny-isles</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=one-park-tower</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=ora-by-casa-tua</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=the-residences-at-1428-brickell</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=st-regis-brickell</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=cipriani-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=the-village-coral-gables</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=casa-bella-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=nomad-wynwood</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=nexo-residences</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=viceroy-brickell</loc><priority>0.7</priority></url>
-  <url><loc>https://destiny.mx/propiedad/?proj=mandarin-oriental</loc><priority>0.7</priority></url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap><loc>https://destiny.mx/sitemap-pages.xml</loc><lastmod>2026-07-29</lastmod></sitemap>
+  <sitemap><loc>https://destiny.mx/sitemap-props.xml</loc><lastmod>2026-07-29</lastmod></sitemap>
+  <sitemap><loc>https://destiny.mx/sitemap-zonas.xml</loc><lastmod>2026-07-29</lastmod></sitemap>
+  <sitemap><loc>https://blog.destiny.mx/sitemap_index.xml</loc><lastmod>2026-07-29</lastmod></sitemap>
+</sitemapindex>

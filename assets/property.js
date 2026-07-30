@@ -6,8 +6,15 @@
   const D = window.DESTINY;
   const $ = (s) => document.querySelector(s);
   const params = new URLSearchParams(location.search);
-  const slug = params.get("p") || (document.body && document.body.dataset.prop) || "";
+  // ?p= es el parámetro actual; ?proj= es el de la era WordPress y sigue
+  // llegando desde enlaces viejos y desde el sitemap anterior.
+  const slug = params.get("p") || params.get("proj") ||
+    (document.body && document.body.dataset.prop) || "";
   const p = D.get(slug) || D.PROPS[1]; // default: Faena
+
+  // El desarrollo de la página se resuelve aquí y lo consumen tracking.js
+  // (evento view_project) y zoho-embed.js (parámetro `desarrollo` del formulario).
+  if (document.body) document.body.setAttribute("data-desarrollo", p.slug);
 
   // Proyectos que usan formulario de Zoho (reemplaza el formulario nativo de agenda).
   // Dos modos:
@@ -37,8 +44,11 @@
 
   // SEO dinámico: canonical, Open Graph y JSON-LD propios de esta propiedad
   (function () {
-    const DOM = "https://destiny.mx", TH = DOM + "/wp-content/themes/destiny/";
-    const url = `${DOM}/propiedad/?proj=${p.slug}`;
+    const DOM = "https://destiny.mx", TH = DOM + "/";
+    // La canónica tiene que apuntar a una URL que responda 200. /propiedad/?proj=
+    // era la ruta de WordPress y hoy solo existe como redirección 301: una canónica
+    // hacia un 301 hace que Google descarte la página.
+    const url = `${DOM}/Propiedad.html?p=${p.slug}`;
     const abs = (g) => (/^https?:/).test(g) ? g : TH + g;
     const img = abs(p.img);
     const desc = (p.desc || `${p.name} en ${p.zone}, Miami.`).replace(/<[^>]*>/g, "").slice(0, 180);
@@ -58,6 +68,17 @@
       category: "Bienes raíces · " + p.zone + ", Miami", url: url };
     const sc = document.createElement("script"); sc.type = "application/ld+json";
     sc.textContent = JSON.stringify(ld); document.head.appendChild(sc);
+
+    // BreadcrumbList: inicio → zona → proyecto.
+    const zSlug = (p.zone || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const bc = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: DOM + "/" },
+      { "@type": "ListItem", position: 2, name: p.zone, item: `${DOM}/Zona.html?z=${zSlug}` },
+      { "@type": "ListItem", position: 3, name: p.name, item: url }
+    ]};
+    const sc2 = document.createElement("script"); sc2.type = "application/ld+json";
+    sc2.textContent = JSON.stringify(bc); document.head.appendChild(sc2);
   })();
 
   // hero
@@ -266,28 +287,18 @@
       // guarda el registro y dispara el webhook (→ Make → correo del dossier).
       if (ZOHO_CFG.iframe) {
         card.classList.add("form--zoho-embed");
-        var zfId = "zfEmbed" + i;
-        // IMPORTANTE: el parámetro ?zf_rszfm=1 activa que Zoho publique la altura real del
-        // formulario vía postMessage. Sin él, el iframe nunca se auto-ajusta (quedaba hueco).
-        var zfSrc = ZOHO_CFG.iframe + (ZOHO_CFG.iframe.indexOf("?") < 0 ? "?" : "&") + "zf_rszfm=1";
+        // El contenedor .zoho-form lo monta assets/zoho-embed.js: agrega el
+        // parámetro zf_rszfm=1 (altura por postMessage), los datos de atribución
+        // (gclid, UTM, desarrollo) y el estado de carga. Un solo lugar para todos
+        // los formularios del sitio.
         card.innerHTML =
           '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
           '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
-          '<iframe id="' + zfId + '" class="zf-embed" src="' + zfSrc + '" title="Formulario de contacto — Destiny Real Estate" ' +
-            'style="width:100%;border:0;height:740px;background:transparent;display:block;"></iframe>' +
-          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>';
-        // Zoho publica la altura real del formulario vía postMessage ("formperma|alto").
-        // La escuchamos para ajustar el iframe a su contenido y evitar el hueco vacío.
-        window.addEventListener("message", function (ev) {
-          var d = ev && ev.data;
-          if (!d || typeof d !== "string" || d.indexOf("|") < 0) return;
-          var parts = d.split("|");
-          if (parts.length < 2) return;
-          var ifr = document.getElementById(zfId);
-          if (!ifr || ifr.src.indexOf(parts[0]) < 0) return;
-          var h = parseInt(parts[1], 10);
-          if (h > 0) ifr.style.height = (h + 15) + "px";
-        }, false);
+          '<div class="zoho-form" data-form-base="' + ZOHO_CFG.iframe + '" data-form-type="sesion" ' +
+            'data-min-height="740" data-form-title="Formulario de contacto — Destiny Real Estate"></div>' +
+          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>' +
+          '<p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a>.</p>';
+        if (window.DestinyZoho) window.DestinyZoho.refresh();
         return;
       }
 
@@ -296,6 +307,22 @@
       const form = card.querySelector("form");
       const ref = form.querySelector('input[name="zf_referrer_name"]');
       if (ref) ref.value = p.name;
+
+      // Atribución como campos ocultos. Los nombres tienen que existir como
+      // campos ocultos en el formulario de Zoho (ver MEDICION.md); si no existen,
+      // Zoho los descarta sin error.
+      if (window.DestinyAttr) {
+        const a = window.DestinyAttr.filled();
+        a.desarrollo = p.slug;
+        a.form_type = "sesion";
+        a.page_url = location.href.split("#")[0];
+        Object.keys(a).forEach(function (k) {
+          if (!a[k] || form.querySelector('[name="' + k + '"]')) return;
+          const h = document.createElement("input");
+          h.type = "hidden"; h.name = k; h.value = a[k];
+          form.appendChild(h);
+        });
+      }
 
       const frameName = "zfTarget" + i;
       const frame = document.createElement("iframe");
@@ -314,7 +341,10 @@
       });
       frame.addEventListener("load", function () {
         if (!submitting) return; // primer load del iframe vacío (al insertarlo)
-        window.location.href = "gracias.html";
+        // Página de gracias por tipo de conversión: es lo que permite separar
+        // las conversiones en Google Ads.
+        window.location.href = "/gracias-sesion.html?form_type=sesion&d=" +
+          encodeURIComponent(p.slug) + "&ctx=" + encodeURIComponent(p.name);
       });
     });
 

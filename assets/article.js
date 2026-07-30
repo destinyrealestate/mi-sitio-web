@@ -15,7 +15,7 @@
     $("#artKicker").textContent = "Blog & Análisis · " + post.year;
 
     // SEO dinámico del artículo
-    const DOM = "https://destiny.mx", TH = DOM + "/wp-content/themes/destiny/";
+    const DOM = "https://destiny.mx", TH = DOM + "/";
     const url = `${DOM}/articulo/?art=${post.slug}`;
     const img = TH + "assets/img/og-default.jpg";
     const desc = post.title + " — análisis de Destiny Real Estate.";
