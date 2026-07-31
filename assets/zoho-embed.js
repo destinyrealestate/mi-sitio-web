@@ -25,13 +25,19 @@
    cada formulario de Zoho. Mientras esos campos no existan, Zoho recibe los
    parámetros y los descarta: la atribución llega al formulario y muere ahí.
 
-   Campos ocultos a crear en cada formulario, con estos nombres de enlace:
-     gclid, wbraid, gbraid, fbclid, utm_source, utm_medium, utm_campaign,
-     utm_term, utm_content, landing_page, referrer, desarrollo, form_type,
-     page_url
+   Campos ocultos a crear en cada formulario, con estos nombres de enlace.
+   Son 16 — los 10 de KEYS y los 3 de EXTRA en attribution.js, más los 3 que
+   agrega este archivo (desarrollo, page_url, form_type):
+     gclid, wbraid, gbraid, fbclid, msclkid,
+     utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+     landing_page, referrer, first_seen,
+     desarrollo, form_type, page_url
 
    Si Zoho asigna otro nombre de enlace (p. ej. "SingleLine3"), mapéalo aquí
    en FIELD_MAP y no en cada página.
+
+   Y falta un tramo más: el CRM es HubSpot, no Zoho CRM. Los valores viajan
+   por webhook a Make y de ahí al módulo upsertAContact. Ver MEDICION.md.
    ============================================================ */
 (function () {
   "use strict";

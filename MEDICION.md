@@ -151,13 +151,43 @@ Si Zoho no permite alguno de esos nombres y le asigna otro (`SingleLine3`, por
 ejemplo), **no se cambia en cada página**: se mapea en el objeto `FIELD_MAP` al
 inicio de `assets/zoho-embed.js`.
 
-Después de crear los campos en Zoho, falta el último tramo: mapearlos a campos
-personalizados del prospecto en **Zoho CRM**. Sin ese paso la atribución llega
-al formulario y muere ahí.
+Después de crear los campos en Zoho falta el último tramo, y **el CRM es
+HubSpot, no Zoho CRM**. La cadena real es:
 
-Verificación rápida de que el puente funciona: abre
+```
+sitio → iframe de Zoho Forms → webhook → Make → HubSpot
+```
+
+Escenarios de Make involucrados (equipo 2342480):
+
+| Escenario | id | Formulario | Destino |
+|---|---|---|---|
+| Integración Zoho Forms — HOME-TOFU | 5514580 | HOMETOFUFORM27062026V1 | HubSpot |
+| Integration Zoho Forms - Cipriani | 5223878 | CIPRIANIFORM27052026V1 | HubSpot |
+| Integración Zoho Forms — Mercedes-Benz | 5485213 | MERCEDESBENZFORM24062026V1 | HubSpot |
+| Integración Zoho Forms — Newsletter | 5775240 | FORMNEWSLETTER26072026V1 | ActiveCampaign |
+
+Hacen falta las tres cosas, en este orden: campos ocultos en Zoho → propiedades
+personalizadas en HubSpot → mapeo en el módulo `upsertAContact` de Make. Si se
+hace solo la primera, la atribución muere un paso más adelante.
+
+**Estado verificado el 2026-07-30:** los formularios de Zoho tienen **cero**
+campos de atribución y HubSpot **ninguna** propiedad personalizada para
+recibirla. El puente está roto de Zoho en adelante.
+
+Dos cosas más que hay que corregir al hacerlo:
+
+- El escenario de Cipriani manda `hs_analytics_source` **fijo en
+  `"PAID_SOCIAL"`** para todos los leads. Debe salir del `utm_source` real.
+- El escenario HOME-TOFU (5514580) lleva **0 ejecuciones** desde el 28-jun-2026.
+  Su webhook (`hookId` 2511344) está activo y sin cola, así que o no ha entrado
+  un solo lead por el formulario principal, o el formulario de Zoho no lo está
+  llamando. **Verificar esto antes de crear nada.**
+
+Verificación rápida del tramo que SÍ funciona: abre
 `destiny.mx/agenda?gclid=prueba123`, inspecciona el iframe y confirma que su
-`src` contiene `gclid=prueba123`.
+`src` contiene `gclid=prueba123`. Verificado el 2026-07-30: llegan los 9
+parámetros.
 
 ---
 
@@ -185,6 +215,14 @@ El home del blog es un archivo suelto en `public_html`, **no** el
 En el blog los tres scripts van **después** del `<meta charset>`: si se ponen
 antes, el bloque de comentarios empuja el charset fuera del primer kilobyte y
 WordPress renderiza los acentos rotos.
+
+**El blog también mide eventos** desde el 2026-07-30, no solo vistas. Lleva
+`tracking.js` al final del `<body>` (en `theme-v3/footer.php` y en el
+`blog-home.html` suelto) y `data-desarrollo="blog"` en el `<body>`, para que sus
+eventos no se confundan con los de destiny.mx. Importaba porque un solo artículo
+tiene 6 enlaces a `#agenda` y 2 a WhatsApp, que son el trabajo entero del blog y
+no se estaban midiendo. Verificado: el evento sale con `desarrollo: "blog"` y
+arrastra el `gclid` y los UTM guardados en destiny.mx.
 
 Como `blog.destiny.mx` es subdominio de `destiny.mx`, GA4 mantiene la sesión al
 saltar entre los dos sin configurar medición entre dominios, y las cookies de
@@ -249,12 +287,35 @@ localStorage.removeItem('destiny_consent_v1'); location.reload();
 
 ## Lo que este código NO resuelve
 
-- Crear los campos ocultos en Zoho Forms y mapearlos a Zoho CRM.
+- Los campos ocultos en Zoho Forms, las propiedades en HubSpot y el mapeo en
+  Make — ver la sección del puente de atribución. Es el pendiente de más valor:
+  hoy ningún contacto del CRM sabe de dónde vino.
 - Publicar etiquetas dentro del contenedor de GTM (el contenedor ya está
   instalado y cargando, pero va vacío a propósito — ver la sección de GTM).
-- Los eventos de `tracking.js` (WhatsApp, descargas, scroll, etc.) **no** corren
-  en el blog: ahí solo se carga la cadena del `<head>`, no `tracking.js`. El
-  blog mide vistas de página, no interacciones.
 - Crear la cuenta de Google Ads y obtener el `AW-`.
 - Recuperar el acceso administrativo a la propiedad GA4 `G-J8KK325F2B`.
-- Verificar las propiedades en Search Console y volver a enviar el sitemap.
+
+---
+
+## Search Console (revisado 2026-07-30)
+
+**Ya estaba verificado**, y mejor de lo que parecía: es una propiedad de
+**dominio** (`sc-domain:destiny.mx`) verificada por DNS. Por eso no hay ningún
+`<meta name="google-site-verification">` en el HTML y no hace falta ponerlo. Al
+ser de dominio, **cubre también `blog.destiny.mx`** — no es una propiedad
+aparte.
+
+Lo que sí estaba roto eran los sitemaps: los dos enviados fallaban y Google
+llevaba **0 páginas descubiertas**.
+
+- `https://www.destiny.mx/sitemap_index.xml` — resto de la era WordPress. Da
+  **404**: ni existe el subdominio `www` ni esa ruta. Sigue en la lista
+  marcando error; se puede quitar desde la interfaz.
+- `https://blog.destiny.mx/sitemap_index.xml` — sí responde 200, pero su última
+  lectura era de **junio de 2022**. Reenviado el 2026-07-30 para forzar
+  relectura.
+- `https://destiny.mx/sitemap.xml` — **es el bueno** y no estaba enviado.
+  Enviado el 2026-07-30, estado **Correcto** el mismo día.
+
+Antes de reenviar conviene correr `python3 scripts/check-links.py --live`: el
+2026-07-30 dio 49/49 URLs en 200 sin redirección.
