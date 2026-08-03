@@ -11,7 +11,7 @@ Tres archivos, en este orden obligatorio dentro del `<head>` de cada página:
 ```
 1. assets/consent.js       Modo de consentimiento de Google. Va PRIMERO.
 2. assets/attribution.js   Guarda gclid / wbraid / gbraid / UTM en cookies.
-3. assets/tags.js          GA4 + Pixel de Meta + Contentsquare. IDs en un solo lugar.
+3. assets/tags.js          GA4 + Google Ads + Pixel de Meta + Contentsquare. IDs en un solo lugar.
 ```
 
 Y al final del `<body>`:
@@ -73,6 +73,50 @@ window.DESTINY_DEBUG = true;   // imprime cada evento con su carga completa
 window.DestinyAttr.all();      // qué atribución tiene guardada este visitante
 window.destinyTrack('prueba', {a: 1});   // dispara un evento a mano
 ```
+
+---
+
+## Google Ads — `AW-18368975159`
+
+Instalado el **2026-08-03** en `assets/tags.js`, junto a GA4 y el Pixel. No hay
+un segundo `gtag.js`: la librería que ya carga GA4 sirve para las dos cuentas y
+Ads entra con una línea más de `config`. Así es como Google documenta convivir
+GA4 + Ads en la misma página.
+
+```js
+gtag('config', 'AW-18368975159', { allow_enhanced_conversions: true });
+```
+
+Qué queda cubierto de entrada, sin tocar nada más:
+
+- **Vista de página / remarketing.** Todas las páginas de destiny.mx y del blog
+  alimentan las listas de audiencia de Ads desde el primer día.
+- **Enlazador de conversiones.** El `config` de `AW-` guarda solo el `gclid` en
+  la cookie `_gcl_aw`, que es lo que después empata el clic con la conversión.
+- **Consentimiento.** `consent.js` va antes y declara `ad_storage`,
+  `ad_user_data` y `ad_personalization`; si el visitante rechaza, Ads pasa a
+  medición sin cookies (modelado) en vez de escribirlas igual.
+- **Conversiones mejoradas.** La bandera queda activada aquí, pero **solo sirve
+  cuando además** (a) se active la función en la interfaz de Ads y (b) Zoho
+  devuelva el correo en la URL de gracias — ver la sección siguiente.
+
+### Lo que NO hace todavía
+
+La etiqueta base **no registra ninguna conversión**. Cada conversión necesita su
+propio rótulo (`AW-18368975159/xxxxxxxx`), que solo existe una vez creada en la
+interfaz de Google Ads. Orden a seguir:
+
+1. En Ads, crear las acciones de conversión — como mínimo `generate_lead`
+   (principal) y `click_whatsapp` / `click_telefono` (secundarias).
+2. Copiar el rótulo de cada una.
+3. Dispararlas **desde GTM**, con activadores de *Evento personalizado* sobre
+   los eventos que `tracking.js` ya deja en el `dataLayer`. No hace falta tocar
+   el código: los 7 eventos ya están ahí con toda la atribución.
+
+Se hace desde GTM y no en código a propósito: los rótulos cambian cada vez que
+se crea o rehace una conversión, y no vale la pena redesplegar el sitio por eso.
+La etiqueta **base** sí vive en código para que el remarketing no dependa de que
+alguien publique el contenedor.
 
 ---
 
@@ -236,10 +280,15 @@ consentimiento dejará de respetarse.
 ### La regla que no se puede romper
 
 Mientras `GTM_ADMINISTRA_ETIQUETAS` sea `false` en `tags.js`, **no crear dentro
-de GTM ninguna etiqueta de GA4 ni del Pixel de Meta**. Si se crean, cada visita
-y cada evento se cuentan dos veces. GTM es hoy el contenedor para lo *nuevo*
-(Google Ads, remarketing, LinkedIn), no un segundo camino para lo que ya sale
-por código.
+de GTM ninguna etiqueta de GA4, del Pixel de Meta ni la etiqueta base de Google
+Ads** (la de tipo *Etiqueta de Google* con el `AW-`). Si se crean, cada visita y
+cada evento se cuentan dos veces. GTM es hoy el contenedor para lo que **no**
+sale por código.
+
+Con Google Ads la distinción importa: la **etiqueta base** ya está en el código
+—no se toca— pero las **etiquetas de conversión** (las que llevan rótulo) sí van
+en GTM. No se duplican entre sí: una declara la cuenta, la otra registra el
+hecho.
 
 Los 7 eventos de la tabla de arriba ya llegan al `dataLayer`, así que se pueden
 consumir desde GTM con activadores de tipo *Evento personalizado* y el nombre
@@ -292,7 +341,9 @@ localStorage.removeItem('destiny_consent_v1'); location.reload();
   hoy ningún contacto del CRM sabe de dónde vino.
 - Publicar etiquetas dentro del contenedor de GTM (el contenedor ya está
   instalado y cargando, pero va vacío a propósito — ver la sección de GTM).
-- Crear la cuenta de Google Ads y obtener el `AW-`.
+- Crear las acciones de conversión en Google Ads y disparar sus rótulos desde
+  GTM. La etiqueta base (`AW-18368975159`) ya está puesta, pero sola no registra
+  ni una conversión.
 - Recuperar el acceso administrativo a la propiedad GA4 `G-J8KK325F2B`.
 
 ---

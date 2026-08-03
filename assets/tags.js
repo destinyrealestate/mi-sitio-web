@@ -18,10 +18,14 @@
    ni un solo día mientras se construye el contenedor.
 
    REGLA QUE NO SE PUEDE ROMPER: mientras GTM_ADMINISTRA_ETIQUETAS sea
-   false, NO crear dentro de GTM ninguna etiqueta de GA4 ni del Pixel de
-   Meta. Si se crean, cada visita y cada evento se contarían DOS veces.
-   GTM es aquí el contenedor para lo NUEVO (Google Ads, remarketing,
-   LinkedIn, etc.), no un segundo camino para lo que ya está.
+   false, NO crear dentro de GTM ninguna etiqueta de GA4, del Pixel de
+   Meta ni la etiqueta base de Google Ads (AW-). Si se crean, cada visita
+   y cada evento se contarían DOS veces. GTM es aquí el contenedor para lo
+   que NO sale por código (remarketing de LinkedIn, etc.).
+
+   Google Ads sí puede usar GTM para las CONVERSIONES (cada una necesita
+   su etiqueta de conversión con su rótulo), porque la etiqueta base ya
+   está puesta aquí y GTM la reutiliza en lugar de duplicarla.
 
    Para migrar de verdad a GTM el día que se quiera:
      1. Crear en GTM la etiqueta de configuración de GA4, la del Pixel y
@@ -40,7 +44,7 @@
   var GA4_ID = "G-J8KK325F2B";
   var META_PIXEL_ID = "27857783360524172";
   var CONTENTSQUARE_ID = "7dccdd22cb616";
-  var GOOGLE_ADS_ID = "";                // ej. "AW-XXXXXXXXX" — pendiente de crear la cuenta
+  var GOOGLE_ADS_ID = "AW-18368975159";  // instalado 2026-08-03
 
   // false = convivencia: GA4 y Pixel salen por código, GTM va aparte.
   // true  = GA4 y Pixel se administran desde la interfaz de GTM.
