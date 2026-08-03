@@ -46,6 +46,11 @@ PAGES = {
     "scorecard.html":          ("scorecard",           "captura",   ""),
     "privacidad.html":         ("legal",               "legal",     ""),
     "404.html":                ("404",                 "404",       ""),
+    # Exportación cruda de Zoho Forms, autoalojada. No es un iframe: postea
+    # directo a Zoho, así que zoho-embed.js no hace nada aquí. Entra a la
+    # cadena por el consentimiento, la atribución y las etiquetas.
+    "forms/CIPRIANIFORM27052026V1/index.html":
+                               ("cipriani-residences", "captura",   ""),
 }
 
 V = "4"  # versión de caché de los scripts nuevos

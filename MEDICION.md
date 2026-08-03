@@ -166,6 +166,29 @@ Sin esto, cuando Zoho redirige **dentro** de su propio iframe, la página de
 gracias se pinta en un recuadro de 700 px y **la conversión no se mide nunca**,
 porque el evento se queda atrapado en el iframe.
 
+### El formulario autoalojado de Cipriani
+
+`/forms/CIPRIANIFORM27052026V1/` es una exportación cruda de Zoho Forms subida
+al servidor (con su `.zip` al lado). Entró a la cadena de medición el
+**2026-08-03**: antes tenía un GA4 y un Contentsquare pegados a mano y ni
+consentimiento ni atribución. Se le quitaron los dos y ahora lleva los cinco
+scripts como cualquier otra página, con `data-desarrollo="cipriani-residences"`.
+
+**Pero sigue sin poder generar una conversión**, y no por las etiquetas:
+
+- No es un iframe. Postea directo a `forms.zohopublic.com`, así que
+  `zoho-embed.js` —que solo enriquece `iframe.zf-embed` y los contenedores
+  `.zoho-form`— **no hace nada aquí**. La atribución no viaja.
+- Su campo oculto `zf_redirect_url` está **vacío**. Al enviar, Zoho muestra su
+  propia pantalla de gracias en lugar de `/gracias-sesion.html`, así que
+  `generate_lead` no se dispara nunca.
+- Ninguna página del sitio enlaza a esa URL y no está en el sitemap.
+
+Para que sirviera de verdad harían falta dos cosas: poner
+`zf_redirect_url` a `https://destiny.mx/gracias-sesion.html?form_type=sesion&d=cipriani-residences`
+y rellenar por JS los campos ocultos con lo que guarda `DestinyAttr`. Antes de
+invertir ahí conviene decidir si esa página se usa o se borra.
+
 ---
 
 ## La atribución hacia Zoho — el eslabón que falta
