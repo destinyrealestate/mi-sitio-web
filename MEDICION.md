@@ -279,6 +279,15 @@ El home del blog es un archivo suelto en `public_html`, **no** el
 `blog-home.html` del repo. El `.htaccess` lo sirve solo cuando el host es
 `blog.destiny.mx` y la ruta es `/`. Editar el del repo no cambia nada ahí.
 
+**El `?v=` del blog se sube a mano, por SSH.** No lo toca ningún deploy. El
+2026-08-03 estaba en `v=2` mientras el repo iba en `v=3`: se había quedado atrás
+dos versiones sin que nadie lo notara. Se subió a `v=4` en los tres archivos
+—`theme-v3/header.php`, `theme-v3/footer.php` y el `blog-home.html` suelto—
+con respaldos `.bak-claude-20260803` al lado. Ruta real en el servidor:
+`~/domains/destiny.mx/public_html/`. Cada vez que suba `V` en `patch-head.py`
+hay que repetir esto o el blog se queda con la copia vieja hasta que expire
+(el servidor manda `max-age=604800`, siete días).
+
 En el blog los tres scripts van **después** del `<meta charset>`: si se ponen
 antes, el bloque de comentarios empuja el charset fuera del primer kilobyte y
 WordPress renderiza los acentos rotos.
@@ -348,6 +357,22 @@ artículos se leen sin JavaScript.
 - Enfoque de **modo de consentimiento, no bloqueo de scripts**: las etiquetas
   cargan siempre y lo que cambia es si pueden escribir cookies. Así no se pierde
   el modelado de conversiones de Google.
+
+### El consentimiento no cruza al blog (verificado 2026-08-03)
+
+La decisión se guarda en `localStorage`, que es **por origen**. Las cookies de
+`attribution.js` sí cruzan, porque llevan `domain=.destiny.mx`; `localStorage`
+no tiene ese mecanismo. Consecuencia comprobada en el navegador: quien acepta o
+rechaza en `destiny.mx` vuelve a ver el banner al entrar a `blog.destiny.mx`, y
+—peor— quien **rechazó** en destiny.mx arranca en el blog con los valores por
+defecto de México, que son `granted`. Su rechazo no se respeta ahí.
+
+Importa más ahora que Google Ads está instalado: `ad_storage` y
+`ad_personalization` dependen justamente de esa decisión.
+
+Se arregla guardando la elección en una cookie con `domain=.destiny.mx` en vez
+de (o además de) `localStorage`, leyendo la cookie primero. Es un cambio de unas
+diez líneas en `consent.js`, en `read()` y `write()`.
 
 Para volver a ver el banner en pruebas:
 
