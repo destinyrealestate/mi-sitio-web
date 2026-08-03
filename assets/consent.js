@@ -14,7 +14,9 @@
    - EEE/Reino Unido/Suiza: denegado por defecto hasta que el visitante
      acepte, como exige la política de consentimiento de la UE de Google.
 
-   La elección se guarda en localStorage y se respeta en visitas siguientes.
+   La elección se guarda en una cookie de .destiny.mx (con localStorage como
+   respaldo) y se respeta en visitas siguientes Y en el blog. Ver el bloque
+   "Dónde se guarda la elección" más abajo.
 
    REAPERTURA: el aviso de privacidad promete un enlace de preferencias.
    Lo expone window.DESTINY_CONSENT.open(). Cualquier <a id="cookiePrefs">
@@ -35,10 +37,59 @@
   var DENIED = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' };
   var GRANTED = { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' };
 
-  function read() {
-    try { return localStorage.getItem(STORE); } catch (e) { return null; }
+  /* ------------------------------------------------------------
+     Dónde se guarda la elección
+     ------------------------------------------------------------
+     En una COOKIE con domain=.destiny.mx, no en localStorage.
+
+     localStorage es por origen: destiny.mx y blog.destiny.mx tienen cada
+     uno el suyo. Con la elección ahí, quien RECHAZABA en destiny.mx
+     arrancaba en el blog con los valores por defecto de México, que son
+     'granted' — su rechazo no se respetaba. La cookie con punto inicial
+     cubre los dos, igual que hace attribution.js.
+
+     localStorage se mantiene por dos razones: migrar a quien ya había
+     decidido antes del 2026-08-03, y servir de respaldo si el navegador
+     rechaza la cookie. La cookie manda cuando las dos existen.
+
+     180 días: es una decisión del visitante, no un dato de campaña, y
+     volver a preguntar cada tres meses molesta sin aportar nada. Queda
+     debajo de los 13 meses que marca la práctica europea.
+     ------------------------------------------------------------ */
+  var MAX_AGE = 15552000; // 180 días
+  var host = location.hostname || '';
+  var DOMAIN = /(^|\.)destiny\.mx$/.test(host) ? ';domain=.destiny.mx' : '';
+  var SECURE = location.protocol === 'https:' ? ';Secure' : '';
+
+  function valido(v) {
+    return v === 'granted' || v === 'denied' ? v : null;
   }
+
+  function readCookie() {
+    var m = document.cookie.match('(^|;\\s*)' + STORE + '=([^;]*)');
+    return m ? valido(decodeURIComponent(m[2])) : null;
+  }
+
+  function readStorage() {
+    try { return valido(localStorage.getItem(STORE)); } catch (e) { return null; }
+  }
+
+  function read() {
+    var c = readCookie();
+    if (c) return c;
+    // Quien decidió antes de que existiera la cookie: se migra en silencio.
+    var s = readStorage();
+    if (s) writeCookie(s);
+    return s;
+  }
+
+  function writeCookie(v) {
+    document.cookie = STORE + '=' + encodeURIComponent(v) +
+      ';max-age=' + MAX_AGE + ';path=/' + DOMAIN + ';SameSite=Lax' + SECURE;
+  }
+
   function write(v) {
+    writeCookie(v);
     try { localStorage.setItem(STORE, v); } catch (e) {}
   }
 

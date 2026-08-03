@@ -53,7 +53,7 @@ PAGES = {
                                ("cipriani-residences", "captura",   ""),
 }
 
-V = "4"  # versión de caché de los scripts nuevos
+V = "5"  # versión de caché de los scripts nuevos
 
 HEAD_BLOCK = f"""<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v={V}"></script>

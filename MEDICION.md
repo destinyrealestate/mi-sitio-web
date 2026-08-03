@@ -358,27 +358,37 @@ artículos se leen sin JavaScript.
   cargan siempre y lo que cambia es si pueden escribir cookies. Así no se pierde
   el modelado de conversiones de Google.
 
-### El consentimiento no cruza al blog (verificado 2026-08-03)
+### El consentimiento cruza al blog (arreglado 2026-08-03)
 
-La decisión se guarda en `localStorage`, que es **por origen**. Las cookies de
-`attribution.js` sí cruzan, porque llevan `domain=.destiny.mx`; `localStorage`
-no tiene ese mecanismo. Consecuencia comprobada en el navegador: quien acepta o
-rechaza en `destiny.mx` vuelve a ver el banner al entrar a `blog.destiny.mx`, y
-—peor— quien **rechazó** en destiny.mx arranca en el blog con los valores por
-defecto de México, que son `granted`. Su rechazo no se respeta ahí.
+Hasta ese día la decisión vivía solo en `localStorage`, que es **por origen**.
+Las cookies de `attribution.js` sí cruzaban, porque llevan `domain=.destiny.mx`;
+`localStorage` no tiene ese mecanismo. Comprobado en el navegador: quien aceptaba
+o rechazaba en `destiny.mx` volvía a ver el banner en `blog.destiny.mx` y —lo
+serio— quien **rechazaba** arrancaba en el blog con los valores por defecto de
+México, que son `granted`. Su rechazo no se respetaba. Dejó de ser cosmético en
+cuanto se instaló Google Ads: `ad_storage` y `ad_personalization` dependen justo
+de esa decisión.
 
-Importa más ahora que Google Ads está instalado: `ad_storage` y
-`ad_personalization` dependen justamente de esa decisión.
+Ahora la elección se guarda en una **cookie `destiny_consent_v1` con
+`domain=.destiny.mx`**, 180 días, y `localStorage` queda como respaldo:
 
-Se arregla guardando la elección en una cookie con `domain=.destiny.mx` en vez
-de (o además de) `localStorage`, leyendo la cookie primero. Es un cambio de unas
-diez líneas en `consent.js`, en `read()` y `write()`.
+- Al leer manda la cookie. Si no hay cookie pero sí `localStorage` —alguien que
+  decidió antes del cambio— se migra en silencio y se escribe la cookie.
+- Al escribir se escriben las dos, por si el navegador rechaza la cookie.
+- Solo se aceptan los valores `granted` y `denied`; cualquier otra cosa se
+  trata como "sin decisión" y vuelve a preguntar.
+- 180 días porque es una decisión del visitante, no un dato de campaña. Queda
+  debajo de los 13 meses de la práctica europea.
 
-Para volver a ver el banner en pruebas:
+Para volver a ver el banner en pruebas hay que borrar **las dos**:
 
 ```js
-localStorage.removeItem('destiny_consent_v1'); location.reload();
+localStorage.removeItem('destiny_consent_v1');
+document.cookie = 'destiny_consent_v1=;max-age=0;path=/;domain=.destiny.mx';
+location.reload();
 ```
+
+Borrar solo el `localStorage` ya no sirve de nada: la cookie lo repone.
 
 ---
 
