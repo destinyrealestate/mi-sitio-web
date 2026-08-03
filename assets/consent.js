@@ -15,6 +15,10 @@
      acepte, como exige la política de consentimiento de la UE de Google.
 
    La elección se guarda en localStorage y se respeta en visitas siguientes.
+
+   REAPERTURA: el aviso de privacidad promete un enlace de preferencias.
+   Lo expone window.DESTINY_CONSENT.open(). Cualquier <a id="cookiePrefs">
+   o [data-cookie-prefs] del sitio queda conectado solo, sin JS en el HTML.
    ============================================================ */
 (function () {
   "use strict";
@@ -51,14 +55,13 @@
   if (saved === 'granted') gtag('consent', 'update', GRANTED);
 
   function apply(choice) {
+    saved = choice;
     write(choice);
     gtag('consent', 'update', choice === 'granted' ? GRANTED : DENIED);
     window.dataLayer.push({ event: 'consent_update', consent_state: choice });
   }
 
-  // --- 3. Banner. Solo si no hay decisión previa. ---
-  if (saved) return;
-
+  // --- 3. Banner. ---
   var CSS = '' +
     '#dstCookie{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:760px;margin:0 auto;' +
       'background:rgba(16,25,35,.97);color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:16px;' +
@@ -75,36 +78,55 @@
     '#dstCookie button:hover{border-color:#d8b26a}' +
     '#dstCookie button.ok{background:#d8b26a;border-color:#d8b26a;color:#101923}' +
     '#dstCookie button.ok:hover{filter:brightness(1.08)}' +
+    '#dstCookie button[aria-pressed="true"]{outline:2px solid #d8b26a;outline-offset:2px}' +
+    '#dstCookie .dstNow{display:block;margin-top:6px;font-size:12.5px;opacity:.62}' +
     '@media (max-width:560px){#dstCookie{padding:18px}#dstCookie .dstBtns{width:100%}#dstCookie button{flex:1}}';
+
+  function styles() {
+    if (document.getElementById('dstCookieCSS')) return;
+    var st = document.createElement('style');
+    st.id = 'dstCookieCSS';
+    st.textContent = CSS;
+    document.head.appendChild(st);
+  }
+
+  function close(box) {
+    box.classList.remove('in');
+    setTimeout(function () { box.remove(); }, 450);
+  }
 
   function mount() {
     if (document.getElementById('dstCookie')) return;
-
-    var st = document.createElement('style');
-    st.textContent = CSS;
-    document.head.appendChild(st);
+    styles();
 
     var box = document.createElement('div');
     box.id = 'dstCookie';
     box.setAttribute('role', 'dialog');
-    box.setAttribute('aria-label', 'Aviso de cookies');
+    box.setAttribute('aria-label', 'Preferencias de cookies');
+
+    // Al reabrir desde el pie mostramos la decisión vigente; en la primera
+    // visita no hay ninguna que mostrar.
+    var estado = saved
+      ? '<span class="dstNow">Tu preferencia actual: ' +
+        (saved === 'granted' ? 'cookies aceptadas' : 'cookies rechazadas') + '.</span>'
+      : '';
+
     box.innerHTML =
       '<p>Usamos cookies propias y de terceros para medir el rendimiento del sitio y la efectividad de ' +
       'nuestra publicidad. Puedes rechazarlas sin perder acceso a nada. ' +
       // URL absoluta a propósito: este archivo también se carga desde
       // blog.destiny.mx, donde /privacidad.html no existe (es WordPress).
-      '<a href="https://destiny.mx/privacidad.html">Aviso de Privacidad</a>.</p>' +
+      '<a href="https://destiny.mx/privacidad.html">Aviso de Privacidad</a>.' + estado + '</p>' +
       '<div class="dstBtns">' +
-        '<button type="button" data-consent="denied">Rechazar</button>' +
-        '<button type="button" class="ok" data-consent="granted">Aceptar</button>' +
+        '<button type="button" data-consent="denied" aria-pressed="' + (saved === 'denied') + '">Rechazar</button>' +
+        '<button type="button" class="ok" data-consent="granted" aria-pressed="' + (saved === 'granted') + '">Aceptar</button>' +
       '</div>';
 
     box.addEventListener('click', function (ev) {
       var b = ev.target.closest('button[data-consent]');
       if (!b) return;
       apply(b.getAttribute('data-consent'));
-      box.classList.remove('in');
-      setTimeout(function () { box.remove(); }, 450);
+      close(box);
     });
 
     document.body.appendChild(box);
@@ -112,6 +134,30 @@
       requestAnimationFrame(function () { box.classList.add('in'); });
     });
   }
+
+  function open() {
+    if (document.body) mount();
+    else document.addEventListener('DOMContentLoaded', mount);
+  }
+
+  // --- 4. API pública para el enlace de preferencias del pie. ---
+  window.DESTINY_CONSENT = {
+    open: open,
+    get state() { return saved; }   // 'granted' | 'denied' | null
+  };
+
+  // Delegado en el documento: funciona con los pies que se inyectan por JS.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest('#cookiePrefs, [data-cookie-prefs]');
+    if (!a) return;
+    ev.preventDefault();
+    var box = document.getElementById('dstCookie');
+    if (box) { close(box); return; }   // segundo clic: cierra
+    open();
+  });
+
+  // --- 5. Primera visita: el banner se muestra solo. ---
+  if (saved) return;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', mount);

@@ -115,6 +115,25 @@
     setTimeout(done, 8000); // red mala: nunca dejar el velo pegado
   }
 
+  /* Leyenda de consentimiento. La exige el aviso de privacidad y va aquí,
+     no en cada HTML, porque los formularios se montan desde este archivo.
+     Es el respaldo del consentimiento tácito: lo sólido es la casilla NO
+     marcada por defecto dentro del formulario en el panel de Zoho. */
+  function legend(host) {
+    if (!host || host.querySelector('.form-legal')) return;
+    var p = document.createElement('p');
+    p.className = 'form-legal';
+    p.style.cssText = 'font:400 12.5px/1.55 "Outfit",system-ui,sans-serif;' +
+      'margin:10px 0 0;opacity:.62;text-align:center;';
+    // URL absoluta: este archivo también se carga desde blog.destiny.mx,
+    // donde /privacidad.html no existe (es WordPress).
+    p.innerHTML = 'Al enviar este formulario aceptas nuestro ' +
+      '<a href="https://destiny.mx/privacidad.html" style="color:inherit;text-decoration:underline;">' +
+      'Aviso de Privacidad</a> y el uso de tus datos para contactarte y para ' +
+      'las finalidades publicitarias descritas en él.';
+    host.appendChild(p);
+  }
+
   function run() {
     /* --- 1. Iframes de Zoho ya presentes en el HTML --- */
     document.querySelectorAll('iframe.zf-embed').forEach(function (ifr) {
@@ -130,6 +149,7 @@
       if (!ifr.getAttribute('loading')) ifr.setAttribute('loading', 'lazy');
       autoHeight(ifr);
       loader(ifr.parentNode, ifr);
+      legend(ifr.parentNode);
     });
 
     /* --- 2. Contenedores declarativos de las páginas nuevas --- */
@@ -152,6 +172,7 @@
       el.appendChild(ifr);
       autoHeight(ifr);
       loader(el, ifr);
+      legend(el);
     });
   }
 
