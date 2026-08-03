@@ -5,6 +5,28 @@ AddDefaultCharset UTF-8
 </IfModule>
 
 # ============================================================
+# Archivos de trabajo que NO se sirven
+# ============================================================
+# El deploy es un checkout del repo entero: todo lo que está en Git queda
+# accesible por URL. Hasta el 2026-08-03, destiny.mx/MEDICION.md respondía
+# 200 con los IDs de GA4, Ads, Pixel y GTM, la ruta interna del servidor y
+# la lista de lo que falta configurar. No hay credenciales en ninguno, pero
+# es el mapa de la operación servido a quien lo pida.
+#
+# Nada del sitio enlaza a estos archivos: verificado antes de bloquearlos.
+# Si algún día se publica una guía en .md pensada para leerse, sacarla de
+# aquí en vez de quitar la regla.
+<FilesMatch "\.(md|py|zip)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# ============================================================
 # Destiny Real Estate — Apache rewrites (sitio estático Hostinger)
 # Migración blog: WP movido a blog.destiny.mx (side-by-side)
 # Las URLs viejas redirigen al subdominio del blog.
