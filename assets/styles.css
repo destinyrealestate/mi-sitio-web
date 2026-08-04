@@ -997,8 +997,26 @@ p { text-wrap: pretty; }
 .brandstrip__stats .bs .l { font-size: 13px; color: rgba(255,255,255,.65); margin-top: 8px; max-width: 18ch; margin-inline: auto; }
 @media (max-width: 620px) { .brandstrip__stats { gap: 30px; } .brandstrip__stats .bs .n { font-size: 34px; } }
 
-/* ---------- Fix: card destacado del blog en el home (llena la columna + fondo) ---------- */
-.blog-feat__main .fpost__main { flex: 1 1 auto; min-height: 360px; background: linear-gradient(180deg, rgba(19,25,42,.05) 0%, rgba(19,25,42,.28) 50%, rgba(19,25,42,.84) 100%), url("img/blog-skyline2.jpg") center/cover no-repeat; }
+/* ---------- Card destacado del blog en el home (llena la columna) ---------- */
+.blog-feat__main .fpost__main { flex: 1 1 auto; min-height: 360px; }
+
+/* ---------- Portada de cada análisis en el home ----------
+   Antes el destacado traía una foto fija en este archivo y las tarjetas de al
+   lado iban en azul plano. Ahora la imagen la trae cada artículo desde
+   blog-data.js; aquí sólo vive el velo que sostiene la lectura del título. */
+.fpost__img { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.fpost__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+.fpost__img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,25,42,.58) 0%, rgba(19,25,42,.44) 38%, rgba(19,25,42,.90) 100%); transition: background .45s var(--ease); }
+.fpost:hover .fpost__img img { transform: scale(1.05); }
+.fpost:hover .fpost__img::after { background: linear-gradient(180deg, rgba(19,25,42,.50) 0%, rgba(19,25,42,.36) 38%, rgba(19,25,42,.86) 100%); }
+/* El texto va encima del velo, y con sombra por si la foto trae cielo claro.
+   El :not() es obligatorio: sin él esta regla le gana en especificidad al
+   position:absolute de la portada y la tarjeta se desarma. */
+.fpost > div:not(.fpost__img) { position: relative; z-index: 1; }
+.fpost h3, .fpost__k, .fpost__date { text-shadow: 0 1px 14px rgba(19,25,42,.62); }
+/* Si la foto no carga, la tarjeta vuelve al azul de siempre. */
+.fpost__img.noimg { background: var(--ink-2); }
+.fpost__img.noimg img { display: none; }
 
 /* ---------- Hero carrusel de proyectos de marca (crossfade) ---------- */
 .hero__slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.4s ease; }

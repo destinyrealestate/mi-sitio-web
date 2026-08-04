@@ -9,7 +9,7 @@ window.DESTINY_BLOG = (function () {
   //   — enBlog=1: el artículo vive en blog.destiny.mx y la tarjeta enlaza directo allá.
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
-  const POSTS = [
+  const ROWS = [
     ["Los costos de cierre en preconstrucción que no vienen en el price list", "costos-de-cierre-preconstruccion-price-list", 2026, "7 ago 2026", 7, 7, 1],
     ["Frida Kahlo Wynwood Residences: qué compras cuando compras una marca", "frida-kahlo-wynwood-residences-analisis", 2026, "5 ago 2026", 7, 5, 1],
     ["FIRPTA: por qué te retienen el 15% al vender en Estados Unidos", "firpta-retencion-15-por-ciento-vender-propiedad-estados-unidos", 2026, "3 ago 2026", 7, 3, 1],
@@ -71,17 +71,76 @@ window.DESTINY_BLOG = (function () {
     ["Invertir en criptomonedas: ¿vale la pena?", "invertir-en-criptomonedas", 2021, "9 mar 2021", 2, 9, 1],
     ["¿Cómo generar más dinero?", "como-generar-mas-dinero", 2021, "3 mar 2021", 2, 3, 1],
     ["Miami es caro para vivir… ¿o no?", "miami-es-caro-para-vivir", 2021, "27 feb 2021", 1, 27, 1],
-  ]
+  ];
+
+  // Portadas de cada artículo, por slug. El home NO consulta el API de
+  // WordPress, así que las imágenes se congelan aquí: las genera
+  // scripts/blog-imgs.py, que las va a buscar al blog y resuelve con el banco
+  // local las de los artículos que no tienen imagen destacada asignada.
+  //
+  //   python3 scripts/blog-imgs.py
+  //
+  // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
+  // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
+  const IMGS = { /* AUTO:INICIO */
+    "costos-de-cierre-preconstruccion-price-list": "assets/img/midtownpark/exterior.jpg",
+    "frida-kahlo-wynwood-residences-analisis": "assets/img/frida/hero.jpg",
+    "firpta-retencion-15-por-ciento-vender-propiedad-estados-unidos": "https://blog.destiny.mx/wp-content/uploads/2026/08/firpta-retencion-venta-propiedad-miami-800x560.jpg",
+    "costos-de-cierre-preconstruccion-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/costos-de-cierre-preconstruccion-miami-800x560.jpg",
+    "bentley-residences-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/bentley-residences-miami-800x560.jpg",
+    "mercado-inmobiliario-miami-2026": "https://blog.destiny.mx/wp-content/uploads/2026/07/mercado-inmobiliario-miami-2026-800x560.jpg",
+    "condo-barato-letra-chica-hoa-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/condo-barato-letra-chica-hoa-miami-800x560.jpg",
+    "se-acabo-el-mundial-discurso-de-venta-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/se-acabo-el-mundial-discurso-de-venta-miami-800x560.jpg",
+    "miami-no-es-un-mercado-son-dos": "https://blog.destiny.mx/wp-content/uploads/2026/07/miami-no-es-un-mercado-son-dos-800x560.jpg",
+    "premium-residencias-marca-miami": "assets/img/mandarin/hero.jpg",
+    "marcas-miami-renta-vs-prestigio": "assets/img/stregis-brickell/hero.jpg",
+    "premium-marca-reventa-cuando-no": "assets/img/cipriani/hero.jpg",
+    "invertir-en-miami-proteger-patrimonio-2026": "assets/img/hero-miami.jpg",
+    "invertir-miami-desde-mexico-blindaje-patrimonial": "assets/img/hero-bahia.jpg",
+    "financiamiento-inmobiliario-miami-inversionistas": "assets/img/hero-dusk.jpg",
+    "titulo-propiedad-miami-extranjeros": "assets/img/onepark/hero.jpg",
+    "invertir-miami-siendo-extranjero": "assets/img/blog-skyline.jpg",
+    "mejores-ciudades-invertir-bienes-raices-cuando": "assets/img/hero-turquesa.jpg",
+    "economia-mexicana-analisis-real-inversionistas": "assets/img/hero-bluehour.jpg",
+    "invertir-en-miami-desde-mexico-guia-completa": "assets/img/blog-skyline2.jpg",
+    "que-pasa-si-no-pago-hipoteca-miami": "assets/img/viceroy/exterior.jpg",
+    "titulo-propiedad-estados-unidos-inversionistas-mexicanos": "assets/img/rivage/dusk.jpg",
+    "seguridad-juridica-propiedad-estados-unidos-extranjeros": "assets/img/stregis-brickell/entrance.jpg",
+    "inversion-inmobiliaria-miami-tips": "assets/img/hero-pool.jpg",
+    "real-estate-de-lujo-en-miami": "https://blog.destiny.mx/wp-content/uploads/2026/04/casa-bella-18-800x560.webp",
+    "south-beach": "assets/img/faena/beach.jpg",
+    "fraudes-inmobiliarios": "https://blog.destiny.mx/wp-content/uploads/2026/05/pagani17-1-800x560.webp",
+    "vida-nocturna-de-miami": "https://blog.destiny.mx/wp-content/uploads/2026/05/St-Regis-Sunny-Isles-4-800x560.webp",
+    "departamentos-en-preventa": "https://blog.destiny.mx/wp-content/uploads/2026/05/SRRSIB-9-800x560.webp",
+    "tipos-de-inversiones": "https://blog.destiny.mx/wp-content/uploads/2026/05/turnberry_shortFilm_Opt-1_1.mp4",
+    "como-abrir-una-empresa-en-estados-unidos": "https://blog.destiny.mx/wp-content/uploads/2026/05/onepark-interiores-1-800x560.webp",
+    "zonas-de-miami": "https://blog.destiny.mx/wp-content/uploads/2026/05/onepark-interiores-13-800x560.webp",
+    "visas-de-inversionista": "https://blog.destiny.mx/wp-content/uploads/2026/05/1428-brickell-20-800x560.webp",
+  /* AUTO:FIN */ };
+
+  // Respaldo para el archivo de 2021, que se quedó sin portada cuando la
+  // migración dejó huérfanos sus adjuntos. Rota por posición para que no salgan
+  // veinte tarjetas con la misma foto.
+  const IMG_POOL = [
+    "assets/img/blog-skyline2.jpg",
+    "assets/img/hero-bluehour.jpg",
+    "assets/img/hero-bahia.jpg",
+    "assets/img/blog-skyline.jpg",
+    "assets/img/hero-dusk.jpg"
+  ];
+
+  const POSTS = ROWS
     // Las entradas programadas se listan aquí desde ya, pero sólo aparecen el día
     // que el blog las publica (9:00). Así no hay que volver a tocar este archivo.
     .filter(p => new Date(p[2], p[4], p[5], 9, 0, 0) <= new Date())
-    .map(p => ({
+    .map((p, i) => ({
       title: p[0],
       url: p[6] ? U + p[1] + "/" : "Articulo.html?post=" + p[1],
       src: U + p[1] + "/",
       slug: p[1],
       year: p[2],
-      date: p[3]
+      date: p[3],
+      img: IMGS[p[1]] || IMG_POOL[i % IMG_POOL.length]
     }));
 
   return { POSTS };

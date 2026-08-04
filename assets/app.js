@@ -84,11 +84,16 @@
   const B = window.DESTINY_BLOG;
   if (B && $("#homeBlogMain")) {
     const f = B.POSTS.slice(0, 5);
+    // La portada va de fondo, detrás del texto. El velo lo pone el CSS.
+    const cover = (p, eager) =>
+      `<div class="fpost__img"><img src="${D.imgURL(p.img)}" alt="${p.title}"` +
+      ` loading="${eager ? "eager" : "lazy"}" decoding="async" referrerpolicy="no-referrer"` +
+      ` onerror="this.parentNode.classList.add('noimg')"></div>`;
     const m = f[0];
     $("#homeBlogMain").innerHTML =
-      `<a class="fpost fpost__main" href="${m.url}"><div><div class="fpost__k">Análisis destacado</div><h3>${m.title}</h3><div class="fpost__date">Oscar Chapa · ${m.date}</div></div></a>`;
+      `<a class="fpost fpost__main" href="${m.url}">${cover(m, true)}<div><div class="fpost__k">Análisis destacado</div><h3>${m.title}</h3><div class="fpost__date">Oscar Chapa · ${m.date}</div></div></a>`;
     $("#homeBlogSide").innerHTML = f.slice(1, 5).map(p =>
-      `<a class="fpost" href="${p.url}"><div><div class="fpost__k">${p.year}</div><h3>${p.title}</h3><div class="fpost__date">${p.date}</div></div></a>`).join("");
+      `<a class="fpost" href="${p.url}">${cover(p, false)}<div><div class="fpost__k">${p.year}</div><h3>${p.title}</h3><div class="fpost__date">${p.date}</div></div></a>`).join("");
   }
 
   /* ---------- Shell (nav, drawer, scroll, reveal, form) ---------- */
