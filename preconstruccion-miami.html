@@ -34,6 +34,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css?v=57">
+<style>
+  /* Retrato vertical de Oscar: solo en esta landing */
+  .split--retrato { grid-template-columns: .85fr 1.15fr; }
+  .split--retrato .split__media img { height: auto; min-height: 0; aspect-ratio: 3 / 4; }
+  @media (max-width: 900px) {
+    .split--retrato .split__media img { max-width: 420px; margin-inline: auto; display: block; }
+  }
+</style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
  {"@type":"Question","name":"¿Cuánto necesito para empezar a invertir en preconstrucción en Miami?","acceptedAnswer":{"@type":"Answer","text":"Los proyectos de nuestra colección arrancan alrededor de 570,000 dólares. Como se paga por etapas, el desembolso inicial suele ser del 10% al 20% del precio: entre 57,000 y 114,000 dólares al firmar. A eso hay que sumarle los costos de cierre, que se pagan hasta la escritura. En la sesión corremos tu caso con el price list real del proyecto que te interese."}},
@@ -267,9 +275,9 @@
 
 <!-- ══════════ 7 · OSCAR ══════════ -->
 <section class="section" data-screen-label="Oscar Chapa">
-  <div class="wrap split">
+  <div class="wrap split split--retrato">
     <div class="split__media reveal">
-      <img src="/assets/img/oscar-retrato.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" loading="lazy" decoding="async">
+      <img src="/assets/img/oscar-retrato-v2.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1200" height="1600" loading="lazy" decoding="async">
     </div>
     <div class="reveal d1">
       <span class="eyebrow">Quién te va a atender</span>
