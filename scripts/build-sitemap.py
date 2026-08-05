@@ -56,6 +56,12 @@ PAGES = [
     ("/club",                    "0.9", "monthly"),
     ("/radar",                   "0.8", "monthly"),
     ("/scorecard",               "0.8", "monthly"),
+    # Landings de Google Ads. Van al sitemap a propósito: no llevan noindex
+    # porque también deben poder posicionar en orgánico. Las páginas de
+    # gracias NO van: son noindex.
+    ("/preconstruccion-miami",   "0.9", "monthly"),
+    ("/invertir-en-dolares",     "0.9", "monthly"),
+    ("/guia",                    "0.8", "monthly"),
     ("/Marca.html",              "0.8", "monthly"),
     ("/Inversion.html",          "0.8", "monthly"),
     ("/privacidad.html",         "0.2", "yearly"),

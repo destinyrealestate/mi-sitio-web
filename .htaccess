@@ -56,6 +56,25 @@ AddDefaultCharset UTF-8
   RewriteRule ^(agenda|club|radar|scorecard)/$  /$1       [R=301,L]
 
   # ----------------------------------------------------------
+  # Landing pages de Google Ads (fase 1) y sus páginas de gracias.
+  # Las URLs de destino de los anuncios tienen que ser limpias, en
+  # minúsculas y sin parámetros: así las escribe la campaña y así las
+  # califica Google. Reescritura interna → responden 200.
+  #
+  # /guia rescata además una fuga vieja: /Guia.html estaba enlazada
+  # desde el menú del blog y desde campañas, y respondía 404.
+  # ----------------------------------------------------------
+  RewriteRule ^(preconstruccion-miami|invertir-en-dolares)$   $1.html   [L]
+  RewriteRule ^(preconstruccion-miami|invertir-en-dolares)/$  /$1       [R=301,L]
+
+  RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
+  RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
+
+  # La guía: /guia responde 200 y /Guia.html sigue vivo para los enlaces
+  # viejos, que llegan con esa mayúscula exacta.
+  RewriteRule ^guia/?$  /Guia.html  [L]
+
+  # ----------------------------------------------------------
   # Rescate de las rutas de la era WordPress.
   # Estaban en el sitemap y en las canónicas, y hoy responden 404.
   # Un solo salto: origen → destino final.

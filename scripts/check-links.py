@@ -31,7 +31,10 @@ os.chdir(ROOT)
 
 # Rutas sin extensión que resuelve el .htaccess. Si agregas una ruta corta allá,
 # agrégala aquí o el verificador la reportará como roto.
-RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/"}
+RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
+                 # Landings de Google Ads y sus páginas de gracias
+                 "/preconstruccion-miami", "/invertir-en-dolares", "/guia",
+                 "/gracias-preconstruccion", "/gracias-dolares", "/gracias-guia"}
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 
