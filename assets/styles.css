@@ -405,8 +405,11 @@ p { text-wrap: pretty; }
 .cta { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,5vw,80px); }
 .cta__left .lede { color: rgba(250,249,243,.74); margin: 22px 0 34px; }
 .cta__list { display: grid; gap: 16px; margin-bottom: 36px; }
-.cta__list li { display: flex; gap: 14px; align-items: flex-start; list-style: none; font-size: 15.5px; color: rgba(250,249,243,.86); }
-.cta__list li::before { content: ""; flex: none; width: 7px; height: 7px; margin-top: 8px; background: var(--gold-bright); transform: rotate(45deg); }
+/* el rombo va absoluto, no como item de flex: si no, un <strong> dentro del li
+   se convierte en columna aparte y el texto se parte en dos bloques */
+.cta__list li { position: relative; padding-left: 21px; list-style: none; font-size: 15.5px; line-height: 1.6; color: rgba(250,249,243,.86); }
+.cta__list li::before { content: ""; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; background: var(--gold-bright); transform: rotate(45deg); }
+.cta__list li strong { color: var(--paper); font-weight: 600; }
 .cta__trust { font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(250,249,243,.5); padding-top: 26px; border-top: 1px solid var(--line-light); }
 
 .form { background: var(--paper); color: var(--ink); padding: clamp(30px,3.4vw,48px); border-radius: var(--r); }
