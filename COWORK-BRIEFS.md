@@ -1,27 +1,410 @@
 # Briefs para Claude CoWork
 
-Cuatro encargos independientes para cerrar lo que falta del Prompt 3. Cada bloque
-se pega tal cual. **No dependen entre sí**: se pueden lanzar en paralelo.
+Cinco encargos para cerrar lo que falta. Cada bloque se pega tal cual.
 
-Contexto que comparten todos: `FORMULARIOS.md` (el motor y el payload),
-`MEDICION.md` (la capa del navegador) y `MAKE-ESCENARIO.md` (el mapeo propuesto).
+**Reescrito el 2026-08-06.** La versión anterior tenía briefs para ActiveCampaign y
+para construir el escenario de Make: las dos cosas ya están hechas y se cayeron.
 
 ---
 
-## Brief 1 · Los PDFs que faltan
+## Dónde está todo — el estado real
 
-El único imprescindible es el del Scorecard: la página lo promete por escrito
-("Te lo enviamos por correo") y el archivo no existe. Los otros dos son opcionales
-y el brief lo dice.
+Rama `formularios-nativos`, 10 commits por delante de `main`. **`main` no se ha
+tocado**, así que destiny.mx en vivo sigue con Zoho: es a propósito.
+
+| Pieza | Estado |
+|---|---|
+| Formularios nativos, 22 en 16 páginas | ✅ hecho y probado |
+| Capa de medición (atribución, conversiones, diagnóstico) | ✅ hecha y probada |
+| Lista ActiveCampaign `Leads Web 2026` | ✅ creada · **id 7** |
+| 12 tags de ActiveCampaign | ✅ creados · **ids 11–22** |
+| Webhook de Make | ✅ **2662269** |
+| Escenario de Make **5871285** | ⚠️ armado, **INACTIVO**, sin Meta CAPI |
+| 18 propiedades `dst_*` en HubSpot | ❌ Brief B |
+| Módulo de Meta CAPI | ❌ Brief A · falta el token |
+| Contenedor de GTM importado | ❌ Brief C |
+| Acción `newsletter_signup` en Google Ads | ❌ Brief C |
+| Despliegue | ❌ Brief D |
+| PDF del Scorecard | ❌ Brief E |
+
+### Identificadores que vas a necesitar
 
 ```
-Trabaja en el repositorio de destiny.mx que tienes abierto. Necesito los entregables
-descargables que faltan, en el mismo formato que ya usa el sitio.
+Make · equipo            2342480
+  webhook                https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2
+  escenario              5871285   (INACTIVO)
+  conexión HubSpot       9067982   · la de 41 scopes es 9833579
+  conexión ActiveCampaign 9068082
+  conexión Microsoft      9069490
+  conexión Meta           9833591
 
-CÓMO SE HACE UN PDF EN ESTE PROYECTO
-No se escribe un PDF directamente. Se escribe una plantilla HTML de impresión y se
-convierte con Chrome headless. El patrón ya existe y está documentado en el
-encabezado de Guia-PDF.html — léelo antes de empezar y cópialo:
+HubSpot · portal        8199998   · owner Camile Demboski = 176436235
+ActiveCampaign          lista 7 (Leads Web 2026) · lista 6 (Newsletter Web)
+Meta · Pixel = Dataset  27857783360524172
+
+GTM   GTM-KW8TPGGG · cuenta 6368951919 · contenedor 259896060
+Ads   AW-18368975159 · cuenta 721-558-8421
+```
+
+⚠️ **GTM y Google Ads NO están bajo `lic.carlos.cataneo@gmail.com`.** Viven en el
+`authuser=6` de ese navegador, que es `it.destiny.real.estate@gmail.com`. Buscarlos
+en la cuenta por defecto no da nada. Ojo también con el contenedor gemelo
+`GTM-N6ZQ256`, vacío y sin usar: el que carga el sitio es `GTM-KW8TPGGG`.
+
+### El orden
+
+```
+Brief B (HubSpot)  ─→  Brief A (terminar Make)  ─┐
+Brief C (GTM + Ads) ────────────────────────────┴─→  Brief D (desplegar)
+
+Brief E (PDFs)  ──── en paralelo, cuando quieras
+```
+
+---
+
+## Brief A · Terminar y encender el escenario de Make
+
+Requiere el Brief B hecho y el token de la CAPI de Meta.
+
+```
+En Make, equipo 2342480, hay un escenario llamado
+"WEB · Formularios destiny.mx → HubSpot + ActiveCampaign + aviso", id 5871285.
+Está armado, es válido y está INACTIVO. Le faltan tres cosas.
+
+Antes de tocarlo, lee MAKE-ESCENARIO.md y FORMULARIOS.md del repositorio: el
+primero explica el mapeo y por qué se construyó sin router, el segundo trae el JSON
+exacto que manda el navegador.
+
+CÓMO ESTÁ HOY
+  1 Webhook (gateway:CustomWebHook, hook 2662269)
+  2 util:SetVariables      correo limpio, nombre/apellido, origen legible,
+                           fuente de HubSpot, lista AC, tag AC, calidad, URL del PDF
+  3 hubspotcrm:upsertAContact          filtro: trae correo con @
+  4 activecampaign:upsertContact2024
+  5 activecampaign:UpdateContactListStatus
+  6 microsoft-email  aviso a carlos.cataneo@ y camile@
+  7 microsoft-email  entrega del PDF     filtro: hay algo que entregar
+Del 3 al 7, cada módulo lleva builtin:Resume en su ruta de error.
+
+FALTA 1 — MAPEAR LAS PROPIEDADES dst_* EN EL MÓDULO 3
+Hoy el módulo de HubSpot solo escribe en las propiedades que ya existían (origen,
+estatus_art, hablame_de_ti_quiero_conocerte_mas, hs_analytics_source). Las 18
+propiedades dst_* las crea el Brief B; cuando existan, mapéalas:
+
+  dst_gclid            ← {{1.atribucion.gclid}}
+  dst_wbraid           ← {{1.atribucion.wbraid}}
+  dst_gbraid           ← {{1.atribucion.gbraid}}
+  dst_msclkid          ← {{1.atribucion.msclkid}}
+  dst_ttclid           ← {{1.atribucion.ttclid}}
+  dst_li_fat_id        ← {{1.atribucion.li_fat_id}}
+  dst_utm_source       ← {{1.atribucion.utm_source}}      (y los otros cuatro utm)
+  dst_form_type        ← {{1.form_type}}
+  dst_form_variant     ← {{1.form_variant}}
+  dst_pagina_origen    ← {{1.page_url}}
+  dst_propiedad        ← {{1.desarrollo_nombre}}
+  dst_zona             ← {{1.zona_nombre}}
+  dst_primer_contacto  ← {{toString(1.atribucion.first_touch)}}
+  dst_calidad_lead     ← {{2.calidad}}
+
+NO las mapees antes de que existan. Si mapeas una propiedad inexistente, HubSpot
+rechaza el contacto entero y se pierde el lead completo por un campo.
+
+FALTA 2 — EL MÓDULO DE META CAPI
+Va entre el 5 y el 6. Lee esto entero antes de escribirlo:
+
+Los cuatro escenarios de Meta que ya existen en la cuenta usan
+facebook-conversion-leads:CreateALead. Eso es la CAPI para CRM: manda etapas de
+lead identificadas por lead_id y NO admite event_id ni eventos web. NO SIRVE AQUÍ,
+por mucho que parezca lo mismo. Si copias ese módulo, la deduplicación contra el
+Pixel nunca va a funcionar y el fallo es silencioso: solo se nota semanas después
+viendo leads duplicados en el Administrador de Eventos.
+
+Lo que hace falta es la CAPI web, con el módulo HTTP de Make:
+
+  POST https://graph.facebook.com/v21.0/27857783360524172/events
+
+  {
+    "data": [{
+      "event_name": "<Lead | CompleteRegistration | Schedule | Subscribe>",
+      "event_time": <unix del submitted_at>,
+      "event_id": "{{1.event_id}}",          ← TAL CUAL, no generes uno nuevo
+      "event_source_url": "{{1.page_url}}",
+      "action_source": "website",
+      "user_data": {
+        "em": ["<sha256 del correo en minúsculas y sin espacios>"],
+        "ph": ["<sha256 del teléfono en E.164 SIN el +>"],
+        "fbc": "fb.1.<timestamp>.<fbclid>",
+        "client_user_agent": "..."
+      }
+    }],
+    "access_token": "<variable de escenario, NO en el blueprint>"
+  }
+
+El mapeo de event_name por form_type:
+  lead, guia, propiedad, zona   → Lead
+  club, scorecard               → CompleteRegistration
+  agenda                        → Schedule
+  newsletter, radar             → Subscribe
+Calcúlalo en el SetVariables del módulo 2, junto a los demás.
+
+El event_id es lo único que le dice a Meta que el evento del Pixel y el del
+servidor son el mismo. Normaliza ANTES de hashear, no después.
+
+Ponle también su builtin:Resume: si Meta truena, el lead ya está en HubSpot y el
+aviso a Carlos tiene que salir igual.
+
+FALTA 3 — ANTIDUPLICADOS
+Data Store con clave correo+form_type y TTL de 5 minutos, entre el módulo 2 y el 3.
+Si la clave existe, corta la ejecución.
+
+PRUEBA DE PUNTA A PUNTA
+Cuando esté completo: activa el escenario, manda este POST y revisa los siete
+módulos en el historial de ejecuciones.
+
+  curl -X POST https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2 \
+    -H "Content-Type: application/json" \
+    -d '{"form_type":"propiedad","nombre":"PRUEBA CoWork","email":"prueba@destiny.mx",
+         "telefono":"+525611659009","desarrollo_slug":"cipriani-residences",
+         "desarrollo_nombre":"Cipriani Residences","zona_nombre":"Brickell",
+         "page_url":"https://destiny.mx/Propiedad.html?p=cipriani-residences",
+         "event_id":"aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+         "submitted_at":"2026-08-06T11:00:00-06:00",
+         "atribucion":{"gclid":"PRUEBA123","utm_source":"google","utm_medium":"cpc",
+                       "utm_campaign":"preconstruccion","utm_term":"departamentos miami"},
+         "extra":{"presupuesto":"$2M - $5M USD"}}'
+
+Verifica: el contacto en HubSpot con su origen legible y su gclid; el contacto en
+ActiveCampaign en la lista 7; el correo a Carlos con el origen legible y NO el
+gclid crudo; el correo de entrega con la URL del dossier de Cipriani; y el evento
+en el Depurador de Meta con ese event_id.
+
+Después borra el contacto de prueba de HubSpot y de ActiveCampaign.
+
+DÉJALO ACTIVO. A diferencia de la primera vez, ahora sí tiene que quedar encendido:
+el sitio se despliega después y un escenario apagado rechaza los leads con HTTP 410
+(comprobado). El Brief D depende de esto.
+
+Cuando termines, avísame y dime qué escenarios viejos de Zoho hay que apagar:
+son 5514580, 5223878, 5485213 y 5775240.
+```
+
+---
+
+## Brief B · Las 18 propiedades de HubSpot
+
+```
+Crea 18 propiedades de contacto en HubSpot (portal 8199998) para guardar la
+atribución de los formularios de destiny.mx. Hoy no existe ninguna: comprobado por
+API el 2026-08-06. Sin ellas, el escenario de Make recibe la atribución completa y
+no tiene dónde escribirla.
+
+GRUPO
+Crea primero un grupo de propiedades:
+  nombre interno: dst_atribucion
+  etiqueta:       Atribución web (Destiny)
+
+El prefijo dst_ distingue de un vistazo estas propiedades de las nativas de HubSpot
+y de las que ya existían en el portal.
+
+LAS 18 — todas de objeto CONTACT, todas en el grupo dst_atribucion
+
+Identificadores de clic · string / text:
+  dst_gclid      · Google Ads · gclid      · Identificador de clic de Google Ads. Es lo que empata el lead con la campaña que lo trajo.
+  dst_wbraid     · Google Ads · wbraid     · Identificador de Google cuando el navegador bloquea cookies de terceros (Safari/iOS, web a app).
+  dst_gbraid     · Google Ads · gbraid     · Igual que wbraid, para tráfico de app a web.
+  dst_msclkid    · Microsoft Ads · msclkid · Identificador de clic de Bing.
+  dst_ttclid     · TikTok · ttclid         · Se captura de antemano para tener histórico el día que se encienda el canal.
+  dst_li_fat_id  · LinkedIn · li_fat_id    · Mismo criterio que TikTok.
+
+UTM · string / text:
+  dst_utm_source · UTM source   · Fuente de la campaña.
+  dst_utm_medium · UTM medium   · Medio de la campaña.
+  dst_utm_campaign · UTM campaign · Nombre de la campaña.
+  dst_utm_term   · UTM term     · Término de búsqueda o segmento.
+  dst_utm_content · UTM content · Variante creativa.
+
+Contexto del formulario:
+  dst_form_type     · Tipo de formulario · enumeration / select
+        Opciones EXACTAS: lead, agenda, guia, club, scorecard, propiedad, zona, newsletter, radar
+  dst_form_variant  · Variante del formulario · enumeration / select
+        Opciones EXACTAS: preconstruccion, dolares, patrimonio
+  dst_pagina_origen · Página de origen · string / text
+  dst_propiedad     · Propiedad de interés · string / text
+  dst_zona          · Zona de interés · string / text
+
+Recorrido y calidad:
+  dst_primer_contacto · Primer contacto · string / textarea
+        JSON del primer contacto: campaña, click ID, referente y fecha. Se escribe
+        una vez y no se toca. El anuncio que descubre al inversionista casi nunca es
+        el que cierra la conversión tres semanas después, y sin esto esa primera
+        campaña desaparece del registro.
+  dst_calidad_lead · Calidad del lead · enumeration / select
+        Opciones EXACTAS: ok, correo_desechable, telefono_invalido, patron_spam
+
+Las opciones tienen que ser literales: el escenario de Make escribe esos valores
+y una opción mal escrita hace que HubSpot rechace el contacto entero.
+
+LO QUE NO HAY QUE TOCAR
+Ya existen y el escenario las reutiliza. No las dupliques ni las modifiques:
+  origen · estatus_art ("Estatus DRE") · hablame_de_ti_quiero_conocerte_mas
+  hs_analytics_source · hs_facebook_click_id
+
+La marca de calidad va en dst_calidad_lead y NO en estatus_art. Si se escribiera
+ahí, un lead marcado como spam borraría el estado de venta que el equipo lleva a
+mano.
+
+CÓMO
+POST /crm/v3/properties/contacts, o desde Configuración › Propiedades. Hazlo
+idempotente: comprueba si existe y no falles si ya está.
+
+AL TERMINAR
+Dame la lista de las creadas y confirma que las tres enumeraciones tienen
+exactamente las opciones de arriba.
+```
+
+---
+
+## Brief C · GTM y Google Ads
+
+El único que necesita cambiar de cuenta de Google.
+
+```
+Dos cambios de plataforma. Los dos están en el authuser=6 de Chrome, que es
+it.destiny.real.estate@gmail.com — NO en lic.carlos.cataneo@gmail.com. Ya lo
+comprobé: desde la cuenta principal, la cuenta de Ads 721-558-8421 no aparece y la
+única cuenta Destiny visible (370-038-3619, administradora) tiene CERO acciones de
+conversión.
+
+⛔ NO PUBLIQUES NADA HASTA EL FINAL. Lee el punto 3 antes de tocar GTM.
+
+1 · GOOGLE ADS — crear la acción newsletter_signup
+Cuenta 721-558-8421 (AW-18368975159).
+  Objetivo:  Suscribirse
+  Valor:     100 MXN
+  Recuento:  Una
+  Marcarla como SECUNDARIA. Esto no es opcional: si entra como principal, el
+  algoritmo persigue suscripciones baratas de 100 pesos en lugar de inversionistas
+  de varios millones, y la campaña se degrada sola.
+
+Saca su rótulo (la parte después de la diagonal, como D636CNu6xdwcELeigbdE) y
+pégalo en DOS lugares del repositorio:
+  - assets/tracking.js, en la constante ETIQUETAS, campo newsletter_signup
+  - gtm-destiny.json, en la etiqueta "Ads · newsletter_signup", donde dice
+    PEGAR_ROTULO_AQUI — y quítale el "paused": true
+
+2 · GTM — importar el contenedor
+Contenedor GTM-KW8TPGGG (cuenta 6368951919, contenedor 259896060). Ojo con el
+gemelo GTM-N6ZQ256, que está vacío y no se usa.
+
+  Administración › Importar contenedor
+  Archivo:            gtm-destiny.json del repositorio
+  Espacio de trabajo: EXISTENTE
+  Modo:               Combinar › Sobrescribir etiquetas, activadores y variables
+                      en conflicto
+
+Revisa la vista previa de cambios antes de confirmar.
+
+Después, a mano: la etiqueta que YA existe "Ads · Conversiones mejoradas" (tipo
+User-provided Data Event) necesita que le cambies el activador a dst_form_lead y
+dst_agenda_solicitada. No viene en el archivo a propósito: su tipo de etiqueta no
+se reproduce con seguridad en una exportación hecha a mano y una importación mal
+formada puede dañar un contenedor que hoy funciona.
+
+POR QUÉ CAMBIAN LOS NOMBRES DE LOS ACTIVADORES
+Los activadores publicados escuchan generate_lead y click_whatsapp. El sitio nuevo
+emite dst_form_lead, dst_agenda_solicitada, dst_newsletter_signup y
+dst_whatsapp_click. El prefijo dst_ no es capricho: tags.js define gtag como un
+push al dataLayer, así que un gtag('event','form_lead') también aterriza ahí y GTM
+lo leía como un segundo evento. Cada lead se contaba dos veces. Con nombres
+distintos en cada vía, eso ya no puede pasar. Está explicado en MEDICION.md.
+
+3 · CUÁNDO PUBLICAR
+NO publiques el contenedor todavía. El sitio en vivo sigue emitiendo los nombres
+viejos: si publicas ahora, las conversiones de hoy se apagan.
+
+Publicar GTM y desplegar el sitio son el MISMO paso, y va en el Brief D. Deja los
+cambios guardados en el espacio de trabajo, sin publicar, y avísame.
+```
+
+---
+
+## Brief D · El despliegue, en orden
+
+El más corto y el más fácil de romper.
+
+```
+Poner en producción los formularios nativos y la medición nueva. El orden importa
+y cada paso tiene una razón; no los reordenes.
+
+REQUISITOS — los tres, antes de empezar
+  [ ] Brief A terminado y el escenario de Make 5871285 ACTIVO
+  [ ] Brief B terminado (las 18 propiedades existen)
+  [ ] Brief C terminado, con los cambios de GTM guardados SIN publicar
+
+PASO 1 — Comprobar que el escenario está encendido
+  curl -X POST https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2 \
+    -H "Content-Type: application/json" -d '{"form_type":"lead","email":"ping@destiny.mx"}'
+
+  Si responde "Accepted", sigue. Si responde HTTP 410 "There is no scenario
+  listening for this webhook", el escenario está apagado: PARA AQUÍ. Con el
+  escenario apagado, cada visitante vería la caja de error del formulario y ningún
+  lead se guardaría. Comprobado el 2026-08-06.
+
+PASO 2 — Fusionar y desplegar
+  git checkout main
+  git merge formularios-nativos
+  git push origin main
+
+  Hostinger despliega solo desde main. Verifica en hPanel › GIT que "Actual"
+  coincide con el HEAD que acabas de subir: el auto-deploy a veces se queda en un
+  commit viejo y parece que no pasó nada.
+
+PASO 3 — Publicar GTM, inmediatamente después
+  Publica el espacio de trabajo del Brief C.
+
+  Los pasos 2 y 3 no se pueden separar. El sitio nuevo emite eventos dst_*; los
+  activadores viejos escuchan generate_lead. Si despliegas sin publicar, las
+  conversiones se apagan. Si publicas sin desplegar, también. Hazlos seguidos.
+
+PASO 4 — Validar
+  Abre https://destiny.mx/diagnostico.html?gclid=PRUEBA123&utm_source=google&utm_medium=cpc&utm_campaign=prueba
+
+  Esa página lo dice todo sin adivinar. Que no haya nada en rojo. Los siete
+  bloques: la cadena de scripts, el consentimiento con sus cuatro parámetros, los
+  click IDs, los identificadores de GA4, quién dispara las conversiones, los
+  eventos disparados y los pasos de prueba manual.
+
+  Después, con la vista previa de GTM abierta, llena un formulario de cada tipo y
+  confirma que cada etiqueta se dispara UNA sola vez. Si sale "Activado 2 veces",
+  el contenedor conserva los activadores viejos además de los nuevos.
+
+  Y comprueba lo que la página no puede: el lead en HubSpot con su gclid, el
+  contacto en ActiveCampaign, el correo a Carlos, y el evento en el Depurador de
+  Meta con su event_id.
+
+PASO 5 — Apagar Zoho
+  Solo cuando el paso 4 esté limpio, apaga los cuatro escenarios viejos en Make:
+  5514580, 5223878, 5485213 y 5775240. No antes: son la red de seguridad.
+
+SI ALGO SALE MAL
+  git revert del merge y volver a publicar la versión anterior de GTM. Las dos
+  cosas, otra vez juntas.
+```
+
+---
+
+## Brief E · Los PDFs que faltan
+
+Independiente de todo lo demás.
+
+```
+Trabaja en el repositorio de destiny.mx. Falta un entregable que el sitio ya
+promete por escrito.
+
+CÓMO SE HACE UN PDF AQUÍ
+No se escribe un PDF directamente: se escribe una plantilla HTML de impresión y se
+convierte con Chrome headless. El patrón está documentado en el encabezado de
+Guia-PDF.html — léelo y cópialo.
 
   python3 -m http.server 8899
   nohup "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
@@ -31,323 +414,54 @@ encabezado de Guia-PDF.html — léelo antes de empezar y cópialo:
     "http://localhost:8899/<Nombre>-PDF.html" &
   pkill -f print-to-pdf     # Chrome se cuelga después de escribir el PDF
 
-La plantilla lleva meta robots noindex, no se enlaza desde ninguna página y usa la
-tipografía y la paleta de Guia-PDF.html (Playfair Display + Outfit, crema #FAF9F3,
-navy #13192A, oro #C5A058). Reutiliza su CSS de impresión: ya está resuelto el
-salto de página, los márgenes y el pie.
+La plantilla lleva noindex, no se enlaza desde ninguna página, y usa la tipografía
+y la paleta de Guia-PDF.html (Playfair Display + Outfit, crema #FAF9F3, navy
+#13192A, oro #C5A058). Reutiliza su CSS de impresión: ya está resuelto el salto de
+página y los márgenes.
 
-ENTREGABLE 1 — SCORECARD DE INVERSIÓN (obligatorio)
-Archivo fuente: Scorecard-PDF.html
-Salida:         dossiers/scorecard-inversion-miami.pdf
+OBLIGATORIO — EL SCORECARD DE INVERSIÓN
+  Fuente: Scorecard-PDF.html
+  Salida: dossiers/scorecard-inversion-miami.pdf
 
-Es el marco con el que Destiny descarta proyectos, no una versión reducida — así lo
-promete /scorecard. Cinco dimensiones, en este orden, que son las que la página
-lista textualmente:
+/scorecard promete "te lo enviamos por correo" y el archivo no existe. Es el mismo
+marco con el que Destiny descarta proyectos, no una versión reducida. Cinco
+dimensiones, en este orden, que son las que la página lista textualmente:
 
   1. Desarrollador — historial de entregas, litigios y capacidad financiera
   2. Estructura de pagos — depósitos, hitos y qué pasa si el proyecto se retrasa
   3. Costos recurrentes — HOA, impuestos, seguros y fees de licencia de marca
-  4. Letra chica — cláusulas de rescisión, cambios de plano y reventa antes de la entrega
-  5. Salida — liquidez real del producto en reventa, no la proyectada en el brochure
+  4. Letra chica — rescisión, cambios de plano y reventa antes de la entrega
+  5. Salida — liquidez real en reventa, no la proyectada en el brochure
 
-Cada dimensión necesita:
-  - qué se revisa exactamente y por qué importa
-  - las preguntas concretas que hay que hacerle al desarrollador, redactadas para
-    que el lector pueda copiarlas y mandarlas tal cual
-  - las señales de alarma que descartan un proyecto
-  - un espacio para calificar del 1 al 5, porque es un scorecard y tiene que poder
-    llenarse a mano o en pantalla
+Cada dimensión: qué se revisa y por qué importa; las preguntas concretas para el
+desarrollador, redactadas para copiarlas y mandarlas tal cual; las señales de
+alarma que descartan un proyecto; y un espacio para calificar del 1 al 5, porque es
+un scorecard y tiene que poder llenarse.
 
-Cierra con una hoja de puntuación total y qué significa cada rango. El rango bajo
-tiene que decir "no compres", sin suavizarlo: es el punto entero de la marca.
+Cierra con la hoja de puntuación y qué significa cada rango. El rango bajo dice "no
+compres", sin suavizarlo: es el punto entero de la marca.
 
-ENTREGABLE 2 — DECIDE SI EXISTEN (opcional, tú me dices)
-Las páginas /club, /preconstruccion-miami e /invertir-en-dolares NO prometen hoy
-ningún PDF en su página de gracias. Antes de escribir nada, revisa esas tres
-páginas de gracias y dime si conviene crear un entregable o si el compromiso que
-hacen (activar accesos, contactar el mismo día) ya se cumple sin documento.
-Si crees que sí conviene, propón qué sería y por qué, y espera mi visto bueno antes
-de escribirlo. No inventes un PDF por rellenar.
+OPCIONAL — DECIDE SI HACEN FALTA
+/club, /preconstruccion-miami e /invertir-en-dolares no prometen ningún PDF en su
+página de gracias. Revísalas y dime si conviene crear un entregable o si el
+compromiso que hacen ya se cumple sin documento. Si crees que sí, propón qué sería
+y espera mi visto bueno. No inventes un PDF por rellenar.
 
-REGLAS DE COMPLIANCE — NO NEGOCIABLES
-Este es un sitio de inversión inmobiliaria y el texto es material de marketing
-financiero. Está prohibido, en todo el documento:
-  - porcentajes de retorno, rendimiento esperado o proyecciones de ganancia
-  - las palabras "garantizado" y "asegurado" aplicadas a resultados
-  - cualquier promesa de plusvalía
-Los rangos con escenarios sí se pueden usar, siempre etiquetados como escenarios y
-con su fuente. Toda cifra lleva fuente embebida y fecha.
+COMPLIANCE — NO NEGOCIABLE
+Prohibido en todo el documento: porcentajes de retorno o rendimiento esperado, las
+palabras "garantizado" y "asegurado" aplicadas a resultados, y cualquier promesa de
+plusvalía. Los rangos con escenarios sí, siempre etiquetados como escenarios y con
+su fuente. Toda cifra lleva fuente y fecha.
 
-⛔ Ojo con un dato que se repite en tres lugares: las cifras de Guia-PDF.html son
-las mismas que las de /preconstruccion-miami y /invertir-en-dolares. Si cambias
-una, cambian las tres. El tipo de cambio de referencia (17.32 MXN, Banxico
-3-ago-2026) se revisa cada trimestre.
+⛔ Las cifras de Guia-PDF.html son las mismas que las de /preconstruccion-miami y
+/invertir-en-dolares. Si cambias una, cambian las tres.
 
 VOZ
 Transparencia radical y posicionamiento antibroker: se dice lo que los demás
-callan, incluido lo que juega en contra de cerrar la venta. Nada de superlativos
-vacíos ni de lenguaje de folleto. Si algo es un riesgo, se nombra riesgo.
+callan, incluido lo que juega en contra de cerrar la venta. Si algo es un riesgo,
+se nombra riesgo.
 
 AL TERMINAR
-Genera el PDF, comprueba que pesa menos de 5 MB y que abre bien en móvil, y hazme
-un commit por entregable con un mensaje que explique qué decisión de contenido
-tomaste y por qué.
+Genera el PDF, comprueba que abre bien en móvil, y haz un commit explicando qué
+decisiones de contenido tomaste.
 ```
-
----
-
-## Brief 2 · Las 18 propiedades de HubSpot
-
-```
-Necesito crear 18 propiedades de contacto en HubSpot (portal 8199998) para guardar
-la atribución de los formularios de destiny.mx. Hoy no existe ninguna: comprobado
-por API el 2026-08-06. Sin ellas, el escenario de Make recibe la atribución
-completa y no tiene dónde escribirla.
-
-GRUPO
-Crea primero un grupo de propiedades nuevo:
-  nombre interno: dst_atribucion
-  etiqueta:       Atribución web (Destiny)
-
-El prefijo dst_ en todo es a propósito: distingue de un vistazo estas propiedades
-de las nativas de HubSpot y de las que ya existían en el portal.
-
-LAS 18 PROPIEDADES
-Todas de objeto CONTACT, todas en el grupo dst_atribucion.
-
-Identificadores de clic — tipo string, fieldType text:
-  dst_gclid        · Google Ads · gclid     · Identificador de clic de Google Ads. Es lo que empata el lead con la campaña que lo trajo.
-  dst_wbraid       · Google Ads · wbraid    · Identificador de Google cuando el navegador bloquea cookies de terceros (Safari/iOS, web a app).
-  dst_gbraid       · Google Ads · gbraid    · Igual que wbraid, para tráfico de app a web.
-  dst_msclkid      · Microsoft Ads · msclkid · Identificador de clic de Bing. Se captura aunque todavía no se use ese canal.
-  dst_ttclid       · TikTok · ttclid        · Identificador de clic de TikTok. Se captura de antemano para tener histórico el día que se encienda el canal.
-  dst_li_fat_id    · LinkedIn · li_fat_id   · Identificador de clic de LinkedIn. Mismo criterio que TikTok.
-
-UTM — tipo string, fieldType text:
-  dst_utm_source   · UTM source    · Fuente de la campaña.
-  dst_utm_medium   · UTM medium    · Medio de la campaña.
-  dst_utm_campaign · UTM campaign  · Nombre de la campaña.
-  dst_utm_term     · UTM term      · Término de búsqueda o segmento.
-  dst_utm_content  · UTM content   · Variante creativa.
-
-Contexto del formulario:
-  dst_form_type    · Tipo de formulario · enumeration / select
-                     Opciones: lead, agenda, guia, club, scorecard, propiedad, zona, newsletter, radar
-  dst_form_variant · Variante del formulario · enumeration / select
-                     Opciones: preconstruccion, dolares, patrimonio
-  dst_pagina_origen · Página de origen · string / text
-                     URL exacta desde la que se envió el formulario.
-  dst_propiedad    · Propiedad de interés · string / text
-  dst_zona         · Zona de interés      · string / text
-
-Atribución de recorrido:
-  dst_primer_contacto · Primer contacto · string / textarea
-    JSON del primer contacto del visitante: campaña, click ID, referente y fecha.
-    Se escribe una vez y no se vuelve a tocar. El anuncio que descubre al
-    inversionista casi nunca es el que cierra la conversión tres semanas después,
-    y sin esto esa primera campaña desaparece del registro.
-
-Calidad:
-  dst_calidad_lead · Calidad del lead · enumeration / select
-    Opciones: ok, correo_desechable, telefono_invalido, patron_spam
-    Marca automática que NO frena nada: sirve para filtrar reportes sin bloquear la
-    señal a las plataformas de anuncios.
-
-LO QUE NO HAY QUE TOCAR
-Estas ya existen en el portal y el escenario de Make las va a reutilizar. No las
-dupliques ni las modifiques:
-  origen                            (texto libre, origen legible de campaña)
-  estatus_art  "Estatus DRE"        (el estado de venta que el equipo lleva a mano)
-  hablame_de_ti_quiero_conocerte_mas
-  hs_analytics_source               (nativa, enumeración)
-  hs_facebook_click_id              (nativa, ahí va el fbclid)
-
-Muy importante: la marca de calidad va en dst_calidad_lead y NO en estatus_art. Si
-se escribiera en estatus_art, un lead marcado como spam borraría el estado de venta
-que el equipo actualiza a mano.
-
-CÓMO CREARLAS
-Por la API de propiedades de HubSpot (POST /crm/v3/properties/contacts) o desde
-Configuración › Propiedades. Si usas la API, hazlo idempotente: comprueba primero
-si la propiedad existe y no falles si ya está.
-
-AL TERMINAR
-Dame la lista de las que creaste y de las que ya existían, y confirma que
-dst_form_type y dst_form_variant tienen exactamente las opciones de arriba: el
-escenario de Make escribe esos valores literales y una opción mal escrita hace que
-HubSpot rechace el contacto entero.
-```
-
----
-
-## Brief 3 · Las listas y los tags de ActiveCampaign
-
-```
-Necesito preparar ActiveCampaign para recibir los leads de los formularios de
-destiny.mx. Hoy hay 3 listas y 8 tags, y ninguno corresponde a formularios web.
-
-LO QUE YA EXISTE — no lo toques
-  Lista id 4 · BD-9.5K-18032026-DRE      (7,806 suscriptores, la base grande)
-  Lista id 5 · Leads-Fondos-Inversion-2026 (4)
-  Lista id 6 · Newsletter Web            (2)  ← esta sí se usa, ver abajo
-  Tags: hubspot-calificacion-AAA, BD-HUBSPOT-9.5K-18032026-DRE, mbp_* (4), cip_* (3)
-
-LO QUE HAY QUE CREAR
-
-1. Una lista nueva:
-   Nombre:   Leads Web 2026
-   stringid: leads-web-2026
-   URL del remitente: https://destiny.mx
-
-   Texto de recordatorio de suscripción (ActiveCampaign lo exige y aparece al pie
-   de cada envío — tiene que decir la verdad de por qué recibe el correo):
-
-   "Recibes este correo porque dejaste tus datos en destiny.mx para recibir
-   información sobre inversión inmobiliaria en Miami. Puedes darte de baja con un
-   solo clic cuando quieras."
-
-   Por qué una lista aparte y no reusar Newsletter Web: quien pidió una sesión de
-   claridad no es lo mismo que quien solo quiere el boletín del lunes. Mezclarlos
-   obliga a segmentar en cada envío y termina mandándole material de venta a gente
-   que solo quería leer. Newsletter Web (id 6) se queda para newsletter y radar.
-
-2. Doce tags, uno por tipo de formulario. Descripción incluida, porque en seis
-   meses nadie recuerda qué era cada uno:
-
-   web_lead            · Formulario general de lead del sitio
-   web_preconstruccion · Landing de Google Ads de preconstrucción
-   web_dolares         · Landing de Google Ads de patrimonio en dólares
-   web_patrimonio      · Formulario de Marca, Inversión o Artículo
-   web_agenda          · Solicitud de sesión desde /agenda
-   web_guia            · Descargó la guía de inversión en Miami
-   web_club            · Se registró al Miami Investors Club
-   web_scorecard       · Pidió el Scorecard de inversión
-   web_propiedad       · Interés en un desarrollo concreto
-   web_zona            · Interés en una zona concreta
-   web_newsletter      · Suscripción al newsletter desde el home
-   web_radar           · Suscripción al Radar semanal
-
-MAPEO QUE VA A USAR EL ESCENARIO DE MAKE
-  newsletter y radar  → lista Newsletter Web (id 6)
-  club                → lista Leads Web 2026 + Newsletter Web (pide las dos cosas)
-  todo lo demás       → lista Leads Web 2026
-
-Además, los tipos propiedad y zona reciben un segundo tag dinámico con el slug del
-desarrollo o la zona (prop_cipriani-residences, zona_brickell). Esos NO hay que
-crearlos por adelantado: son 29 propiedades y 12 zonas, y ActiveCampaign los crea
-al vuelo cuando el escenario los aplica.
-
-AL TERMINAR
-Dame el id numérico de la lista nueva y el de cada tag. El escenario de Make los
-necesita literales; con el nombre no basta.
-```
-
----
-
-## Brief 4 · El escenario de Make completo
-
-```
-Construye el escenario de Make que recibe los formularios nativos de destiny.mx y
-los reparte. El sitio ya está listo y probado: lo único que falta es el otro lado
-del webhook.
-
-LEE PRIMERO, en este orden:
-  MAKE-ESCENARIO.md  — el mapeo completo, ya aprobado. Es tu especificación.
-  FORMULARIOS.md     — el JSON exacto que manda el navegador.
-  MEDICION.md        — qué se mide en el navegador, para no duplicarlo aquí.
-
-NO EMPIECES DE CERO. En el equipo 2342480 hay 20 escenarios que ya siguen el patrón
-correcto. Copia el más reciente: AUTO-CONV-ABO-FONDOS-LEADS-CALIFICADOS-V1-02082026
-(id 5837439). De ahí sale la estructura, el manejo de errores con builtin:Resume en
-cada módulo, y el corrector de erratas de correo (gnail.com → gmail.com y 16 más)
-que vale la pena conservar.
-
-Revisa también BACKFILL · HubSpot MQL+ → Meta CAPI CRM (id 5815339) antes de tocar
-nada de Meta.
-
-CONEXIONES — ya existen todas, no crees ninguna
-  HubSpot           9067982   (la que usan los 20 escenarios)
-  HubSpot           9833579   (41 scopes, si necesitas escribir esquemas)
-  ActiveCampaign    9068082
-  Correo Microsoft  9069490   (carlos.cataneo@destiny.mx)
-  Meta              9833591
-
-ARQUITECTURA
-Un escenario, un webhook, un router por form_type. No once escenarios iguales: los
-nueve tipos comparten el 90% de los módulos y solo cambian en la lista de
-ActiveCampaign, el evento de Meta y el PDF que entregan. Si al construirlo ves que
-alguno merece escenario propio, propónmelo con la razón antes de hacerlo.
-
-FLUJO
-1. Webhook recibe el JSON. Valida que traiga correo. Si falta, corta y avísame.
-2. Antiduplicados: Data Store con clave correo+form_type y TTL de 5 minutos.
-3. Conversión de Google Ads: NO la dupliques. La dispara el navegador. Aquí solo se
-   guardan los click IDs en HubSpot para la carga offline posterior. Si viene sin
-   gclid pero con msclkid, guárdalo igual etiquetado como Microsoft Ads.
-4. Meta CAPI web — la parte delicada, lee esto entero:
-   Los cuatro escenarios de Meta que ya existen usan
-   facebook-conversion-leads:CreateALead, que es la CAPI para CRM: manda etapas de
-   lead identificadas por lead_id y NO admite event_id ni eventos web. NO SIRVE
-   AQUÍ. Lo que hace falta es la CAPI web, por módulo HTTP:
-
-     POST https://graph.facebook.com/v21.0/27857783360524172/events
-
-   con event_name (Lead / CompleteRegistration / Schedule / Subscribe según el
-   mapeo), action_source "website", event_source_url, y el event_id DEL PAYLOAD
-   TAL CUAL. Ese event_id es lo único que le dice a Meta que el evento del Pixel y
-   el del servidor son el mismo; si generas uno nuevo, cada lead se cuenta dos
-   veces en el Administrador de Eventos.
-   user_data con SHA-256: normaliza ANTES de hashear (correo en minúsculas sin
-   espacios, teléfono en E.164 sin el +). El fbclid va como fbc con el formato
-   fb.1.<timestamp>.<fbclid>.
-   El token de acceso te lo paso aparte — no lo escribas en el blueprint, ponlo
-   como variable de escenario.
-5. HubSpot: crea o actualiza el contacto con upsertAContact. Las propiedades dst_*
-   ya deberían existir; si alguna falta, dímelo en vez de perder el dato en
-   silencio. Deduce hs_analytics_source con la regla de MAKE-ESCENARIO.md, no lo
-   dejes fijo en PAID_SOCIAL como hace el escenario viejo de Cipriani.
-6. ActiveCampaign: upsertContact2024 + UpdateContactListStatus. El upsert NO
-   suscribe a la lista por sí solo, hacen falta los dos módulos.
-7. Entrega al usuario: para guia manda dossiers/guia-invertir-en-miami.pdf. Para
-   propiedad, la URL se arma sola con desarrollo_slug del payload
-   (https://destiny.mx/dossiers/<slug>.pdf) — no hagas una tabla de PDFs.
-8. Correo a carlos.cataneo@destiny.mx y camile@destiny.mx. Informativo, no espera
-   aprobación. Copia el diseño del escenario 5837439. Que traiga nombre, correo,
-   teléfono, qué formulario llenó, propiedad o zona si aplica, la liga al contacto
-   en HubSpot, y el origen LEGIBLE — "Google Ads · campaña Preconstrucción ·
-   término departamentos miami", nunca el gclid crudo. Asunto escaneable en el
-   celular.
-9. Marca de calidad: evalúa correo desechable, teléfono inválido y patrón de spam,
-   y escribe el resultado en dst_calidad_lead. NO frenes nada por esto.
-
-ERRORES
-builtin:Resume en cada llamada externa. Si Meta CAPI truena, el lead tiene que
-llegar igual a HubSpot y a Carlos. Ruta de error global que me avise por correo.
-
-ENTREGABLES
-- El escenario armado y DESACTIVADO hasta que yo lo revise.
-- La URL del webhook, para pegarla en la constante MAKE_WEBHOOK_URL de
-  assets/forms.js. Es lo único que falta para poder desplegar el sitio.
-- Instrucciones para probarlo de punta a punta con un lead falso.
-- Dime qué escenarios viejos de Zoho hay que apagar y cuándo: son 5514580,
-  5223878, 5485213 y 5775240.
-
-NO ACTIVES NADA. Ni el escenario nuevo ni cambios en los viejos.
-```
-
----
-
-## En qué orden lanzarlos
-
-Los briefs 2 y 3 son requisitos del 4: el escenario de Make escribe en propiedades
-y listas que tienen que existir antes. El 1 es independiente.
-
-```
-Brief 2 (HubSpot)  ─┐
-Brief 3 (AC)       ─┴─→  Brief 4 (Make)
-
-Brief 1 (PDFs)     ─────  en paralelo, cuando quieras
-```
-
-El brief 4 además necesita el **token de la CAPI de Meta**, que es el único
-bloqueante que no puede resolver ninguno de los cuatro.
