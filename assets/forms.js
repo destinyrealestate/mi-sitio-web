@@ -53,11 +53,15 @@
      Escenario "WEB · Formularios destiny.mx → HubSpot + ActiveCampaign +
      aviso" (id 5871285, equipo 2342480), creado el 2026-08-06.
 
-     ⚠️ EL ESCENARIO ESTÁ INACTIVO. Mientras no se active en Make, este
-     webhook acepta la petición y la encola sin procesarla: el lead no se
-     pierde, pero tampoco llega a HubSpot ni a ActiveCampaign hasta que
-     alguien le dé a Activar. Es lo que se pidió —armado y en revisión—
-     pero hay que acordarse de encenderlo el día del despliegue.
+     ⛔ NO SUBIR EL SITIO CON EL ESCENARIO APAGADO.
+     Comprobado el 2026-08-06 mandando un POST real: un escenario inactivo
+     NO encola la petición, la RECHAZA con HTTP 410 ("There is no scenario
+     listening for this webhook"). El formulario se comporta bien —muestra
+     la caja de error con reintento y la salida por WhatsApp— pero ningún
+     lead se guardaría.
+
+     El orden es: activar el escenario en Make PRIMERO, y desplegar
+     después. No al revés.
 
      Si algún día se rehace el escenario, la URL cambia y hay que
      actualizarla aquí. Es el único lugar donde vive.

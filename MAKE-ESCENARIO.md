@@ -23,6 +23,17 @@ lo que cambia (lista, tag, PDF, origen legible) se resuelve en un solo
 nueve sitios donde arreglar el mismo error. Si algún tipo llega a necesitar
 tratamiento propio de verdad, ahí sí entra un router.
 
+### ⛔ El orden del despliegue importa
+
+Comprobado el 2026-08-06 con un POST real al webhook: un escenario **inactivo no
+encola, rechaza** con `HTTP 410 — There is no scenario listening for this
+webhook`. El formulario del sitio se comporta bien (muestra la caja de error con
+reintento y la salida por WhatsApp), pero **ningún lead se guardaría**.
+
+El orden es: **activar el escenario en Make primero, desplegar el sitio después.**
+No al revés. La prueba también confirma que la URL del webhook es correcta y está
+viva: una URL equivocada devolvería 404, no ese 410.
+
 **Lo que falta para encenderlo:**
 1. Crear las 18 propiedades `dst_*` en HubSpot (Brief 2) y mapearlas en el módulo 3.
 2. Token de la CAPI de Meta → agregar el módulo HTTP con el `event_id`.
