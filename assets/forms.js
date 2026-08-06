@@ -48,17 +48,21 @@
   "use strict";
 
   /* ------------------------------------------------------------------
-     ⚠️  LO ÚNICO QUE HAY QUE CAMBIAR CUANDO MAKE ESTÉ LISTO
+     EL WEBHOOK DE MAKE
      ------------------------------------------------------------------
-     Pega aquí la URL del webhook del escenario de Make que recibe todos
-     los formularios. Mientras diga el placeholder, el formulario sigue
-     funcionando de punta a punta (valida, mide y redirige a la página de
-     gracias) pero NO envía el lead a ningún lado y deja un aviso en la
-     consola. Es a propósito: así se puede revisar el diseño y la medición
-     antes de que exista el escenario, sin que un error de red rompa la
-     página.
+     Escenario "WEB · Formularios destiny.mx → HubSpot + ActiveCampaign +
+     aviso" (id 5871285, equipo 2342480), creado el 2026-08-06.
+
+     ⚠️ EL ESCENARIO ESTÁ INACTIVO. Mientras no se active en Make, este
+     webhook acepta la petición y la encola sin procesarla: el lead no se
+     pierde, pero tampoco llega a HubSpot ni a ActiveCampaign hasta que
+     alguien le dé a Activar. Es lo que se pidió —armado y en revisión—
+     pero hay que acordarse de encenderlo el día del despliegue.
+
+     Si algún día se rehace el escenario, la URL cambia y hay que
+     actualizarla aquí. Es el único lugar donde vive.
      ------------------------------------------------------------------ */
-  var MAKE_WEBHOOK_URL = "MAKE_WEBHOOK_URL";
+  var MAKE_WEBHOOK_URL = "https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2";
 
   var WEBHOOK_LISTO = MAKE_WEBHOOK_URL.indexOf("http") === 0;
 

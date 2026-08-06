@@ -1,9 +1,33 @@
 # El escenario de Make — mapeo propuesto
 
 Lo que recibe el webhook de `assets/forms.js` y a dónde va cada cosa.
-**Nada de esto está construido todavía**: es la propuesta para aprobar antes de
-crear el escenario. Ver `FORMULARIOS.md` para el payload y `MEDICION.md` para la
-capa del navegador.
+Ver `FORMULARIOS.md` para el payload y `MEDICION.md` para la capa del navegador.
+
+## Estado — 2026-08-06
+
+**Construido y funcionando, salvo la CAPI de Meta.**
+
+| Pieza | Estado |
+|---|---|
+| Webhook | `https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2` · hook `2662269` |
+| Escenario | `5871285` — **INACTIVO**, a la espera de revisión |
+| Lista ActiveCampaign | `Leads Web 2026` · **id 7** |
+| Tags ActiveCampaign | **11 a 22** (12 tags) |
+| HubSpot | Escribe en las propiedades que ya existían |
+| Meta CAPI | **Pendiente** — falta el token |
+| Propiedades `dst_*` de HubSpot | **Pendientes** — ver Brief 2 |
+
+El escenario se construyó sin router: los nueve tipos comparten el mismo flujo y
+lo que cambia (lista, tag, PDF, origen legible) se resuelve en un solo
+`SetVariables` con búsquedas. Nueve ramas idénticas salvo por un dato habrían sido
+nueve sitios donde arreglar el mismo error. Si algún tipo llega a necesitar
+tratamiento propio de verdad, ahí sí entra un router.
+
+**Lo que falta para encenderlo:**
+1. Crear las 18 propiedades `dst_*` en HubSpot (Brief 2) y mapearlas en el módulo 3.
+2. Token de la CAPI de Meta → agregar el módulo HTTP con el `event_id`.
+3. Antiduplicados con Data Store (5 min por correo + form_type).
+4. Revisarlo y **activarlo**.
 
 ---
 
@@ -54,18 +78,28 @@ Dos defectos suyos que no hay que repetir:
 
 ## 2. Arquitectura
 
-**Un escenario, un webhook, un router.** No once escenarios iguales.
+**Un escenario, un webhook, sin router.** Así quedó construido:
 
 ```
-Webhook  →  Validar (¿trae correo?)  →  Antiduplicados (5 min)
-         →  Normalizar + calidad     →  Router por form_type
-                                          ├── rama común: HubSpot → ActiveCampaign → Meta CAPI → correo a Carlos
-                                          └── rama variable: entrega del PDF
+1 Webhook
+2 SetVariables    correo limpio · nombre/apellido · origen legible · fuente HubSpot
+                  · lista AC · tag AC · calidad · URL del PDF
+3 HubSpot         upsertAContact          filtro: trae correo con @
+4 ActiveCampaign  upsertContact2024
+5 ActiveCampaign  UpdateContactListStatus
+6 Correo          aviso a Carlos y Camile
+7 Correo          entrega del PDF          filtro: hay algo que entregar
 ```
 
-Ningún tipo de formulario merece escenario propio: los nueve comparten el 90 % de
-los módulos y solo cambian en la lista de ActiveCampaign, el evento de Meta y el
-PDF que se entrega.
+Cada módulo del 3 al 7 lleva un `builtin:Resume` en su ruta de error: si
+ActiveCampaign truena, el lead ya está en HubSpot y el aviso sale igual.
+
+**Por qué sin router.** El plan original decía router por `form_type`. Al
+construirlo quedó claro que las nueve ramas serían idénticas salvo por cuatro
+datos —lista, tag, PDF y evento de Meta—, y eso son nueve sitios donde arreglar
+el mismo error. Los cuatro datos se resuelven en el `SetVariables` del módulo 2 y
+el flujo es uno solo. Si algún tipo llega a necesitar tratamiento propio de
+verdad, ahí sí entra un router.
 
 ---
 
