@@ -89,7 +89,21 @@
     window.gtag("config", GOOGLE_ADS_ID, { allow_enhanced_conversions: true });
   }
 
-  /* ---------- Pixel de Meta ---------- */
+  /* ---------- Pixel de Meta ----------
+     META NO LEE EL CONSENT MODE DE GOOGLE. Google Ads y GA4 respetan solos
+     lo que declara consent.js; el Pixel no se entera de nada y seguiría
+     mandando el PageView de un visitante que pulsó "Rechazar". Por eso
+     lleva su propia guarda, aquí y en tracking.js para los eventos.
+
+     Se comprueba el estado, no se bloquea la carga del script: si el
+     visitante acepta después, fbq ya está listo y el siguiente evento sale
+     sin recargar la página. */
+  function metaDenegado() {
+    try {
+      return !!(window.DESTINY_CONSENT && window.DESTINY_CONSENT.state === "denied");
+    } catch (e) { return false; }
+  }
+
   if (META_PIXEL_ID && porCodigo) {
     (function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
@@ -100,7 +114,7 @@
       s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
     window.fbq("init", META_PIXEL_ID);
-    window.fbq("track", "PageView");
+    if (!metaDenegado()) window.fbq("track", "PageView");
   }
 
   /* ---------- Contentsquare ---------- */

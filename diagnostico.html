@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Diagnóstico de medición — Destiny</title>
+
+<!-- Esta página SÍ carga la cadena completa, tags.js incluido, al revés que
+     forms-demo.html. Es a propósito: el punto es comprobar que gtag y fbq
+     existan de verdad y que el Consent Mode esté aplicado, y eso no se puede
+     verificar sin cargarlos. El precio es una visita extra en GA4 y en el
+     Pixel cada vez que se abre. Se abre poco y por una sola persona. -->
+<script src="/assets/consent.js?v=7"></script>
+<script src="/assets/attribution.js?v=7"></script>
+<script src="/assets/tags.js?v=7"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink:#13192A; --cream:#FAF9F3; --paper:#FFF; --gold:#C5A058;
+    --soft:#3F516B; --line:rgba(19,25,42,.12);
+    --ok:#1E7A4C; --mal:#B4453A; --duda:#9A6B12;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--cream); color:var(--ink);
+    font:400 15px/1.6 "Outfit",system-ui,-apple-system,sans-serif;
+  }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 22px; }
+  h1 { font-family:"Playfair Display",Georgia,serif; font-size:clamp(30px,4vw,46px); font-weight:500; margin:0 0 6px; }
+  h1 em { color:var(--gold); }
+  h2 {
+    font-family:"Playfair Display",Georgia,serif; font-size:24px; font-weight:500;
+    margin:0 0 4px;
+  }
+  header { padding:56px 0 10px; }
+  .lede { color:var(--soft); margin:0 0 34px; max-width:70ch; }
+  section {
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding:26px 28px; margin-bottom:20px;
+  }
+  .sub { color:var(--soft); font-size:13.5px; margin:0 0 18px; max-width:78ch; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); font-weight:500; }
+  td.k { width:34%; color:var(--soft); }
+  .pill {
+    display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em;
+    padding:3px 11px; border-radius:999px; white-space:nowrap;
+  }
+  .ok   { background:rgba(30,122,76,.12);  color:var(--ok); }
+  .mal  { background:rgba(180,69,58,.12);  color:var(--mal); }
+  .duda { background:rgba(154,107,18,.14); color:var(--duda); }
+  code, pre {
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;
+    overflow-wrap:anywhere;
+  }
+  pre {
+    background:var(--ink); color:#9BE7A8; padding:15px 17px; border-radius:10px;
+    white-space:pre-wrap; margin:0; max-height:300px; overflow:auto; line-height:1.5;
+  }
+  .vacio { color:var(--soft); opacity:.6; font-style:italic; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:820px) { .cols { grid-template-columns:1fr; } }
+  button {
+    font:inherit; font-weight:600; font-size:14px; cursor:pointer;
+    background:var(--ink); color:var(--cream); border:0;
+    border-radius:999px; padding:11px 24px; transition:.2s;
+  }
+  button:hover { background:var(--gold); color:var(--ink); }
+  button[disabled] { opacity:.4; cursor:not-allowed; }
+  ol.pasos { padding-left:22px; margin:0; }
+  ol.pasos li { margin-bottom:14px; }
+  ol.pasos code { background:rgba(19,25,42,.06); padding:2px 6px; border-radius:4px; }
+  .nota {
+    border-left:3px solid var(--gold); background:rgba(197,160,88,.07);
+    padding:14px 18px; border-radius:0 8px 8px 0; margin-top:16px;
+    font-size:13.5px; color:var(--soft);
+  }
+  footer { padding:20px 0 70px; color:var(--soft); font-size:13px; }
+</style>
+</head>
+
+<body data-desarrollo="diagnostico" data-page-type="diagnostico">
+
+<div class="wrap">
+  <header>
+    <h1>Diagnóstico de <em>medición</em></h1>
+    <p class="lede">Qué se capturó, qué se disparó y con qué valores — sin abrir Tag Assistant
+    y sin adivinar. Esta página no está enlazada desde ningún lado y lleva <code>noindex</code>.</p>
+  </header>
+
+  <section>
+    <h2>1 · La cadena</h2>
+    <p class="sub">Los cinco archivos tienen un orden de carga obligatorio. Si
+    <code>consent.js</code> no va primero, Google ignora el modo de consentimiento por completo.</p>
+    <table id="tCadena"></table>
+  </section>
+
+  <section>
+    <h2>2 · Consentimiento</h2>
+    <p class="sub">Consent Mode v2 exige los cuatro parámetros. Google Ads y GA4 los respetan
+    solos; <strong>Meta no lee el Consent Mode</strong>, así que el Pixel lleva su propia guarda
+    en <code>tags.js</code> y en <code>tracking.js</code>.</p>
+    <table id="tConsent"></table>
+  </section>
+
+  <section>
+    <h2>3 · Click IDs y UTM de esta sesión</h2>
+    <p class="sub">Para probar, entra con <code>?gclid=PRUEBA123&amp;utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=prueba</code>
+    y recarga. Las cookies duran 90 días, que es la ventana de conversión de Google Ads.</p>
+    <table id="tAttr"></table>
+    <div class="cols" style="margin-top:22px;">
+      <div>
+        <h2 style="font-size:17px;">Primer contacto</h2>
+        <p class="sub">Se escribe una vez y no se vuelve a tocar.</p>
+        <pre id="ft"></pre>
+      </div>
+      <div>
+        <h2 style="font-size:17px;">Último contacto</h2>
+        <p class="sub">Se reescribe con cada campaña nueva.</p>
+        <pre id="lt"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>4 · Identificadores de GA4</h2>
+    <p class="sub">Viajan al webhook de Make dentro del JSON del formulario. Si salen en
+    <code>null</code> es porque el visitante rechazó cookies o su navegador las bloquea:
+    se manda <code>null</code> a propósito, nunca un valor inventado.</p>
+    <table id="tGa4"></table>
+  </section>
+
+  <section>
+    <h2>5 · Quién dispara las conversiones de Google Ads</h2>
+    <p class="sub">Solo puede ser uno de los dos. Si GTM y el código las disparan a la vez,
+    cada conversión se cuenta doble y el costo por lead que reporta Ads sale a la mitad del real.</p>
+    <table id="tConv"></table>
+  </section>
+
+  <section>
+    <h2>6 · Eventos disparados en esta página</h2>
+    <p class="sub">Se actualiza solo. Baja, haz clic en un enlace de WhatsApp o espera a los
+    60 segundos de permanencia y verás aparecer las filas.</p>
+    <table id="tEventos"></table>
+    <div class="nota">
+      <strong>El <code>event_id</code> es lo que hay que vigilar.</strong> Es el mismo UUID que
+      viaja al Pixel de Meta (como <code>eventID</code>) y al webhook de Make. Make tiene que
+      reenviarlo <em>tal cual</em> en el evento de la CAPI: es lo único que le dice a Meta que el
+      evento del navegador y el del servidor son el mismo. Si Make genera uno nuevo, cada lead
+      aparece dos veces en el Administrador de Eventos.
+    </div>
+    <p style="margin:20px 0 0;">
+      <button id="btnPrueba">Disparar un evento de prueba</button>
+      <span class="sub" style="display:block;margin-top:8px;">Emite <code>diagnostico_prueba</code>,
+      que <strong>no</strong> es una acción de conversión: nunca puede costar dinero en Google Ads.
+      Sirve para ver la mecánica completa de un vistazo.</span>
+    </p>
+  </section>
+
+  <section>
+    <h2>7 · Prueba manual, paso a paso</h2>
+    <p class="sub">Lo que la página no puede verificar sola, porque pasa en las plataformas.</p>
+    <ol class="pasos">
+      <li><strong>Entra con origen falso.</strong> Abre
+      <code>destiny.mx/diagnostico.html?gclid=PRUEBA123&amp;utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=prueba</code>
+      y comprueba en el bloque 3 que el <code>gclid</code> y los tres UTM aparecen en verde.
+      Navega a otra página del sitio y vuelve: deben seguir ahí, porque viven en cookies de
+      <code>.destiny.mx</code>, no en la URL.</li>
+
+      <li><strong>Enciende la vista previa de GTM.</strong> El contenedor está en
+      <code>GTM-KW8TPGGG</code>, en la cuenta <em>Destiny Real Estate</em> que vive en el
+      <code>authuser=6</code> de ese navegador, no en la cuenta por defecto. Ojo con el
+      contenedor gemelo <code>GTM-N6ZQ256</code>, que está vacío y no se usa.</li>
+
+      <li><strong>Llena un formulario de cada tipo</strong> y confirma en Tag Assistant que
+      cada envío dispara la etiqueta <strong>una sola vez</strong>. Si sale “Activado 2 veces”,
+      el contenedor todavía tiene los activadores viejos (<code>generate_lead</code>,
+      <code>click_whatsapp</code>) además de los nuevos <code>dst_*</code>.</li>
+
+      <li><strong>Comprueba los valores:</strong> 500 MXN en <code>form_lead</code>,
+      2000 en <code>agenda_solicitada</code>, 100 en <code>newsletter_signup</code>.
+      La moneda tiene que ser <strong>MXN</strong> en las dos partes — la etiqueta de Ads y el
+      <code>dataLayer</code>.</li>
+
+      <li><strong>Depurador de Meta.</strong> En el Administrador de Eventos, pestaña
+      <em>Probar eventos</em>, pega la URL del sitio. Al enviar un formulario debe aparecer
+      <code>Lead</code> (o <code>CompleteRegistration</code>, <code>Schedule</code>,
+      <code>Subscribe</code> según el tipo) con su <code>eventID</code>. Anótalo.</li>
+
+      <li><strong>Cruza el <code>event_id</code>.</strong> Cuando Make esté vivo, abre la
+      ejecución de ese lead y comprueba que el <code>event_id</code> del payload es el mismo que
+      viste en el depurador de Meta. Si no coinciden, la deduplicación no funciona y cada lead
+      se cuenta dos veces.</li>
+
+      <li><strong>Prueba el rechazo.</strong> Borra la cookie <code>destiny_consent_v1</code>
+      <em>y</em> el <code>localStorage</code> (borrar solo uno no sirve: la cookie repone al otro),
+      recarga, pulsa <strong>Rechazar</strong> y vuelve aquí. El bloque 2 debe decir
+      <code>denied</code> y el bloque 6 debe mostrar los eventos de Meta como
+      <em>omitido (consentimiento denegado)</em>.</li>
+
+      <li><strong>La conversión en Google Ads tarda.</strong> Hasta 24 horas en aparecer.
+      No la des por rota antes de ese plazo. Y recuerda que la cuenta sigue detenida por saldo:
+      la medición se monta y se prueba completa sin pagar, pero ningún anuncio corre.</li>
+    </ol>
+  </section>
+
+  <footer>
+    Generado por <code>diagnostico.html</code>. Ver <code>MEDICION.md</code> y
+    <code>FORMULARIOS.md</code> en el repositorio.
+  </footer>
+</div>
+
+<script src="/assets/tracking.js?v=7"></script>
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function pill(estado, texto) {
+    return '<span class="pill ' + estado + '">' + texto + '</span>';
+  }
+
+  function fila(k, v) {
+    return '<tr><td class="k">' + k + '</td><td>' + v + '</td></tr>';
+  }
+
+  function vacio(t) { return '<span class="vacio">' + (t || 'sin valor') + '</span>'; }
+
+  /* ---------- 1. La cadena ---------- */
+  function cadena() {
+    var piezas = [
+      ["consent.js", !!window.DESTINY_CONSENT, "Modo de consentimiento. Va PRIMERO."],
+      ["attribution.js", !!window.DestinyAttr, "Guarda los click IDs y los UTM."],
+      ["tags.js", !!window.DestinyTags, "GA4, Google Ads, Pixel de Meta, GTM y Contentsquare."],
+      ["tracking.js", !!window.DestinyMedicion, "El único lugar donde se mide."],
+      ["gtag", typeof window.gtag === "function", "Función de Google. La define tags.js."],
+      ["fbq", typeof window.fbq === "function", "Pixel de Meta."],
+      ["dataLayer", Array.isArray(window.dataLayer), "Lo que consume GTM."]
+    ];
+    var h = '<tr><th>Pieza</th><th>Estado</th><th>Qué hace</th></tr>';
+    piezas.forEach(function (p) {
+      h += '<tr><td class="k"><code>' + p[0] + '</code></td><td>' +
+        (p[1] ? pill('ok', 'cargado') : pill('mal', 'NO cargado')) +
+        '</td><td style="color:var(--soft);font-size:13px;">' + p[2] + '</td></tr>';
+    });
+    if (window.DestinyTags) {
+      h += fila('Modo de etiquetas', '<code>' + window.DestinyTags.modo + '</code>');
+      h += fila('GA4', '<code>' + window.DestinyTags.GA4_ID + '</code>');
+      h += fila('Google Ads', '<code>' + window.DestinyTags.GOOGLE_ADS_ID + '</code>');
+      h += fila('GTM', '<code>' + window.DestinyTags.GTM_ID + '</code>');
+      h += fila('Pixel de Meta', '<code>' + window.DestinyTags.META_PIXEL_ID + '</code>');
+    }
+    $('tCadena').innerHTML = h;
+  }
+
+  /* ---------- 2. Consentimiento ---------- */
+  function consentimiento() {
+    var estado = (window.DESTINY_CONSENT && window.DESTINY_CONSENT.state) || null;
+    var h = '<tr><th>Qué</th><th>Estado</th></tr>';
+
+    h += fila('Elección del visitante', estado === 'granted' ? pill('ok', 'granted — aceptó')
+      : estado === 'denied' ? pill('mal', 'denied — rechazó')
+      : pill('duda', 'sin decidir — el banner sigue abierto'));
+
+    /* Los cuatro parámetros se buscan en el dataLayer, que es donde consent.js
+       los declara. Leerlos de ahí es la única forma de comprobar que salieron
+       de verdad y no solo que están escritos en el archivo. */
+    var params = ['ad_storage', 'ad_user_data', 'ad_personalization', 'analytics_storage'];
+    var vistos = {};
+    (window.dataLayer || []).forEach(function (e) {
+      if (e && e[0] === 'consent') {
+        params.forEach(function (p) { if (e[2] && e[2][p]) vistos[p] = e[2][p]; });
+      }
+    });
+    params.forEach(function (p) {
+      h += fila('<code>' + p + '</code>', vistos[p]
+        ? pill(vistos[p] === 'granted' ? 'ok' : 'duda', vistos[p])
+        : pill('mal', 'NO declarado'));
+    });
+
+    var faltan = params.filter(function (p) { return !vistos[p]; });
+    h += fila('Consent Mode v2',
+      faltan.length ? pill('mal', 'faltan: ' + faltan.join(', '))
+                    : pill('ok', 'los cuatro parámetros declarados'));
+
+    h += fila('Pixel de Meta',
+      estado === 'denied' ? pill('ok', 'bloqueado por la guarda propia')
+                          : pill('ok', 'permitido'));
+    h += fila('Cookie <code>destiny_consent_v1</code>',
+      document.cookie.indexOf('destiny_consent_v1') >= 0 ? pill('ok', 'presente') : vacio('no escrita todavía'));
+
+    $('tConsent').innerHTML = h;
+  }
+
+  /* ---------- 3. Atribución ---------- */
+  function atribucion() {
+    var A = window.DestinyAttr;
+    if (!A) { $('tAttr').innerHTML = fila('Error', pill('mal', 'attribution.js no cargó')); return; }
+    var todo = A.all();
+    var h = '<tr><th>Parámetro</th><th>Valor</th></tr>';
+    (A.CLICK_IDS || []).forEach(function (k) {
+      h += fila('<code>' + k + '</code>', todo[k] ? pill('ok', todo[k]) : vacio());
+    });
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+     'landing_page', 'referrer', 'first_seen'].forEach(function (k) {
+      h += fila('<code>' + k + '</code>', todo[k] ? '<code>' + todo[k] + '</code>' : vacio());
+    });
+    $('tAttr').innerHTML = h;
+
+    var ft = A.firstTouch(), lt = A.lastTouch();
+    $('ft').textContent = ft ? JSON.stringify(ft, null, 2) : 'sin primer contacto registrado';
+    $('lt').textContent = lt ? JSON.stringify(lt, null, 2) : 'sin último contacto registrado';
+  }
+
+  /* ---------- 4. GA4 ---------- */
+  function ga4() {
+    function cookie(n) {
+      var m = document.cookie.match('(^|;\\s*)' + n + '=([^;]*)');
+      return m ? decodeURIComponent(m[2]) : '';
+    }
+    var ga = cookie('_ga');
+    var cid = null;
+    if (ga) { var p = ga.split('.'); if (p.length >= 4) cid = p[2] + '.' + p[3]; }
+
+    var id = (window.DestinyTags && window.DestinyTags.GA4_ID) || '';
+    var suf = id.replace(/^G-/, '');
+    var sesion = suf ? cookie('_ga_' + suf) : '';
+    var sid = null;
+    if (sesion) { var q = sesion.split('.'); if (q.length >= 3 && q[2]) sid = q[2]; }
+
+    var h = '<tr><th>Identificador</th><th>Valor</th></tr>';
+    h += fila('<code>ga4_client_id</code>', cid ? pill('ok', cid) : pill('duda', 'null'));
+    h += fila('<code>ga4_session_id</code>', sid ? pill('ok', sid) : pill('duda', 'null'));
+    h += fila('Cookie <code>_ga</code>', ga ? '<code>' + ga + '</code>' : vacio('no existe'));
+    h += fila('Cookie <code>_ga_' + suf + '</code>', sesion ? '<code>' + sesion + '</code>' : vacio('no existe'));
+    $('tGa4').innerHTML = h;
+  }
+
+  /* ---------- 5. Quién dispara las conversiones ---------- */
+  function conversiones() {
+    var M = window.DestinyMedicion;
+    if (!M) { $('tConv').innerHTML = fila('Error', pill('mal', 'tracking.js no cargó')); return; }
+    var c = M.config();
+    var h = '<tr><th>Qué</th><th>Estado</th></tr>';
+    h += fila('Quién dispara Ads', c.conversiones_por_codigo
+      ? pill('duda', 'el código (tracking.js) — GTM debe tener sus etiquetas de Ads pausadas')
+      : pill('ok', 'GTM — tracking.js solo escribe en el dataLayer'));
+    h += fila('Modo desarrollo', c.desarrollo
+      ? pill('duda', 'SÍ — no se dispara ninguna conversión')
+      : pill('ok', 'no — las conversiones salen de verdad'));
+    h += fila('Cuenta de Ads', '<code>' + c.ads_id + '</code>');
+
+    Object.keys(c.etiquetas).forEach(function (k) {
+      var e = c.etiquetas[k];
+      h += fila('Rótulo <code>' + k + '</code> · ' + c.valores[k] + ' MXN',
+        e ? '<code>' + e + '</code>' : pill('duda', 'PENDIENTE — falta crear la acción en Ads'));
+    });
+    $('tConv').innerHTML = h;
+  }
+
+  /* ---------- 6. Eventos ---------- */
+  function eventos() {
+    var M = window.DestinyMedicion;
+    var lista = M ? M.historial() : [];
+    var h = '<tr><th>Evento</th><th>dataLayer</th><th>Valor</th><th>Google Ads</th><th>Meta</th><th>GA4</th><th>event_id</th></tr>';
+    if (!lista.length) {
+      h += '<tr><td colspan="7">' + vacio('todavía no se ha disparado nada en esta página') + '</td></tr>';
+    }
+    lista.forEach(function (e) {
+      h += '<tr>' +
+        '<td><strong>' + e.evento + '</strong></td>' +
+        '<td><code>' + e.dataLayer + '</code></td>' +
+        '<td>' + (e.valor != null ? e.valor + ' ' + e.moneda : vacio('—')) + '</td>' +
+        '<td style="font-size:12.5px;">' + (e.ads || vacio('no aplica')) + '</td>' +
+        '<td style="font-size:12.5px;">' + (e.meta || vacio('—')) + '</td>' +
+        '<td style="font-size:12.5px;">' + (e.ga4 || vacio('—')) + '</td>' +
+        '<td>' + (e.event_id ? '<code>' + e.event_id + '</code>' : vacio('sin id')) + '</td>' +
+        '</tr>';
+    });
+    $('tEventos').innerHTML = h;
+  }
+
+  /* ---------- Arranque ---------- */
+  cadena(); consentimiento(); atribucion(); ga4(); conversiones(); eventos();
+  setInterval(function () { eventos(); consentimiento(); }, 1500);
+
+  $('btnPrueba').addEventListener('click', function () {
+    // diagnostico_prueba NO está en la lista de conversiones de tracking.js,
+    // así que no puede mandar nada a Google Ads por mucho que se pulse.
+    var id = (window.crypto && window.crypto.randomUUID)
+      ? window.crypto.randomUUID()
+      : 'prueba-' + Math.random().toString(16).slice(2);
+    window.destinyTrack('diagnostico_prueba', {
+      event_id: id,
+      form_type: 'diagnostico',
+      user_email: '  PRUEBA@Destiny.MX ',
+      user_phone: '55 1234 5678'
+    });
+    eventos();
+    this.textContent = 'Disparado — mira la tabla de arriba';
+    var b = this;
+    setTimeout(function () { b.textContent = 'Disparar un evento de prueba'; }, 2600);
+  });
+})();
+</script>
+</body>
+</html>

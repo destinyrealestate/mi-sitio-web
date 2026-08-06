@@ -1,0 +1,313 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2026-08-05 00:00:00",
+  "containerVersion": {
+    "path": "accounts/6368951919/containers/259896060/versions/0",
+    "accountId": "6368951919",
+    "containerId": "259896060",
+    "containerVersionId": "0",
+    "name": "Destiny — conversiones sobre eventos dst_",
+    "description": "Generado por Claude Code el 2026-08-05 junto con la migracion a formularios nativos. Los activadores escuchan los eventos con prefijo dst_ que emite assets/tracking.js. NO contiene etiquetas de GA4, del Pixel de Meta ni la etiqueta base de Google Ads: esas salen por codigo desde assets/tags.js y duplicarlas aqui contaria cada visita dos veces.",
+    "container": {
+      "path": "accounts/6368951919/containers/259896060",
+      "accountId": "6368951919",
+      "containerId": "259896060",
+      "name": "Destiny Real Estate",
+      "publicId": "GTM-KW8TPGGG",
+      "usageContext": [
+        "WEB"
+      ],
+      "fingerprint": "0",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6368951919/containers/259896060/workspaces?apiLink=container"
+    },
+    "variable": [
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "101",
+        "name": "DL - form_type",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "form_type" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "102",
+        "name": "DL - form_variant",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "form_variant" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "103",
+        "name": "DL - value",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "value" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "104",
+        "name": "DL - event_id",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "event_id" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "105",
+        "name": "DL - user_email",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "user_email" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "106",
+        "name": "DL - user_phone",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "user_phone" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "107",
+        "name": "DL - desarrollo",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "desarrollo" }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "variableId": "108",
+        "name": "DL - gclid",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "gclid" }
+        ],
+        "fingerprint": "0"
+      }
+    ],
+    "trigger": [
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "triggerId": "201",
+        "name": "dst_form_lead",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "dst_form_lead" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "triggerId": "202",
+        "name": "dst_agenda_solicitada",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "dst_agenda_solicitada" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "triggerId": "203",
+        "name": "dst_whatsapp_click",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "dst_whatsapp_click" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "triggerId": "204",
+        "name": "dst_newsletter_signup",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "dst_newsletter_signup" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      }
+    ],
+    "tag": [
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "tagId": "301",
+        "name": "Vinculador de conversiones",
+        "type": "gclidw",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "enableCrossDomain", "value": "false" },
+          { "type": "BOOLEAN", "key": "acceptIncoming", "value": "true" },
+          { "type": "TEMPLATE", "key": "linkerScope", "value": "AUTO" }
+        ],
+        "firingTriggerId": [
+          "2147479553"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "tagId": "302",
+        "name": "Ads · form_lead",
+        "type": "awct",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
+          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
+          { "type": "TEMPLATE", "key": "conversionLabel", "value": "D636CNu6xdwcELeigbdE" },
+          { "type": "TEMPLATE", "key": "conversionValue", "value": "500" },
+          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
+          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
+          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+        ],
+        "firingTriggerId": [
+          "201"
+        ],
+        "tagFiringOption": "ONCE_PER_LOAD",
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "tagId": "303",
+        "name": "Ads · agenda_solicitada",
+        "type": "awct",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
+          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
+          { "type": "TEMPLATE", "key": "conversionLabel", "value": "p8UOCOG6xdwcELeigbdE" },
+          { "type": "TEMPLATE", "key": "conversionValue", "value": "2000" },
+          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
+          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
+          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+        ],
+        "firingTriggerId": [
+          "202"
+        ],
+        "tagFiringOption": "ONCE_PER_LOAD",
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "tagId": "304",
+        "name": "Ads · whatsapp_click",
+        "type": "awct",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
+          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
+          { "type": "TEMPLATE", "key": "conversionLabel", "value": "eUBKCN66xdwcELeigbdE" },
+          { "type": "TEMPLATE", "key": "conversionValue", "value": "500" },
+          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
+          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+        ],
+        "firingTriggerId": [
+          "203"
+        ],
+        "tagFiringOption": "ONCE_PER_LOAD",
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6368951919",
+        "containerId": "259896060",
+        "tagId": "305",
+        "name": "Ads · newsletter_signup (PAUSADA — falta el rotulo)",
+        "type": "awct",
+        "notes": "PAUSADA A PROPOSITO. La accion de conversion newsletter_signup todavia no existe en Google Ads. Hay que crearla con categoria Suscribirse, 100 MXN, recuento Una, y marcada como SECUNDARIA para que no ensucie la optimizacion de campanas: si entra como principal, el algoritmo persigue suscripciones baratas en lugar de inversionistas. Cuando exista, pegar su rotulo en conversionLabel y despausar.",
+        "paused": true,
+        "parameter": [
+          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
+          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
+          { "type": "TEMPLATE", "key": "conversionLabel", "value": "PEGAR_ROTULO_AQUI" },
+          { "type": "TEMPLATE", "key": "conversionValue", "value": "100" },
+          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
+          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
+          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
+          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+        ],
+        "firingTriggerId": [
+          "204"
+        ],
+        "tagFiringOption": "ONCE_PER_LOAD",
+        "fingerprint": "0"
+      }
+    ],
+    "fingerprint": "0"
+  }
+}

@@ -36,21 +36,24 @@ el comentario "no mover".
 
 ## Eventos
 
-Todos salen por tres vías a la vez, según lo que exista en la página:
+Cada evento sale por tres vías, con **dos nombres distintos a propósito**:
 
-1. `window.dataLayer` — es lo que consumirá GTM cuando exista el contenedor.
-2. `gtag('event', …)` — para que **ya funcionen hoy** con el GA4 directo.
-3. `fbq(...)` — Pixel de Meta.
+1. `dataLayer.push({event: 'dst_<nombre>'})` — es lo que consume GTM.
+2. `gtag('event', '<nombre>', …)` — GA4.
+3. `fbq(...)` — Pixel de Meta, con el `event_id` para deduplicar contra la CAPI.
 
-Cuando se instale GTM y se retiren GA4 y el Pixel del código, `tracking.js` no
-cambia: las vías 2 y 3 dejan de existir y se omiten solas.
+Los dos nombres son distintos porque `gtag` también escribe en el `dataLayer`;
+ver "Los eventos del dataLayer llevan prefijo `dst_`" más abajo.
 
-| Evento | Cuándo | Parámetros propios | Conversión en Ads |
+| Evento | dataLayer | Cuándo | Conversión en Ads |
 |---|---|---|---|
-| `generate_lead` | carga de cualquier página de gracias | `form_type`, `contexto`, `value`, `currency`, `user_email`, `user_phone` | **Sí — principal** |
-| `view_project` | carga de una landing de proyecto | `project_slug`, `project_name` | No (audiencia) |
-| `click_whatsapp` | clic a `wa.me` / `api.whatsapp.com` / `web.whatsapp.com` | `link_url`, `link_text` | **Sí — secundaria** |
-| `click_telefono` | clic a `tel:` | `phone` | **Sí — secundaria** |
+| `form_lead` | `dst_form_lead` | envío de formulario de lead, guía, club, scorecard, propiedad o zona | **Sí — 500 MXN** |
+| `agenda_solicitada` | `dst_agenda_solicitada` | envío del formulario de `/agenda` | **Sí — 2000 MXN** |
+| `newsletter_signup` | `dst_newsletter_signup` | envío de newsletter o radar | **Sí — 100 MXN, secundaria (pendiente)** |
+| `whatsapp_click` | `dst_whatsapp_click` | clic a `wa.me` / `api.whatsapp.com` / `web.whatsapp.com` | **Sí — 500 MXN** |
+| `gracias_vista` | `dst_gracias_vista` | carga de una página de gracias | No — solo mide la caída entre envío y llegada |
+| `view_project` | `dst_view_project` | carga de una landing de proyecto | No (audiencia) |
+| `click_telefono` | `dst_click_telefono` | clic a `tel:` | No |
 | `click_email` | clic a `mailto:` | `email_to` | No |
 | `file_download` | clic a `.pdf` `.xlsx` `.xls` `.zip` `.docx` `.csv` | `file_name`, `file_extension` | No (micro) |
 | `scroll_90` | 90 % de la página | `percent_scrolled` | No (micro) |
@@ -96,48 +99,37 @@ Qué queda cubierto de entrada, sin tocar nada más:
 - **Consentimiento.** `consent.js` va antes y declara `ad_storage`,
   `ad_user_data` y `ad_personalization`; si el visitante rechaza, Ads pasa a
   medición sin cookies (modelado) en vez de escribirlas igual.
-- **Conversiones mejoradas.** La bandera queda activada aquí, pero **solo sirve
-  cuando además** (a) se active la función en la interfaz de Ads y (b) Zoho
-  devuelva el correo en la URL de gracias — ver la sección siguiente.
+- **Conversiones mejoradas.** La bandera queda activada aquí. El correo y el
+  teléfono los pasa `forms.js` a `tracking.js` en el momento del envío, ya sin
+  depender de ninguna redirección — ver la sección siguiente.
 
-### Lo que NO hace todavía
+### Los rótulos viven en dos lugares
 
-La etiqueta base **no registra ninguna conversión**. Cada conversión necesita su
-propio rótulo (`AW-18368975159/xxxxxxxx`), que solo existe una vez creada en la
-interfaz de Google Ads. Orden a seguir:
+Los tres rótulos existentes están **en GTM** (que es quien dispara hoy) y
+**también** en la constante `ETIQUETAS` de `tracking.js`, lista para el día que
+se pasen a código. Si se crea o rehace una acción en Ads, hay que actualizar los
+dos sitios o quedarán desalineados.
 
-1. En Ads, crear las acciones de conversión — como mínimo `generate_lead`
-   (principal) y `click_whatsapp` / `click_telefono` (secundarias).
-2. Copiar el rótulo de cada una.
-3. Dispararlas **desde GTM**, con activadores de *Evento personalizado* sobre
-   los eventos que `tracking.js` ya deja en el `dataLayer`. No hace falta tocar
-   el código: los 7 eventos ya están ahí con toda la atribución.
-
-Se hace desde GTM y no en código a propósito: los rótulos cambian cada vez que
-se crea o rehace una conversión, y no vale la pena redesplegar el sitio por eso.
-La etiqueta **base** sí vive en código para que el remarketing no dependa de que
-alguien publique el contenedor.
+`newsletter_signup` sigue con el rótulo vacío en las dos partes: la acción
+todavía no existe en Google Ads. `tracking.js` lo trata a propósito como "sin
+rótulo" en vez de mandar una conversión incompleta — una conversión sin rótulo
+se descarta en silencio y da la falsa impresión de estar midiendo.
 
 ---
 
-## Conversiones mejoradas para clientes potenciales
+## Conversiones mejoradas: de dónde sale el correo
 
-Google Ads mejora la medición si recibe el correo del prospecto, con hash.
-`tracking.js` lo expone en el `dataLayer` en un campo dedicado, **solo si Zoho
-lo devuelve en la URL de redirección**:
+Antes esto dependía de que **Zoho** devolviera el correo en la URL de
+redirección, algo que nunca se llegó a configurar. Ya no: el formulario es
+nativo, así que `forms.js` le pasa el correo y el teléfono a `tracking.js` en el
+momento del envío, sin que pasen por la URL en ningún momento.
 
-```
-/gracias-sesion.html?form_type=sesion&d=bentley-residences-miami&email=juan%40ejemplo.com
-```
+`tracking.js` los normaliza y los deja en el `dataLayer` en `user_email` y
+`user_phone`. La etiqueta *Ads · Conversiones mejoradas* de GTM los lee de ahí.
+**El correo nunca sale del navegador desde este código**: quien lo manda a
+Google, con hash, es gtag.
 
-→ `dataLayer.push({event: 'generate_lead', user_email: 'juan@ejemplo.com', ...})`
-
-El correo **nunca sale del navegador desde este código**: solo se deja en el
-`dataLayer` para que GTM lo tome y lo mande con hash a Ads. Si Zoho no lo
-devuelve, el campo simplemente no aparece y el resto del evento funciona igual.
-
-**Pendiente en Zoho:** configurar la redirección post-envío de cada formulario
-para que incluya `email` (y `d` con el slug del desarrollo) en la URL.
+Ver el detalle de la normalización más abajo.
 
 ---
 
@@ -299,68 +291,103 @@ artículos se leen sin JavaScript.
 
 ---
 
-## Las conversiones de Google Ads dentro de GTM (2026-08-05)
+## Las conversiones de Google Ads y GTM
 
-El contenedor dejó de ir vacío. **Versión 2 publicada**: cinco etiquetas, cinco
-variables de capa de datos, una de datos del usuario y tres activadores. **Nada
-de esto tocó el código del sitio**: los eventos que consume ya los dejaba
-`tracking.js`.
+### Quién las dispara: GTM, no el código
 
-Comprobado contra el contenedor en vivo (`gtm.js?id=GTM-KW8TPGGG`), no solo
-contra la interfaz: los tres rótulos viajan con sus valores (500 / 2000 / 500) y
-las cuatro etiquetas de Ads llevan `once_per_load: true`.
+Solo puede ser uno de los dos. Si GTM y `tracking.js` disparan la misma
+conversión, cada lead se cuenta **dos veces** y el costo por lead que reporta
+Ads sale a la mitad del real.
 
-**Dónde vive.** La cuenta de GTM es `Destiny Real Estate` (id `6368951919`,
-contenedor `259896060`) y **no** está bajo `lic.carlos.cataneo@gmail.com` como
-cuenta principal — es el `authuser=6` de ese navegador. Buscarlo en la cuenta
-por defecto no da nada. Ojo también con que existe un contenedor gemelo
-`GTM-N6ZQ256`, también llamado *Destiny Real Estate / destiny.mx*, en otra
-cuenta (`authuser=5`), vacío y sin usar. El que el sitio carga es
-`GTM-KW8TPGGG`. No confundirlos.
+Hoy las dispara **GTM**. Por eso `tracking.js` arranca con:
 
-| Etiqueta | Tipo | Rótulo | Valor | Activador |
-|---|---|---|---|---|
-| Vinculador de conversiones | Vinculación de conversiones | — | — | All Pages |
-| Ads · form_lead | Conversión de Ads | `D636CNu6xdwcELeigbdE` | 500 MXN | `generate_lead` con `form_type` ≠ `sesion` |
-| Ads · agenda_solicitada | Conversión de Ads | `p8UOCOG6xdwcELeigbdE` | 2000 MXN | `generate_lead` con `form_type` = `sesion` |
-| Ads · whatsapp_click | Conversión de Ads | `eUBKCN66xdwcELeigbdE` | 500 MXN | `click_whatsapp` |
-| Ads · Conversiones mejoradas | User-provided Data Event | — | — | los dos de `generate_lead` |
+```js
+var CONVERSIONES_POR_CODIGO = false;
+```
 
-Los nombres de evento son los que **ya existían** (`generate_lead`,
-`click_whatsapp`), no `form_lead` / `whatsapp_click`. No hay ningún evento
-`agenda_solicitada` en el sitio: la agenda es otro formulario de Zoho con
-`form_type = "sesion"`, y es esa condición la que separa los 2000 de los 500.
+Para pasarlas a código hay que hacer las dos cosas **en este orden**:
 
-Las conversiones mejoradas van en etiqueta aparte (*Google Ads User-provided
-Data Event*), no en una casilla de la etiqueta de conversión: la de conversión
-ya no la trae. Lee `UPD - Datos del lead`, que a su vez lee `user_email` y
-`user_phone` del `dataLayer`.
+1. Pausar o borrar en GTM las cuatro etiquetas `Ads · …`.
+2. Recién entonces poner la constante en `true`.
 
-### La trampa: cada evento llega DOS veces al dataLayer
+Al revés queda un hueco sin conversiones. La página `/diagnostico.html` dice en
+todo momento quién las está disparando, en su bloque 5.
 
-`tracking.js` emite cada evento por dos vías (ver el encabezado de ese archivo):
-`dataLayer.push({event: …})` **y** `gtag('event', …)`. Lo que no era evidente es
-que la segunda **también termina en `window.dataLayer`**, porque `tags.js`
-define `gtag` justamente como un push a ese array. GTM lee las dos y dispara la
-etiqueta dos veces:
+GA4 y el Pixel de Meta **sí** salen por código siempre: GTM no los administra
+(regla de convivencia en `tags.js`), y el Pixel además necesita el `event_id`
+que genera `forms.js` para deduplicar contra la CAPI que manda Make.
+
+### Los eventos del dataLayer llevan prefijo `dst_`
+
+`tags.js` define `gtag` como un push a `window.dataLayer`. Eso significa que un
+`gtag('event','form_lead',…)` **también** aterriza en el dataLayer, y GTM lo lee
+como un evento más. Con el mismo nombre en las dos vías, cada activador se
+cumplía dos veces:
 
 ```
 índice  9 → dataLayer.push({event:'generate_lead', …})
 índice 10 → gtag('event','generate_lead', {…})
 ```
 
-Verificado en Tag Assistant: sin corregir, `form_lead` salía *Activado 2 veces*
-en un solo envío. **Cada lead se habría cobrado doble en Google Ads.**
+Verificado en Tag Assistant: la etiqueta salía *Activado 2 veces* en un solo
+envío. **Cada lead se habría cobrado doble en Google Ads.**
 
-**El arreglo:** las cuatro etiquetas de Ads llevan *Configuración avanzada →
-Opciones de activación de la etiqueta* = **`Una vez por página`** (no el
-`Una vez por evento` que trae de fábrica). Con eso el segundo `generate_lead`
-muestra *Etiquetas activadas: Ninguna*. En `whatsapp_click` implica además que
-varios clics en la misma página cuentan uno solo, que es lo que Ads quiere para
-una acción de tipo cliente potencial.
+En agosto de 2026 se parcheó poniendo las etiquetas en *Una vez por página*. Eso
+tapa el síntoma, pero deja la trampa puesta para la siguiente etiqueta que
+alguien cree. Ahora está arreglado de raíz:
 
-**Toda etiqueta nueva que se cuelgue de un evento de `tracking.js` necesita lo
-mismo.** Es la regla menos obvia de este contenedor.
+| Vía | Nombre |
+|---|---|
+| `dataLayer.push` para GTM | `dst_form_lead` |
+| `gtag('event', …)` para GA4 | `form_lead` |
+
+Un activador de `dst_form_lead` no puede dispararse con el push de `gtag`,
+porque ese llega como `form_lead`. Comprobado en navegador: un envío deja
+exactamente **un** `dst_form_lead` en el dataLayer.
+
+Las etiquetas conservan además *Una vez por página*, por si acaso.
+
+### Al desplegar hay que importar el contenedor nuevo
+
+Los activadores publicados escuchan `generate_lead` y `click_whatsapp`, que ya
+no se emiten. **Si se sube el sitio sin tocar GTM, las conversiones dejan de
+registrarse.** El archivo listo para importar es `gtm-destiny.json`.
+
+Cómo importarlo: *Administración → Importar contenedor →* elegir el archivo,
+espacio de trabajo **existente**, y modo **Combinar → Sobrescribir etiquetas,
+activadores y variables en conflicto**. Revisar la vista previa de cambios
+antes de confirmar, y publicar solo después de validar con Tag Assistant.
+
+| Etiqueta | Rótulo | Valor | Activador |
+|---|---|---|---|
+| Vinculador de conversiones | — | — | All Pages |
+| Ads · form_lead | `D636CNu6xdwcELeigbdE` | 500 MXN | `dst_form_lead` |
+| Ads · agenda_solicitada | `p8UOCOG6xdwcELeigbdE` | 2000 MXN | `dst_agenda_solicitada` |
+| Ads · whatsapp_click | `eUBKCN66xdwcELeigbdE` | 500 MXN | `dst_whatsapp_click` |
+| Ads · newsletter_signup | **PENDIENTE** | 100 MXN | `dst_newsletter_signup` |
+
+La última va **pausada** en el archivo: la acción de conversión todavía no
+existe en Google Ads. Hay que crearla con categoría *Suscribirse*, 100 MXN,
+recuento *Una*, y marcada como **secundaria** — si entra como principal, el
+algoritmo persigue suscripciones baratas en lugar de inversionistas.
+
+Ya no hace falta separar la agenda por `form_type = "sesion"`: cada acción tiene
+su propio evento.
+
+**Lo que el archivo NO trae y hay que repuntar a mano:** la etiqueta existente
+*Ads · Conversiones mejoradas* (tipo *User-provided Data Event*). Se le cambia el
+activador a `dst_form_lead` y `dst_agenda_solicitada` y listo. No se incluyó en
+el archivo a propósito: su tipo de etiqueta no se reproduce con seguridad en una
+exportación hecha a mano, y una importación mal formada puede dañar un
+contenedor que hoy funciona.
+
+### Dónde vive el contenedor
+
+Cuenta `Destiny Real Estate` (id `6368951919`, contenedor `259896060`). **No**
+está bajo `lic.carlos.cataneo@gmail.com` como cuenta principal — es el
+`authuser=6` de ese navegador. Buscarlo en la cuenta por defecto no da nada. Ojo
+también con el contenedor gemelo `GTM-N6ZQ256`, en `authuser=5`, vacío y sin
+usar. El que el sitio carga es `GTM-KW8TPGGG`.
 
 ### Detalle al validar
 
@@ -368,15 +395,96 @@ La vista previa de GTM congela el estado del contenedor en el momento en que se
 abre. Después de editar una etiqueta hay que **volver a pulsar Vista previa** o
 los cambios no aparecen, aunque se recargue la página.
 
-### Pendientes que salieron de esta validación
+---
 
-- `/gracias-sesion` (sin `.html`) da **404**: el `.htaccess` solo tiene rutas
-  limpias para `gracias-preconstruccion`, `gracias-dolares` y `gracias-guia`.
-  Si alguien configura esa redirección en Zoho con la ruta limpia, la conversión
-  se pierde. Hoy funciona como `/gracias-sesion.html`.
-- `tracking.js` manda `currency: "USD"` y `value: 0` en `generate_lead`. Las
-  etiquetas de Ads llevan el valor fijo en MXN, así que no estorba, pero los dos
-  números se contradicen y conviene alinearlos.
+## Conversiones mejoradas: qué se manda
+
+`tracking.js` normaliza y **no hashea**: gtag hashea del lado del cliente. Si se
+mandara sin normalizar, el hash no coincidiría con el que Google tiene y la
+conversión mejorada no emparejaría con nadie.
+
+- **Correo:** sin espacios y en minúsculas.
+- **Teléfono:** E.164. El mercado principal es México, así que 10 dígitos sin
+  lada se asumen mexicanos (`+52`). Los 11 dígitos que empiezan en 1 se asumen de
+  Estados Unidos (`+1`), que en un sitio de Miami es el caso real; el prefijo
+  mexicano heredado aparece como 13 dígitos (`521…`) y ese sí se limpia.
+
+Comprobado: `5611659009`, `56 1165 9009`, `+52 56 1165 9009`, `5215611659009`,
+`525611659009` y `(56) 1165-9009` dan todos `+525611659009`. `13055551234` y
+`+1 305 555 1234` dan `+13055551234`.
+
+---
+
+## Las páginas de gracias ya no disparan la conversión
+
+Antes, cualquier página con `data-page-type="gracias"` emitía `generate_lead` al
+cargar. Tenía sentido cuando el formulario era un iframe de Zoho: el envío
+ocurría en otro dominio y la única señal que llegaba al navegador era el
+aterrizaje en la página de gracias.
+
+Desde que los formularios son nativos, **`forms.js` dispara la conversión en el
+momento del envío**. Dejar además el disparo al cargar contaría cada lead dos
+veces, y una tercera cada vez que alguien recargara la página de gracias o
+volviera a ella desde el historial.
+
+Disparar al enviar es mejor por otra razón: no depende de que el visitante
+complete la redirección. Si se le cae la red justo después de enviar, el lead ya
+está registrado y medido.
+
+Lo que sí queda es `gracias_vista`, sin valor y sin conversión, para poder medir
+la caída entre envío y llegada.
+
+---
+
+## Atribución: primer contacto y último contacto
+
+`attribution.js` guarda tres capas:
+
+| Capa | Qué es | Cookie |
+|---|---|---|
+| Planas, una por clave | El último valor conocido de cada parámetro | `gclid`, `utm_source`, … |
+| Primer contacto | Se escribe una vez y no se toca nunca más | `dst_ft` (JSON) |
+| Último contacto | Se reescribe con cada campaña nueva | `dst_lt` (JSON) |
+
+El anuncio que **descubre** al inversionista casi nunca es el que **cierra** la
+conversión tres semanas después. Con una sola capa, esa primera campaña
+desaparecía del registro y su presupuesto parecía no producir nada.
+
+Comprobado en navegador: entrando por Google Ads (`gclid` + campaña
+`preconstruccion`) y volviendo después por un anuncio de Meta (`fbclid` +
+campaña `retargeting`), el primer contacto conserva Google y el último registra
+Meta. Las cookies planas conservan los dos click IDs.
+
+Se capturan además `ttclid` (TikTok) y `li_fat_id` (LinkedIn), que todavía no se
+usan: el día que se encienda uno de esos canales habrá histórico en vez de
+arrancar de cero.
+
+Vigencia: **90 días**, que es la ventana de conversión de Google Ads. Guardar más
+tiempo produce atribuciones que Ads ya no acepta.
+
+`DestinyAttr.payload()` devuelve el objeto completo, con `first_touch` y
+`last_touch` dentro. Es lo que manda `forms.js` al webhook.
+
+---
+
+## La página de diagnóstico
+
+`/diagnostico.html` — `noindex`, sin enlazar. Responde sin adivinar:
+
+- qué click IDs y UTM se capturaron, y el primer y último contacto completos
+- si Consent Mode declaró los cuatro parámetros, y si está permitiendo o bloqueando
+- el `ga4_client_id` y el `ga4_session_id` que viajan al webhook
+- **quién** está disparando las conversiones de Ads
+- qué eventos se dispararon en esa página, con su valor, su `event_id` y qué le
+  pasó a cada uno en Ads, en Meta y en GA4
+
+Trae además la lista de pasos de prueba manual: entrar con `?gclid=PRUEBA123`,
+qué mirar en Tag Assistant y en el Depurador de Meta, y cómo cruzar el
+`event_id` contra la ejecución de Make.
+
+A diferencia de `forms-demo.html`, esta página **sí** carga `tags.js`: sin él no
+se puede comprobar que `gtag` y `fbq` existan de verdad. El precio es una visita
+extra en GA4 y en el Pixel cada vez que se abre.
 
 ---
 
@@ -430,9 +538,12 @@ Borrar solo el `localStorage` ya no sirve de nada: la cookie lo repone.
 
 ## Lo que este código NO resuelve
 
-- Los campos ocultos en Zoho Forms, las propiedades en HubSpot y el mapeo en
-  Make — ver la sección del puente de atribución. Es el pendiente de más valor:
-  hoy ningún contacto del CRM sabe de dónde vino.
+- **Las propiedades de atribución en HubSpot y el escenario de Make.** Es el
+  pendiente de más valor: el navegador ya captura y manda todo, pero mientras
+  `MAKE_WEBHOOK_URL` siga siendo un placeholder en `assets/forms.js`, el lead no
+  llega a ningún CRM. Ver `FORMULARIOS.md`.
+- **La acción `newsletter_signup` en Google Ads.** Sin ella, las suscripciones se
+  miden en GA4 y en Meta pero no en Ads.
 - ~~Publicar etiquetas dentro del contenedor de GTM.~~ Publicadas el 2026-08-05
   como **Versión 2**, «Conversiones de Google Ads — fase 1» — ver «Las
   conversiones de Google Ads dentro de GTM».

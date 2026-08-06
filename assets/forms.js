@@ -707,11 +707,16 @@
 
       var p = payload(form, cfg, host, uuid());
 
-      /* En local y en file:// no se dispara ninguna conversión: si no,
-         cada prueba de diseño ensucia Google Ads y Meta con leads que no
-         existen. El envío al webhook tampoco sale. */
+      /* En local no sale nada al webhook ni se redirige: se deja el payload
+         a la vista. Pero SÍ se llama a tracking.js, porque ahí es donde
+         vive la guarda que impide que salga una conversión de verdad, y
+         porque sin esta llamada la integración entre los dos archivos no
+         se podría probar sin desplegar. tracking.js registra el evento en
+         su historial y lo marca como "omitido (desarrollo)": es lo que
+         lee diagnostico.html. */
       if (esLocal()) {
-        if (window.console) console.log("[destiny-forms] modo local — no se envía ni se mide", p);
+        medir(cfg, p);
+        if (window.console) console.log("[destiny-forms] modo local — no se envía al webhook ni se redirige", p);
         setTimeout(function () { estado("normal"); enviando = false; alertaLocal(host, p); }, 400);
         return;
       }

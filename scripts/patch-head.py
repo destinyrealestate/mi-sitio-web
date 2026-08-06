@@ -48,7 +48,7 @@ PAGES = {
     "404.html":                ("404",                 "404",       ""),
 }
 
-V = "6"  # versión de caché de los scripts nuevos
+V = "7"  # versión de caché de los scripts nuevos
 
 HEAD_BLOCK = f"""<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v={V}"></script>
