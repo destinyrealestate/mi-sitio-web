@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Banco de pruebas · formularios nativos — Destiny</title>
+
+<!-- Aquí NO va assets/tags.js a propósito.
+     tags.js carga GA4, el Pixel de Meta, Google Ads y Contentsquare, y
+     dispara un PageView al cargar. Si esta página lo cargara, cada vez que
+     alguien la abriera para revisar el diseño de un formulario se contaría
+     una visita falsa en los cuatro sistemas. Lo que sí carga es la cadena
+     que el formulario necesita de verdad: consentimiento, atribución,
+     catálogo y capa de eventos. -->
+<script src="/assets/consent.js?v=6"></script>
+<script src="/assets/attribution.js?v=6"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=56">
+
+<style>
+  body { background: var(--cream); }
+  .demo-head { padding: 54px 0 8px; }
+  .demo-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 30px; padding-bottom: 90px;
+  }
+  .demo-card .demo-tag {
+    display: inline-block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 13px; margin-bottom: 12px;
+  }
+  /* Los ejemplos de URL son largos y en móvil desbordan la pantalla si no se
+     les deja partirse. overflow-wrap parte solo donde hace falta; break-all
+     partiría también las palabras cortas y se lee peor. */
+  code { font-size: 11.5px; color: var(--ink-soft); overflow-wrap: anywhere; }
+  .demo-note {
+    background: var(--paper); border-left: 3px solid var(--gold);
+    padding: 22px 26px; border-radius: var(--r); margin: 28px 0 44px;
+  }
+  .demo-note p { font-size: 14.5px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 10px; }
+  .demo-note p:last-child { margin-bottom: 0; }
+  .demo-note strong { color: var(--ink); }
+  @media (max-width: 900px) { .demo-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+
+<body data-page-type="demo" data-desarrollo="home">
+
+<div class="wrap demo-head">
+  <span class="eyebrow">Banco de pruebas</span>
+  <h1 class="h-1" style="margin:14px 0 18px;">Los nueve tipos de <span class="serif-em">formulario.</span></h1>
+
+  <div class="demo-note">
+    <p><strong>Qué es esta página.</strong> Los nueve tipos que soporta
+    <code>assets/forms.js</code>, más las dos variantes calificadoras de las landings
+    de Google Ads, dibujados uno junto a otro para revisarlos de un vistazo. No está
+    enlazada desde ningún lado y lleva <code>noindex</code>.</p>
+
+    <p><strong>Cómo probarla.</strong> Ábrela desde <code>localhost</code> o con doble clic.
+    En local, forms.js <em>no</em> envía nada a Make, <em>no</em> dispara ninguna conversión
+    y <em>no</em> redirige: en su lugar deja debajo del formulario, en verde, el JSON exacto
+    que recibiría el webhook. Ahí se ve el <code>event_id</code>, la atribución, el
+    <code>ga4_client_id</code> y el <code>consent_state</code>.</p>
+
+    <p><strong>Para ver la atribución llena</strong>, entra con parámetros:
+    <code>forms-demo.html?gclid=PRUEBA123&amp;utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=preconstruccion</code></p>
+
+    <p><strong>Para ver el contexto de propiedad o de zona</strong>, agrega
+    <code>?p=cipriani-residences</code> o <code>?z=brickell</code> y recarga: los tipos
+    <em>propiedad</em> y <em>zona</em> resuelven solos el nombre del desarrollo y de la zona
+    contra el catálogo de <code>data.js</code>.</p>
+
+    <p><strong>Qué revisar:</strong> que ningún campo se salga en móvil, que el error salga
+    marcado en el campo y no en un <code>alert</code>, que el botón se bloquee al enviar,
+    que se pueda recorrer todo con Tab, y que el envío en menos de 3 segundos se descarte
+    en silencio.</p>
+  </div>
+</div>
+
+<div class="wrap demo-grid">
+
+  <div class="form demo-card">
+    <span class="demo-tag">lead</span>
+    <p><code>&lt;div data-destiny-form="lead"&gt;</code></p>
+    <div data-destiny-form="lead"
+         data-title="Agenda tu sesión" data-sub="Cupo limitado"
+         data-note="Sesión de claridad sin costo ni compromiso."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">agenda</span>
+    <p><code>&lt;div data-destiny-form="agenda"&gt;</code></p>
+    <div data-destiny-form="agenda"
+         data-title="Agenda tu sesión" data-sub="Cupo limitado"
+         data-note="Sesión de claridad sin costo ni compromiso."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">guia</span>
+    <p><code>&lt;div data-destiny-form="guia"&gt;</code></p>
+    <div data-destiny-form="guia"
+         data-title="Recibe la guía" data-sub="Gratis"
+         data-note="Tres datos y te llega al instante."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">club</span>
+    <p><code>&lt;div data-destiny-form="club"&gt;</code></p>
+    <div data-destiny-form="club"
+         data-title="Entra al Miami Investors Club" data-sub="Sin costo"
+         data-note="Activamos tus cinco accesos y te confirmamos por WhatsApp."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">scorecard</span>
+    <p><code>&lt;div data-destiny-form="scorecard"&gt;</code></p>
+    <div data-destiny-form="scorecard"
+         data-title="Recibe el Scorecard" data-sub="Gratis"
+         data-note="Te lo enviamos por correo."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">propiedad</span>
+    <p><code>&lt;div data-destiny-form="propiedad"&gt;</code> — lee <code>?p=</code></p>
+    <div data-destiny-form="propiedad"
+         data-title="Agenda tu sesión" data-sub="5 lugares / mes"
+         data-note="Sesión de claridad sin costo ni compromiso."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">zona</span>
+    <p><code>&lt;div data-destiny-form="zona"&gt;</code> — lee <code>?z=</code></p>
+    <div data-destiny-form="zona"
+         data-title="Agenda tu sesión" data-sub="5 lugares / mes"
+         data-note="Sesión de claridad sin costo ni compromiso."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">newsletter</span>
+    <p><code>&lt;div data-destiny-form="newsletter"&gt;</code></p>
+    <div data-destiny-form="newsletter"
+         data-title="Suscríbete al newsletter" data-sub="Gratis"
+         data-note="Cada lunes. Cancela cuando quieras."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">radar</span>
+    <p><code>&lt;div data-destiny-form="radar"&gt;</code></p>
+    <div data-destiny-form="radar"
+         data-title="Suscríbete al Radar" data-sub="Gratis"
+         data-note="Cada lunes. Cancela cuando quieras."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">lead · variante preconstruccion</span>
+    <p><code>data-destiny-form="lead" data-variant="preconstruccion"</code></p>
+    <div data-destiny-form="lead" data-variant="preconstruccion"
+         data-title="Ver si califico" data-sub="Sin costo"
+         data-note="Cinco datos. El resto lo platicamos por teléfono."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">lead · variante dolares</span>
+    <p><code>data-destiny-form="lead" data-variant="dolares"</code></p>
+    <div data-destiny-form="lead" data-variant="dolares"
+         data-title="Ver si califico" data-sub="Sin costo"
+         data-note="Cinco datos. El resto lo platicamos por teléfono."></div>
+  </div>
+
+  <div class="form demo-card">
+    <span class="demo-tag">lead · con campos extra</span>
+    <p><code>data-extra="mensaje,horario,ciudad"</code> — cualquier campo del catálogo se
+    enciende desde el HTML, sin tocar forms.js</p>
+    <div data-destiny-form="lead" data-extra="ciudad,horario,mensaje"
+         data-title="Agenda tu sesión" data-sub="Demo"
+         data-note="Los campos extra salen del catálogo CAMPOS de forms.js."></div>
+  </div>
+
+</div>
+
+<script>window.DESTINY_DEBUG = true;</script>
+<script src="assets/data.js?v=54"></script>
+<script src="/assets/tracking.js?v=6"></script>
+<script src="/assets/forms.js?v=1"></script>
+</body>
+</html>
