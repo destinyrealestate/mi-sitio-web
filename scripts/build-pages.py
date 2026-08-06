@@ -33,10 +33,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 WA = "https://api.whatsapp.com/send?phone=525611659009"
-FORM_SESION = ("https://forms.zohopublic.com/destinyrealestate/form/HOMETOFUFORM27062026V1"
-               "/formperma/xcBq_2e5ymlSrWlXIAsXK1-s37Q00IexkcGv6F4afxg")
-FORM_NEWSLETTER = ("https://forms.zohopublic.com/destinyrealestate/form/FORMNEWSLETTER26072026V1"
-                   "/formperma/DNd2CjkapGZrSv18zq8Eqh1QQoNuuipzKD7mbFWYcPg")
 
 NAV = """<nav class="nav" id="nav" data-screen-label="Nav">
   <a class="nav__logo" href="/">
@@ -187,14 +183,19 @@ def cta_section(*, sid, label, eyebrow, h2, inner, form):
 </section>"""
 
 
-def zoho(base, form_type, min_h, heading, sub, note, secure="Tus datos están seguros. Nunca los compartimos con terceros."):
-    return f"""<div class="form reveal d1 form--zoho form--zoho-embed">
+def formulario(tipo, heading, sub, note,
+               secure="Tus datos están seguros. Nunca los compartimos con terceros.",
+               attrs=""):
+    """Contenedor declarativo de assets/forms.js. Ver FORMULARIOS.md.
+
+    La leyenda del Aviso de Privacidad NO va aquí: la pone forms.js debajo del
+    botón, en todos los formularios del sitio a la vez.
+    """
+    return f"""<div class="form reveal d1">
       <div class="form__head"><h3 class="h-3">{heading}</h3><span class="form__sub">{sub}</span></div>
       <p class="form__note">{note}</p>
-      <div class="zoho-form" data-form-base="{base}" data-form-type="{form_type}"
-           data-min-height="{min_h}" data-form-title="{heading} — Destiny Real Estate"></div>
+      <div data-destiny-form="{tipo}"{attrs}></div>
       <p class="form__secure">&#128274; {secure}</p>
-      <p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a>.</p>
     </div>"""
 
 
@@ -240,8 +241,8 @@ def page_agenda():
         ¿Prefieres escribir? <a href="{WA}&amp;text=Hola%2C%20quiero%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" style="color:var(--gold-bright);">Escríbenos por WhatsApp</a>.
       </p>
       <div class="cta__trust" style="margin-top:26px;">+$500M USD vendidos &middot; 290+ clientes &middot; 25 años &middot; Cupo limitado por trimestre</div>""",
-        form=zoho(FORM_SESION, "sesion", 740, "Agenda tu sesión", "Cupo limitado",
-                  "Sesión de claridad sin costo ni compromiso."))
+        form=formulario("agenda", "Agenda tu sesión", "Cupo limitado",
+                        "Sesión de claridad sin costo ni compromiso."))
     return shell(filename="agenda.html", canonical="/agenda",
                  title="Agenda tu sesión de claridad — Destiny Real Estate",
                  desc="Sesión privada de 30 minutos, sin costo: revisamos tu monto, tu plazo y tu perfil de riesgo, y te decimos si Miami tiene sentido para tu capital.",
@@ -272,9 +273,9 @@ def page_radar():
         No vendemos ni compartimos tu correo. No hay promesas de rendimiento: hay datos con su fuente.
       </p>
     </div>
-    {zoho(FORM_NEWSLETTER, "newsletter", 500, "Suscríbete al Radar", "Gratis",
-          "Cada lunes. Cancela cuando quieras.",
-          secure="Sin spam. Solo análisis que mueven tu patrimonio.")}
+    {formulario("radar", "Suscríbete al Radar", "Gratis",
+                "Cada lunes. Cancela cuando quieras.",
+                secure="Sin spam. Solo análisis que mueven tu patrimonio.")}
   </div>
 </section>"""
     return shell(filename="radar.html", canonical="/radar",
@@ -335,8 +336,8 @@ def page_club():
         <li>Puedes salirte con un clic, sin explicaciones</li>
       </ul>
       <div class="cta__trust">+$500M USD vendidos &middot; 290+ clientes &middot; 25 años en el mercado</div>""",
-        form=zoho(FORM_SESION, "club", 740, "Entra al Miami Investors Club", "Sin costo",
-                  "Activamos tus cinco accesos y te confirmamos por WhatsApp."))
+        form=formulario("club", "Entra al Miami Investors Club", "Sin costo",
+                        "Activamos tus cinco accesos y te confirmamos por WhatsApp."))
     return shell(filename="club.html", canonical="/club",
                  title="Miami Investors Club — Destiny Real Estate",
                  desc="Radar semanal, alertas de WhatsApp, Scorecard de inversión, acceso anticipado a listas de precios y sesiones para miembros. Sin costo.",
@@ -386,8 +387,8 @@ def page_scorecard():
         Te lo enviamos por correo en cuanto dejes tus datos.
       </p>
       <div class="cta__trust">Es el mismo marco con el que descartamos proyectos, no una versión reducida</div>""",
-        form=zoho(FORM_SESION, "scorecard", 740, "Recibe el Scorecard", "Gratis",
-                  "Te lo enviamos por correo. Un solo campo obligatorio.")) + f"""
+        form=formulario("scorecard", "Recibe el Scorecard", "Gratis",
+                        "Te lo enviamos por correo. Tres datos y listo.")) + f"""
 
 <section class="section" id="faq" data-screen-label="Preguntas frecuentes">
   <div class="wrap" style="max-width:840px;">
@@ -408,12 +409,13 @@ def page_scorecard():
 #  PÁGINAS DE AGRADECIMIENTO
 # ============================================================
 
-# Escape de iframe: si Zoho redirige DENTRO del iframe del formulario, la
-# página de gracias se pintaría dentro del recuadro y el evento de conversión
-# nunca subiría a la ventana principal. Esto la saca a la ventana de arriba.
+# Escape de iframe. Se puso cuando el formulario vivía en un iframe de Zoho y
+# la redirección se quedaba atrapada dentro del recuadro. Ya no hay iframes,
+# pero se conserva: cuesta una línea y sigue cubriendo el caso de que alguien
+# incruste la página de gracias desde fuera.
 IFRAME_ESCAPE = """<script>
-  /* Escape de iframe: la página de gracias nunca debe quedarse dentro del
-     iframe del formulario de Zoho. Si se queda, la conversión no se mide. */
+  /* Escape de iframe: la página de gracias nunca debe quedarse dentro de un
+     recuadro. Si se queda, la conversión no se mide. */
   if (window.top !== window.self) { window.top.location = window.location.href; }
 </script>"""
 

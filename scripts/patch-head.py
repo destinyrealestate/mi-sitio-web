@@ -8,10 +8,10 @@ Aplica, de forma idempotente (se puede correr varias veces sin duplicar):
   1. <html lang="es-MX">                                        (tarea 4.10)
   2. consent.js + attribution.js al inicio del <head>, ANTES de
      GA4 / Meta Pixel / GTM                                     (tareas 1.1, 1.5)
-  3. preconnect a Zoho, Google y Meta                            (tarea 4.8)
+  3. preconnect a Google y Meta                                  (tarea 4.8)
   4. ContentSquare en async (deja de bloquear el render)         (tarea 4.9)
   5. data-desarrollo / data-page-type en el <body>               (tarea 1.2)
-  6. tracking.js + zoho-embed.js antes de </body>                (tareas 1.3, 2.2)
+  6. tracking.js + forms.js antes de </body>                     (tareas 1.3, 2.2)
 
 Uso:  python3 scripts/patch-head.py
 """
@@ -46,20 +46,13 @@ PAGES = {
     "scorecard.html":          ("scorecard",           "captura",   ""),
     "privacidad.html":         ("legal",               "legal",     ""),
     "404.html":                ("404",                 "404",       ""),
-    # Exportación cruda de Zoho Forms, autoalojada. No es un iframe: postea
-    # directo a Zoho, así que zoho-embed.js no hace nada aquí. Entra a la
-    # cadena por el consentimiento, la atribución y las etiquetas.
-    "forms/CIPRIANIFORM27052026V1/index.html":
-                               ("cipriani-residences", "captura",   ""),
 }
 
-V = "5"  # versión de caché de los scripts nuevos
+V = "6"  # versión de caché de los scripts nuevos
 
 HEAD_BLOCK = f"""<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v={V}"></script>
 <script src="/assets/attribution.js?v={V}"></script>
-<link rel="preconnect" href="https://forms.zohopublic.com" crossorigin>
-<link rel="dns-prefetch" href="https://forms.zohopublic.com">
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://connect.facebook.net">
 <link rel="dns-prefetch" href="https://t.contentsquare.net">
@@ -70,8 +63,8 @@ MARK_HEAD = "<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->"
 TAGS_LINE = f'<script src="/assets/tags.js?v={V}"></script>'
 
 FOOT_BLOCK = f"""<!-- CAPA DE MEDICIÓN -->
-<script src="/assets/zoho-embed.js?v={V}"></script>
 <script src="/assets/tracking.js?v={V}"></script>
+<script src="/assets/forms.js?v={V}"></script>
 <!-- FIN CAPA DE MEDICIÓN -->"""
 
 CS_OLD = '<script src="https://t.contentsquare.net/uxa/7dccdd22cb616.js"></script>'
@@ -130,7 +123,7 @@ def patch(path: Path, desarrollo: str, page_type: str, extra: str) -> list:
             notes.append("!! sin </body>: capa de medición NO insertada")
         else:
             s = s[:i] + FOOT_BLOCK + "\n" + s[i:]
-            notes.append("foot: zoho-embed+tracking")
+            notes.append("foot: tracking+forms")
 
     if s != original:
         path.write_text(s, encoding="utf-8")

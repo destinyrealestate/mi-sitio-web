@@ -5,41 +5,6 @@ window.DESTINY = (function () {
   "use strict";
   const BASE = "https://blog.destiny.mx/wp-content/uploads/";
 
-  /* ---------- Integración HubSpot (Forms API) ----------
-     Pega tu Portal ID y Form GUID (HubSpot › Marketing › Formularios › Compartir › API).
-     Mientras estén vacíos, el envío a HubSpot se omite sin error. */
-  const HUBSPOT = {
-    portalId: "",          // ej. "12345678"
-    formGuid: "",          // ej. "a1b2c3d4-...."
-    map: { nombre: "firstname", email: "email", tel: "phone", pais: "country", presupuesto: "presupuesto_inversion" }
-  };
-  function submitHubSpot(form, ctx) {
-    if (!HUBSPOT.portalId || !HUBSPOT.formGuid) return;
-    const fields = [];
-    Object.keys(HUBSPOT.map).forEach(n => {
-      const el = form.querySelector(`[name="${n}"]`);
-      if (el && el.value.trim()) fields.push({ name: HUBSPOT.map[n], value: el.value.trim() });
-    });
-    const body = { fields, context: { pageUri: location.href, pageName: ctx || document.title } };
-    fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT.portalId}/${HUBSPOT.formGuid}`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), keepalive: true
-    }).catch(() => {});
-  }
-
-  /* ---------- Captura de leads vía webhook (Zoho Flow / Zapier / Make) ----------
-     ESTE es el método del sitio. Crea un "Incoming Webhook" en Zoho Flow y
-     pega su URL aquí: cada lead se envía como JSON
-       { nombre, email, tel, pais, presupuesto, interes, pagina }
-     En Zoho Flow mapeas esos campos a Zoho Forms/CRM y a un correo de aviso
-     (carlos.cataneo@destiny.mx). Sin backend. Déjalo vacío para omitir. */
-  const LEAD_WEBHOOK = "";   // ej. "https://flow.zoho.com/<orgid>/flow/webhook/incoming?..."
-  function submitWebhook(form, ctx) {
-    if (!LEAD_WEBHOOK) return;
-    const v = (n) => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value.trim() : ""; };
-    const payload = { nombre: v("nombre"), email: v("email"), tel: v("tel"), pais: v("pais"), presupuesto: v("presupuesto"), interes: ctx || document.title, pagina: location.href };
-    fetch(LEAD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
-  }
-
   /* ---------- Analítica (se enciende sola al pegar tu ID) ----------
      Pega tu ID y la medición se activa en TODAS las páginas. Vacío = nada. */
   const GA4_ID = "";          // ej. "G-XXXXXXXXXX"  (Google Analytics 4)
@@ -184,57 +149,11 @@ window.DESTINY = (function () {
     // reveal
     $$(".reveal").forEach(el => io.observe(el));
 
-    // formulario genérico (cualquiera con [data-lead])
-    $$("form[data-lead]").forEach(form => {
-      form.addEventListener("submit", e => {
-        e.preventDefault();
-        let ok = true;
-        $$(".field", form).forEach(f => {
-          const input = $("input,select", f);
-          if (!input) return;
-          let valid = input.value.trim() !== "";
-          if (input.type === "email") valid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value);
-          f.classList.toggle("error", !valid);
-          if (!valid) ok = false;
-        });
-        if (!ok) { const fe = $(".field.error input,.field.error select", form); fe && fe.focus(); return; }
-
-        const val = (n) => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value.trim() : ""; };
-        const ctx = form.getAttribute("data-context") || document.title;
-
-        // Captura en Netlify Forms (si algún día se despliega ahí) — silencioso
-        try {
-          const fd = new FormData(form);
-          fd.append("form-name", form.getAttribute("name") || "lead");
-          fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(fd).toString(), keepalive: true }).catch(() => {});
-        } catch (e) {}
-
-        // Captura en HubSpot (si está configurado) — silencioso
-        submitHubSpot(form, ctx);
-        // Captura universal por webhook (Zapier/Make/n8n) — silencioso
-        submitWebhook(form, ctx);
-
-        // Feedback inmediato en el botón mientras redirige
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = ".7"; }
-
-        // Redirige a la página de gracias. En páginas de proyecto (?p=slug /
-        // ?proj=slug) pasa el slug para descargar ESE dossier de la colección.
-        const qp = new URLSearchParams(location.search);
-        const projSlug = qp.get("p") || qp.get("proj") || "";
-        const out = new URLSearchParams();
-        if (projSlug) out.set("d", projSlug);
-        const firstName = val("nombre").split(" ")[0];
-        if (firstName) out.set("n", firstName);
-        out.set("ctx", ctx);
-        // Da un instante a los envíos (keepalive) y navega
-        setTimeout(function () {
-          window.location.href = "gracias.html?" + out.toString();
-        }, 250);
-      });
-      $$(".field input,.field select", form).forEach(i =>
-        i.addEventListener("input", () => i.closest(".field").classList.remove("error")));
-    });
+    /* Los formularios los dibuja y los envía assets/forms.js desde el
+       2026-08-05. Aquí vivía un handler de form[data-lead] que posteaba a
+       Netlify Forms, a HubSpot y a un webhook, y luego redirigía a
+       gracias.html. Se retiró con la migración: dos caminos de envío
+       compitiendo por el mismo formulario es como se pierden leads. */
   }
 
   return { BASE, PROPS, ZONES, slug, byZone, get, getZone, cardHTML, revealObserve, initShell, absUrl, RES, imgURL };

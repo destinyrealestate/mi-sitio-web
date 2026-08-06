@@ -8,7 +8,7 @@
   const params = new URLSearchParams(location.search);
   const z = D.getZone(params.get("z")) || D.ZONES[0]; // default: Brickell
 
-  // El desarrollo de la página lo consumen tracking.js y zoho-embed.js.
+  // El desarrollo de la página lo consume tracking.js (evento view_project).
   if (document.body) document.body.setAttribute("data-desarrollo", "zona-" + z.slug);
 
   const set = (sel, val) => { const e = $(sel); if (e) e.textContent = val; };

@@ -12,27 +12,37 @@
     (document.body && document.body.dataset.prop) || "";
   const p = D.get(slug) || D.PROPS[1]; // default: Faena
 
-  // El desarrollo de la página se resuelve aquí y lo consumen tracking.js
-  // (evento view_project) y zoho-embed.js (parámetro `desarrollo` del formulario).
+  // El desarrollo de la página se resuelve aquí y lo consume tracking.js para
+  // el evento view_project. El formulario NO lo necesita: forms.js lee ?p= y
+  // saca el nombre y la zona del catálogo por su cuenta.
   if (document.body) document.body.setAttribute("data-desarrollo", p.slug);
 
-  // Proyectos que usan formulario de Zoho (reemplaza el formulario nativo de agenda).
-  // Dos modos:
-  //   - iframe: incrusta el formulario hospedado de Zoho (formperma). Es el ÚNICO método que
-  //     guarda el registro de forma confiable: el POST directo a htmlRecords/submit lo rechaza
-  //     Zoho (503) y el lead nunca se guarda. Por eso Mercedes usa iframe.
-  //   - action/phoneField: método antiguo (form propio → htmlRecords/submit). Se conserva en
-  //     Cipriani hasta migrarlo también a iframe.
-  const ZOHO_FORMS = {
-    "cipriani-residences": {
-      action: "https://forms.zohopublic.com/destinyrealestate/form/CIPRIANIFORM27052026V1/formperma/JCvyo0oDu2n3lJMr3KKMq_VjsrkTpcXMygi6kd5JRFc/htmlRecords/submit",
-      phoneField: "PhoneNumber_countrycode"
-    },
-    "mercedes-benz-places-miami": {
-      iframe: "https://forms.zohopublic.com/destinyrealestate/form/MERCEDESBENZFORM24062026V1/formperma/c3dMS1Rh8GkEltrRpRxJL-qntK-dwdqWElEU3SvmyBo"
-    }
-  };
-  const ZOHO_CFG = ZOHO_FORMS[p.slug] || null;
+  /* ---------- El formulario en modo solicitud ----------
+     Los CTA "Solicitar dossier" y "Solicitar price list" no abren un formulario
+     distinto: reusan el de la página cambiándole el encabezado, la nota y el
+     texto del botón, y escribiéndole el contexto. forms.js lee data-context en
+     el momento del envío, no al dibujar, así que basta con ponerlo aquí para
+     que viaje a Make y a la página de gracias. */
+  function modoSolicitud(titulo, nota, boton, contexto) {
+    const card = $("#formPropiedad");
+    if (!card) return;
+    const host = card.querySelector("[data-destiny-form]");
+    if (host) host.setAttribute("data-context", contexto);
+    const head = card.querySelector(".form__head .h-3");
+    if (head) head.textContent = titulo;
+    const note = card.querySelector(".form__note");
+    if (note) note.textContent = nota;
+    // La etiqueta la dibuja forms.js, así que puede no existir todavía si el
+    // visitante hace clic antes de que el motor monte. No es un error.
+    const label = card.querySelector(".dstf-label");
+    if (label) label.textContent = boton;
+  }
+
+  // Contexto por defecto del formulario: este proyecto.
+  (function () {
+    const host = document.querySelector("#formPropiedad [data-destiny-form]");
+    if (host) host.setAttribute("data-context", p.name);
+  })();
 
   const STATUS = ["En construcción", "Pre-venta", "Entrega inmediata", "Cerca de la playa"];
   const status = p.badges.find(b => STATUS.includes(b)) || "Disponible";
@@ -162,18 +172,14 @@
         `<div class="row"><div class="k">${r[0]}</div><div class="v">${r[1]} · <strong>desde ${r[2]}</strong></div></div>`).join("");
     }
     // CTA "Solicitar price list completo" → abre el formulario en modo solicitud (como el dossier)
-    const reqPL = $("#reqPriceList"), form = $("#agendaForm");
-    if (reqPL && form && !ZOHO_CFG) {
-      reqPL.addEventListener("click", () => {
-        form.setAttribute("data-intent", "dossier");
-        form.setAttribute("data-context", p.name + " — price list");
-        const head = form.querySelector(".form__head .h-3");
-        if (head) head.textContent = "Solicita el price list completo";
-        const note = form.querySelector(".form__note");
-        if (note) note.textContent = `Te enviamos el price list completo por unidad de ${p.name} por WhatsApp o correo.`;
-        const submit = form.querySelector('button[type="submit"]');
-        if (submit) submit.innerHTML = 'Solicitar el price list <span class="ar">→</span>';
-      });
+    const reqPL = $("#reqPriceList");
+    if (reqPL) {
+      reqPL.addEventListener("click", () => modoSolicitud(
+        "Solicita el price list completo",
+        `Te enviamos el price list completo por unidad de ${p.name} por WhatsApp o correo.`,
+        "Solicitar el price list",
+        `${p.name} — price list`
+      ));
     }
   })();
 
@@ -197,160 +203,17 @@
   set("#pEntrega2", p.entrega || "Por confirmar");
   set("#pPago", p.pago || "Estructura de pagos bajo solicitud — la revisamos contigo en la sesión.");
 
-  // Botón "Solicitar dossier" → modo dossier en el formulario (entrega diferida)
+  // Botón "Solicitar dossier" → el mismo formulario, en modo solicitud
   (function () {
-    if (ZOHO_CFG) return; // proyectos con Zoho Form: sin modo dossier en el form nativo
-    const form = $("#agendaForm");
-    if (!form) return;
-    form.setAttribute("data-context", p.name); // contexto por defecto = este proyecto
     const btn = $("#reqDossier");
     if (!btn) return;
-    btn.addEventListener("click", () => {
-      form.setAttribute("data-intent", "dossier");
-      form.setAttribute("data-context", p.name);
-      const head = form.querySelector(".form__head .h-3");
-      if (head) head.textContent = "Solicita el dossier";
-      const note = form.querySelector(".form__note");
-      if (note) note.textContent = `Te enviamos el dossier completo de ${p.name} por WhatsApp o correo.`;
-      const submit = form.querySelector('button[type="submit"]');
-      if (submit) submit.innerHTML = 'Solicitar el dossier <span class="ar">→</span>';
-      const wrap = form.closest(".form") || form.parentNode;
-      const succP = wrap && wrap.querySelector(".form__success p");
-      if (succP) succP.innerHTML = `Recibimos tu solicitud del dossier de <strong>${p.name}</strong>. Se abrió <strong>WhatsApp</strong> con tu mensaje — solo presiona enviar y Oscar te hace llegar el dossier completo. ¿No se abrió? Escríbenos al <a href="https://api.whatsapp.com/send?phone=525611659009" target="_blank" rel="noopener" style="color:var(--gold);">+52 56 1165 9009</a>.`;
-    });
+    btn.addEventListener("click", () => modoSolicitud(
+      "Solicita el dossier",
+      `Te enviamos el dossier completo de ${p.name} por WhatsApp o correo.`,
+      "Solicitar el dossier",
+      `${p.name} — dossier`
+    ));
   })();
-
-  // Proyectos con Zoho Form (Cipriani, Mercedes-Benz): reemplaza el formulario nativo por
-  // el de Zoho (embed HTML & CSS), estilizado con el diseño de Destiny y con redirección
-  // propia a gracias.html al enviar. Solo estos proyectos; la plantilla Propiedad.html no
-  // cambia para las demás propiedades.
-  if (ZOHO_CFG) {
-    const ACTION = ZOHO_CFG.action;
-    const PHONE_FIELD = ZOHO_CFG.phoneField;
-    const nativeForm = $("#agendaForm");
-    // Puede haber VARIAS instancias del formulario en una landing ([data-zoho-form]);
-    // en la página de propiedad normal, se usa la tarjeta del form de agenda.
-    let cards = Array.prototype.slice.call(document.querySelectorAll("[data-zoho-form]"));
-    if (!cards.length && nativeForm) { const c0 = nativeForm.closest(".form"); if (c0) cards = [c0]; }
-
-    const buildForm = function (idx) {
-      const fid = "zfForm" + idx;
-      return '' +
-        '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
-        '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
-        '<form action="' + ACTION + '" name="' + fid + '" id="' + fid + '" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">' +
-          '<input type="hidden" name="zf_referrer_name" value="">' +
-          '<input type="hidden" name="zf_redirect_url" value="">' +
-          '<input type="hidden" name="zc_gad" value="">' +
-          '<div class="zf-tempFrmWrapper zf-name"><label class="zf-labelName">Nombre <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv zf-twoType"><div class="zf-nameWrapper">' +
-              '<span><input type="text" maxlength="255" name="Name_First" placeholder="Tu nombre" required/><label>Nombre</label></span>' +
-              '<span><input type="text" maxlength="255" name="Name_Last" placeholder="Tu apellido" required/><label>Apellido</label></span>' +
-              '<div class="zf-clearBoth"></div></div></div></div>' +
-          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">Correo electrónico <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv"><span><input type="email" name="Email" maxlength="255" placeholder="tucorreo@empresa.com" required/></span></div></div>' +
-          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">WhatsApp <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv zf-phonefld"><div class="zf-phwrapper zf-phNumber">' +
-              '<span><input type="text" name="' + PHONE_FIELD + '" maxlength="20" placeholder="+52 ..." required/></span>' +
-              '<div class="zf-clearBoth"></div></div></div></div>' +
-          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿Qué buscas en una propiedad? <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice" required>' +
-              '<option value="">Selecciona…</option>' +
-              '<option value="Máxima rentabilidad">Máxima rentabilidad</option>' +
-              '<option value="Vivir en Miami, Florida">Vivir en Miami, Florida</option>' +
-              '<option value="Diversificar patrimonio">Diversificar patrimonio</option></select></div></div>' +
-          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿En qué plazo tienes pensado comprar? <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice1" required>' +
-              '<option value="">Selecciona…</option>' +
-              '<option value="1 a 3 meses">1 a 3 meses</option>' +
-              '<option value="3 a 6 meses">3 a 6 meses</option>' +
-              '<option value="6 a 12 meses">6 a 12 meses</option>' +
-              '<option value="Más de 12 meses">Más de 12 meses</option></select></div></div>' +
-          '<div class="zf-tempFrmWrapper"><label class="zf-labelName">¿Cuál es tu presupuesto? <em class="zf-important">*</em></label>' +
-            '<div class="zf-tempContDiv zf-mSelect"><select name="MultipleChoice2" required>' +
-              '<option value="">Selecciona…</option>' +
-              '<option value="$500K - $1M USD">$500K - $1M USD</option>' +
-              '<option value="$1M - $2M USD">$1M - $2M USD</option>' +
-              '<option value="$2M - $5M USD">$2M - $5M USD</option>' +
-              '<option value="Más de $5M USD">Más de $5M USD</option></select></div></div>' +
-          '<button type="submit" class="btn btn-primary">Agendar mi sesión de claridad <span class="ar">→</span></button>' +
-          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>' +
-        '</form>';
-    };
-
-    cards.forEach(function (card, i) {
-      card.classList.add("form--zoho");
-
-      // MODO IFRAME (Mercedes): incrusta el formulario hospedado de Zoho. Es el único método
-      // que guarda el registro de forma confiable — el POST directo a htmlRecords/submit lo
-      // rechaza Zoho (503) y el lead nunca llega. El iframe usa el propio JS de Zoho, así que
-      // guarda el registro y dispara el webhook (→ Make → correo del dossier).
-      if (ZOHO_CFG.iframe) {
-        card.classList.add("form--zoho-embed");
-        // El contenedor .zoho-form lo monta assets/zoho-embed.js: agrega el
-        // parámetro zf_rszfm=1 (altura por postMessage), los datos de atribución
-        // (gclid, UTM, desarrollo) y el estado de carga. Un solo lugar para todos
-        // los formularios del sitio.
-        card.innerHTML =
-          '<div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">5 lugares / mes</span></div>' +
-          '<p class="form__note">Sesión de claridad sin costo ni compromiso.</p>' +
-          '<div class="zoho-form" data-form-base="' + ZOHO_CFG.iframe + '" data-form-type="sesion" ' +
-            'data-min-height="740" data-form-title="Formulario de contacto — Destiny Real Estate"></div>' +
-          '<p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>' +
-          '<p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a>.</p>';
-        if (window.DestinyZoho) window.DestinyZoho.refresh();
-        return;
-      }
-
-      // MODO FORM PROPIO (Cipriani) → htmlRecords/submit con POST nativo a iframe oculto.
-      card.innerHTML = buildForm(i);
-      const form = card.querySelector("form");
-      const ref = form.querySelector('input[name="zf_referrer_name"]');
-      if (ref) ref.value = p.name;
-
-      // Atribución como campos ocultos. Los nombres tienen que existir como
-      // campos ocultos en el formulario de Zoho (ver MEDICION.md); si no existen,
-      // Zoho los descarta sin error.
-      if (window.DestinyAttr) {
-        const a = window.DestinyAttr.filled();
-        a.desarrollo = p.slug;
-        a.form_type = "sesion";
-        a.page_url = location.href.split("#")[0];
-        Object.keys(a).forEach(function (k) {
-          if (!a[k] || form.querySelector('[name="' + k + '"]')) return;
-          const h = document.createElement("input");
-          h.type = "hidden"; h.name = k; h.value = a[k];
-          form.appendChild(h);
-        });
-      }
-
-      const frameName = "zfTarget" + i;
-      const frame = document.createElement("iframe");
-      frame.name = frameName;
-      frame.style.display = "none";
-      frame.setAttribute("aria-hidden", "true");
-      frame.setAttribute("title", "Zoho Forms");
-      document.body.appendChild(frame);
-      form.target = frameName;
-
-      let submitting = false;
-      form.addEventListener("submit", function () {
-        submitting = true;
-        const btn = form.querySelector('button[type="submit"]');
-        if (btn) { btn.disabled = true; btn.textContent = "Enviando…"; }
-      });
-      frame.addEventListener("load", function () {
-        if (!submitting) return; // primer load del iframe vacío (al insertarlo)
-        // Página de gracias por tipo de conversión: es lo que permite separar
-        // las conversiones en Google Ads.
-        window.location.href = "/gracias-sesion.html?form_type=sesion&d=" +
-          encodeURIComponent(p.slug) + "&ctx=" + encodeURIComponent(p.name);
-      });
-    });
-
-    const dossierBtn = $("#reqDossier");
-    if (dossierBtn) dossierBtn.innerHTML = "Contáctanos";
-  }
 
   // ubicación + zona link
   const zone = D.ZONES.find(z => z.zoneName === p.zone);

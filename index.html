@@ -5,8 +5,6 @@
 <!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v=5"></script>
 <script src="/assets/attribution.js?v=5"></script>
-<link rel="preconnect" href="https://forms.zohopublic.com" crossorigin>
-<link rel="dns-prefetch" href="https://forms.zohopublic.com">
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://connect.facebook.net">
 <link rel="dns-prefetch" href="https://t.contentsquare.net">
@@ -425,24 +423,18 @@
         <li>Cancela cuando quieras — un solo correo, un solo día</li>
       </ul>
     </div>
-    <!-- Formulario Zoho (NEWSLETTER) embebido vía iframe. El iframe es el ÚNICO método que
-         guarda el lead de forma confiable: el POST directo a htmlRecords/submit lo rechaza
-         Zoho (503). El form de Zoho ya está tematizado con el diseño de Destiny. -->
-    <div class="form reveal d1 form--zoho form--zoho-embed">
+    <!-- Formulario nativo. assets/forms.js lo dibuja aquí: un solo campo y
+         el motor se encarga de validar, mandar el JSON a Make y avisarle a
+         tracking.js. Ver FORMULARIOS.md. -->
+    <div class="form reveal d1">
       <div class="form__head">
         <h3 class="h-3">Suscríbete al newsletter</h3>
         <span class="form__sub">Gratis</span>
       </div>
       <p class="form__note">Cada lunes. Cancela cuando quieras.</p>
-      <!-- assets/zoho-embed.js monta el iframe con los datos de atribución
-           (gclid, UTM, desarrollo) en el src. Ver MEDICION.md. -->
-      <div class="zoho-form"
-           data-form-base="https://forms.zohopublic.com/destinyrealestate/form/FORMNEWSLETTER26072026V1/formperma/DNd2CjkapGZrSv18zq8Eqh1QQoNuuipzKD7mbFWYcPg"
-           data-form-type="newsletter"
-           data-min-height="500"
-           data-form-title="Suscripción al newsletter — Destiny Real Estate"></div>
+      <div data-destiny-form="newsletter"></div>
       <p class="form__secure">🔒 Sin spam. Solo análisis que mueven tu patrimonio.</p>
-      <p class="form__secure" style="opacity:.6;">Al suscribirte aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> · <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a>.</p>
+      <p class="form__secure" style="opacity:.6;"><a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a>.</p>
     </div>
   </div>
 </section>
@@ -596,24 +588,18 @@
       <div class="cta__trust">+$500M USD vendidos · 290+ clientes · 25 años · Cupo limitado por trimestre</div>
     </div>
 
-    <!-- Formulario Zoho (HOME-TOFU) embebido vía iframe. El iframe es el ÚNICO método que
-         guarda el lead de forma confiable: el POST directo a htmlRecords/submit lo rechaza
-         Zoho (503). El form de Zoho ya está tematizado con el diseño de Destiny. -->
-    <div class="form reveal d1 form--zoho form--zoho-embed">
+    <!-- Formulario nativo. Es tipo `lead` y no `agenda` porque el inventario de
+         conversiones lo cuenta como form_lead (500 MXN); /agenda es la que vale
+         2000. La página de gracias sí es la de sesión, que es a donde llegaba
+         antes desde Zoho. -->
+    <div class="form reveal d1">
       <div class="form__head">
         <h3 class="h-3">Agenda tu sesión</h3>
         <span class="form__sub">Cupo limitado</span>
       </div>
       <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
-      <!-- assets/zoho-embed.js monta el iframe con los datos de atribución
-           (gclid, UTM, desarrollo) en el src. Ver MEDICION.md. -->
-      <div class="zoho-form"
-           data-form-base="https://forms.zohopublic.com/destinyrealestate/form/HOMETOFUFORM27062026V1/formperma/xcBq_2e5ymlSrWlXIAsXK1-s37Q00IexkcGv6F4afxg"
-           data-form-type="sesion"
-           data-min-height="740"
-           data-form-title="Agenda tu sesión — Destiny Real Estate"></div>
+      <div data-destiny-form="lead" data-gracias="/gracias-sesion"></div>
       <p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>
-      <p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a>.</p>
     </div>
   </div>
 </section>
@@ -678,29 +664,9 @@
 <script src="assets/data.js?v=54"></script>
 <script src="assets/blog-data.js?v=55"></script>
 <script src="assets/app.js?v=9"></script>
-<!-- Auto-resize de los iframes Zoho (#agenda y #newsletter): Zoho publica la altura
-     real vía postMessage ("formperma|alto") gracias a ?zf_rszfm=1. La escuchamos para
-     ajustar el alto de cada iframe y evitar el hueco vacío. Mismo mecanismo que Mercedes
-     en property.js. Recorremos todos los .zf-embed y aplicamos al que coincida por src. -->
-<script>
-(function () {
-  window.addEventListener("message", function (ev) {
-    var d = ev && ev.data;
-    if (!d || typeof d !== "string" || d.indexOf("|") < 0) return;
-    var parts = d.split("|");
-    if (parts.length < 2) return;
-    var h = parseInt(parts[1], 10);
-    if (!(h > 0)) return;
-    var frames = document.querySelectorAll("iframe.zf-embed");
-    for (var i = 0; i < frames.length; i++) {
-      if (frames[i].src.indexOf(parts[0]) > -1) frames[i].style.height = (h + 15) + "px";
-    }
-  }, false);
-})();
-</script>
 <!-- CAPA DE MEDICIÓN -->
-<script src="/assets/zoho-embed.js?v=5"></script>
-<script src="/assets/tracking.js?v=5"></script>
+<script src="/assets/tracking.js?v=6"></script>
+<script src="/assets/forms.js?v=1"></script>
 <!-- FIN CAPA DE MEDICIÓN -->
 </body>
 </html>

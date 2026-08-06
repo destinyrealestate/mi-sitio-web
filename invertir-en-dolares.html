@@ -5,8 +5,6 @@
 <!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v=5"></script>
 <script src="/assets/attribution.js?v=5"></script>
-<link rel="preconnect" href="https://forms.zohopublic.com" crossorigin>
-<link rel="dns-prefetch" href="https://forms.zohopublic.com">
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://connect.facebook.net">
 <link rel="dns-prefetch" href="https://t.contentsquare.net">
@@ -182,7 +180,7 @@
         <div class="who"><div class="n">Oscar Chapa</div><div class="r">Tu asesor · Fundador de Destiny</div></div>
       </div>
     </div>
-    <div class="form reveal d1 form--zoho form--zoho-embed">
+    <div class="form reveal d1">
       <div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">Sin costo</span></div>
       <p class="form__note">Cinco datos. El resto lo platicamos por teléfono.</p>
       <!-- FORMULARIO CALIFICADOR — PENDIENTE DE CAMBIO.
@@ -191,12 +189,9 @@
            Al crear el formulario nuevo en Zoho (5 campos visibles + los 16
            ocultos de atribución, ver LANDINGS-ADS.md), cambiar el
            data-form-base de los DOS contenedores de esta página. -->
-      <div class="zoho-form"
-           data-form-base="https://forms.zohopublic.com/destinyrealestate/form/HOMETOFUFORM27062026V1/formperma/xcBq_2e5ymlSrWlXIAsXK1-s37Q00IexkcGv6F4afxg"
-           data-form-type="dolares" data-min-height="740"
-           data-form-title="Agenda tu sesión de claridad — Destiny Real Estate"></div>
+      <div data-destiny-form="lead" data-variant="dolares"></div>
       <p class="form__secure">&#128274; Tus datos están seguros. Nunca los compartimos con terceros.</p>
-      <p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> &middot; <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a>.</p>
+      <p class="form__secure" style="opacity:.6;"><a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a>.</p>
     </div>
   </div>
 </section>
@@ -291,16 +286,12 @@
       <h2 class="h-1" style="margin-top:16px;">Agenda tu <span class="serif-em">sesión de claridad.</span></h2>
       <p class="lede" style="margin-top:16px;">Conversación privada, sin costo y sin compromiso. Te contactamos el mismo día.</p>
     </div>
-    <div class="form reveal d1 form--zoho form--zoho-embed">
+    <div class="form reveal d1">
       <div class="form__head"><h3 class="h-3">Ver si califico</h3><span class="form__sub">Sin costo</span></div>
       <p class="form__note">Cinco datos. El resto lo platicamos por teléfono.</p>
-      <div class="zoho-form"
-           data-form-base="https://forms.zohopublic.com/destinyrealestate/form/HOMETOFUFORM27062026V1/formperma/xcBq_2e5ymlSrWlXIAsXK1-s37Q00IexkcGv6F4afxg"
-           data-form-type="dolares" data-min-height="740"
-           data-form-title="Agenda tu sesión de claridad — Destiny Real Estate"></div>
+      <div data-destiny-form="lead" data-variant="dolares"></div>
       <p class="form__secure">&#128274; Tus datos están seguros. Nunca los compartimos con terceros.</p>
-      <p class="form__secure" style="opacity:.6;">Al enviar aceptas nuestro <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a>.</p>
-    </div>
+          </div>
   </div>
 </section>
 
@@ -343,8 +334,8 @@
 </script>
 <script>if (window.DESTINY && DESTINY.initShell) DESTINY.initShell();</script>
 <!-- CAPA DE MEDICIÓN -->
-<script src="/assets/zoho-embed.js?v=5"></script>
-<script src="/assets/tracking.js?v=5"></script>
+<script src="/assets/tracking.js?v=6"></script>
+<script src="/assets/forms.js?v=1"></script>
 <!-- FIN CAPA DE MEDICIÓN -->
 </body>
 </html>

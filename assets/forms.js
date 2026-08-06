@@ -103,6 +103,15 @@
       req: true, err: "Selecciona un rango.",
       opciones: ["$500K - $1M USD", "$1M - $2M USD", "$2M - $5M USD", "Más de $5M USD"]
     },
+    /* Marca, Inversión y Artículo arrancan un escalón más abajo que el resto
+       del sitio: son páginas de descubrimiento, no de un proyecto concreto de
+       varios millones. Se conserva su escala tal cual estaba para no dejar
+       fuera al inversionista de $250K, que hoy sí cabe en ese formulario. */
+    monto: {
+      tipo: "select", label: "Monto a invertir (USD)",
+      req: true, err: "Selecciona un rango.",
+      opciones: ["$250K - $500K USD", "$500K - $1M USD", "$1M - $2M USD", "Más de $2M USD"]
+    },
     capital: {
       tipo: "select", label: "¿Con cuánto capital cuentas para invertir?",
       req: true, err: "Selecciona un rango.",
@@ -201,6 +210,11 @@
     dolares: {
       campos: ["nombre", "telefono", "email", "capital", "cuando"],
       gracias: "/gracias-dolares", cta: "Ver si califico"
+    },
+    /* Marca, Inversión y Artículo: mismo lead, pero con la escala de monto
+       más amplia que ya usaban esas tres páginas. */
+    patrimonio: {
+      campos: ["nombre", "email", "telefono", "pais", "monto"]
     }
   };
 
@@ -654,10 +668,19 @@
       if (f) f.classList.remove("error");
     });
 
+    /* La etiqueta se relee cada vez en lugar de guardarla al montar: la página
+       de propiedad la cambia por fuera cuando el visitante pide el dossier o el
+       price list, y con un valor cacheado el botón volvía al texto original en
+       cuanto había un reintento. */
     function estado(modo) {
       form.setAttribute("data-estado", modo);
       boton.disabled = (modo === "enviando");
-      etiqueta.textContent = modo === "enviando" ? "Enviando…" : textoBoton;
+      if (modo === "enviando") {
+        textoBoton = etiqueta.textContent;
+        etiqueta.textContent = "Enviando…";
+      } else {
+        etiqueta.textContent = textoBoton;
+      }
     }
 
     function intentar() {

@@ -5,8 +5,6 @@
 <!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v=5"></script>
 <script src="/assets/attribution.js?v=5"></script>
-<link rel="preconnect" href="https://forms.zohopublic.com" crossorigin>
-<link rel="dns-prefetch" href="https://forms.zohopublic.com">
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://connect.facebook.net">
 <link rel="dns-prefetch" href="https://t.contentsquare.net">
@@ -283,24 +281,10 @@
     </div>
 
     <div class="form reveal d1">
-      <form id="agendaForm" data-lead novalidate name="lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-context="Residencias de marca"><input type="hidden" name="form-name" value="lead"><p hidden><label>No llenar <input name="bot-field"></label></p>
-        <div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">Cupo limitado</span></div>
-        <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
-        <div class="field"><label>Nombre completo *</label><input type="text" name="nombre" placeholder="Tu nombre" required><span class="err">Ingresa tu nombre.</span></div>
-        <div class="field-row">
-          <div class="field"><label>País de origen *</label><input type="text" name="pais" placeholder="México" required><span class="err">Requerido.</span></div>
-          <div class="field"><label>WhatsApp *</label><input type="tel" name="tel" placeholder="+52 ..." required><span class="err">Requerido.</span></div>
-        </div>
-        <div class="field"><label>Correo electrónico *</label><input type="email" name="email" placeholder="tucorreo@empresa.com" required><span class="err">Ingresa un correo válido.</span></div>
-        <div class="field"><label>Monto a invertir (USD) *</label><select name="presupuesto" required><option value="">Selecciona rango</option><option>$250K – $500K USD</option><option>$500K – $1M USD</option><option>$1M – $2M USD</option><option>$2M+ USD</option></select><span class="err">Selecciona un rango.</span></div>
-        <button type="submit" class="btn btn-primary">Agendar mi sesión de claridad <span class="ar">→</span></button>
-        <p class="form__secure">🔒 Tus datos están seguros. Nunca los compartimos con terceros.</p>
-      </form>
-      <div class="form__success" id="formSuccess">
-        <div class="ok">✓</div>
-        <h3 class="h-3">¡Listo, <span id="successName">gracias</span>!</h3>
-        <p>Recibimos tus datos. Oscar o su equipo te responde en menos de 24 horas. ¿Prefieres escribirnos? <a href="https://api.whatsapp.com/send?phone=525611659009" target="_blank" rel="noopener" style="color:var(--gold);">+52 56 1165 9009</a>.</p>
-      </div>
+      <div class="form__head"><h3 class="h-3">Agenda tu sesión</h3><span class="form__sub">Cupo limitado</span></div>
+      <p class="form__note">Sesión de claridad sin costo ni compromiso.</p>
+      <div data-destiny-form="lead" data-variant="patrimonio" data-context="Residencias de marca"></div>
+      <p class="form__secure">&#128274; Tus datos están seguros. Nunca los compartimos con terceros.</p>
     </div>
   </div>
 </section>
@@ -334,8 +318,8 @@
   })();
 </script>
 <!-- CAPA DE MEDICIÓN -->
-<script src="/assets/zoho-embed.js?v=5"></script>
-<script src="/assets/tracking.js?v=5"></script>
+<script src="/assets/tracking.js?v=6"></script>
+<script src="/assets/forms.js?v=1"></script>
 <!-- FIN CAPA DE MEDICIÓN -->
 </body>
 </html>
