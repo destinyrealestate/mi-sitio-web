@@ -187,7 +187,22 @@ ActiveCampaign en la lista 7; el correo a Carlos con el origen legible y NO el
 gclid crudo; el correo de entrega con la URL del dossier de Cipriani; y el evento
 en el Depurador de Meta con ese event_id.
 
-Después borra el contacto de prueba de HubSpot y de ActiveCampaign.
+SEGUNDA PRUEBA — el correo de entrega
+Manda un segundo POST con form_type "newsletter" y solo correo:
+
+  curl -X POST https://hook.us2.make.com/7qv7oss8wfm52wyfier7g9x5qgyvl7n2 \
+    -H "Content-Type: application/json" \
+    -d '{"form_type":"newsletter","email":"prueba2@destiny.mx"}'
+
+Confirma que el módulo 7 NO se dispara: newsletter no entrega nada, y un correo con
+un enlace roto es peor que ningún correo. El filtro ya exige que pdf_url contenga
+".pdf" precisamente por esto — la primera versión usaba "exist", que es ambiguo con
+las cadenas vacías. Si aun así sale el correo, revisa el filtro.
+
+Comprueba también que el lead SÍ llegó a HubSpot y a la lista 6 de ActiveCampaign:
+lo que no debe salir es la entrega, no el lead.
+
+Después borra los dos contactos de prueba de HubSpot y de ActiveCampaign.
 
 DÉJALO ACTIVO. A diferencia de la primera vez, ahora sí tiene que quedar encendido:
 el sitio se despliega después y un escenario apagado rechaza los leads con HTTP 410
