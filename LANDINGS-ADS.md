@@ -34,57 +34,42 @@ También se tocó:
 
 ## 2. Lo que FALTA antes de encender las campañas
 
-### 2.1 El formulario calificador (bloqueante)
+### 2.1 El formulario calificador — resuelto el 2026-08-05
 
-Las seis páginas montan hoy el **formulario general del sitio**
-(`HOMETOFUFORM27062026V1`), para que capturen leads desde el primer día. Ese
-formulario **no trae los dos campos calificadores** que pide la campaña.
+Ya no hace falta crear nada en Zoho: **Zoho se eliminó del sitio**. Las cinco
+páginas montan el formulario nativo de `assets/forms.js`, con los cinco campos
+que pedía la campaña:
 
-Hay que crear en Zoho un formulario nuevo con:
+| # | Campo | Tipo |
+|---|---|---|
+| 1 | Nombre completo | Texto |
+| 2 | WhatsApp | Teléfono |
+| 3 | Correo | Email |
+| 4 | ¿Con cuánto capital cuentas para invertir? | Menos de $100,000 · $100,000–250,000 · $250,000–500,000 · Más de $500,000 USD |
+| 5 | ¿Cuándo planeas invertir? | En los próximos 30 días · En 3 a 6 meses · Solo estoy explorando |
 
-**Campos visibles (5):**
+La primera opción del campo 4 sigue existiendo a propósito: es donde el no
+calificado se auto-etiqueta.
 
-| # | Campo | Tipo | Validación / opciones |
-|---|---|---|---|
-| 1 | Nombre completo | Texto | Obligatorio, mín. 3 caracteres |
-| 2 | WhatsApp | Teléfono | Obligatorio, 10 dígitos MX, teclado numérico |
-| 3 | Correo | Email | Obligatorio, con validación |
-| 4 | ¿Con cuánto capital cuentas para invertir? | Selección | Menos de $100,000 USD · $100,000–250,000 · $250,000–500,000 · Más de $500,000 |
-| 5 | ¿Cuándo planeas invertir? | Selección | En los próximos 30 días · En 3–6 meses · Solo estoy explorando |
+Los 16 campos ocultos tampoco hacen falta. La atribución completa —los cinco
+click IDs, los cinco UTM, el referrer y la landing— viaja en el objeto
+`atribucion` del JSON que se manda al webhook. Ver `FORMULARIOS.md`.
 
-La primera opción del campo 4 existe a propósito: es donde el no calificado se
-auto-etiqueta.
+Cómo está montado, por variante de `lead`:
 
-**Campos ocultos (16).** Son los mismos que ya documenta `assets/zoho-embed.js`.
-Sin ellos Zoho recibe los parámetros y los descarta, y la atribución muere en el
-formulario:
+| Página | Contenedor | Gracias |
+|---|---|---|
+| `preconstruccion-miami.html` (×2) | `data-variant="preconstruccion"` | `/gracias-preconstruccion` |
+| `invertir-en-dolares.html` (×2) | `data-variant="dolares"` | `/gracias-dolares` |
+| `Guia.html` | `data-destiny-form="guia"` | `/gracias-guia` |
 
-```
-gclid, wbraid, gbraid, fbclid, msclkid,
-utm_source, utm_medium, utm_campaign, utm_term, utm_content,
-landing_page, referrer, first_seen,
-desarrollo, form_type, page_url
-```
+La página de gracias ya no se configura en ningún panel: la decide el tipo o la
+variante en `forms.js`, y se puede sobrescribir por página con `data-gracias`.
 
-**Redirección por landing.** Se configura en el panel de Zoho:
-
-- desde la landing 1 → `https://destiny.mx/gracias-preconstruccion`
-- desde la landing 2 → `https://destiny.mx/gracias-dolares`
-- desde la guía → `https://destiny.mx/gracias-guia`
-
-Si Zoho solo permite una redirección por formulario, hay dos caminos: un
-formulario por landing, o una sola página de gracias que lea `form_type`. La
-primera es la que asumen estas páginas.
-
-**Cuando el formulario exista**, cambiar el `data-form-base` de los contenedores
-`.zoho-form`. Son 5 en total y están marcados con un comentario en el HTML:
-
-- `preconstruccion-miami.html` — 2 (arriba y al final)
-- `invertir-en-dolares.html` — 2 (arriba y al final)
-- `Guia.html` — 1
-
-No hay que tocar nada más: la atribución, la altura automática y la leyenda de
-consentimiento las pone `assets/zoho-embed.js`.
+**Lo que sí sigue bloqueante:** la constante `MAKE_WEBHOOK_URL` de
+`assets/forms.js` es todavía un placeholder. Hasta que el escenario de Make
+exista, el formulario valida, mide y redirige, pero el lead no se guarda en
+ningún lado.
 
 ### 2.2 Las conversiones de Google Ads
 
@@ -151,8 +136,8 @@ Verificados en local antes de desplegar:
 - [x] Sin desbordamiento horizontal a 1425 px ni a 375 px.
 - [x] `scripts/check-links.py` sin roturas.
 - [x] El H1 de cada landing contiene la keyword principal de su campaña.
-- [x] Entrando por `?gclid=PRUEBA123`, el `gclid`, los UTM, el `desarrollo` y el
-      `form_type` llegan al iframe de Zoho.
+- [x] Entrando por `?gclid=PRUEBA123`, el `gclid`, los UTM y el `form_type`
+      llegan al payload del formulario nativo (verificado el 2026-08-05).
 - [x] La página de gracias emite `generate_lead` al dataLayer con su `form_type`.
 - [x] El escape de iframe de las páginas de gracias funciona.
 - [x] Barrido de compliance: cero promesas de retorno, cero «garantizado» y cero

@@ -17,8 +17,8 @@ Tres archivos, en este orden obligatorio dentro del `<head>` de cada página:
 Y al final del `<body>`:
 
 ```
-assets/zoho-embed.js   Pasa la atribución a los formularios de Zoho.
 assets/tracking.js     Emite los eventos de conversión.
+assets/forms.js        Dibuja y envía los formularios. Solo en las páginas que tienen uno.
 ```
 
 Los cinco se insertan con `python3 scripts/patch-head.py`, que es idempotente:
@@ -162,99 +162,54 @@ Las cinco llevan:
 if (window.top !== window.self) { window.top.location = window.location.href; }
 ```
 
-Sin esto, cuando Zoho redirige **dentro** de su propio iframe, la página de
-gracias se pinta en un recuadro de 700 px y **la conversión no se mide nunca**,
-porque el evento se queda atrapado en el iframe.
-
-### El formulario autoalojado de Cipriani
-
-`/forms/CIPRIANIFORM27052026V1/` es una exportación cruda de Zoho Forms subida
-al servidor (con su `.zip` al lado). Entró a la cadena de medición el
-**2026-08-03**: antes tenía un GA4 y un Contentsquare pegados a mano y ni
-consentimiento ni atribución. Se le quitaron los dos y ahora lleva los cinco
-scripts como cualquier otra página, con `data-desarrollo="cipriani-residences"`.
-
-**Pero sigue sin poder generar una conversión**, y no por las etiquetas:
-
-- No es un iframe. Postea directo a `forms.zohopublic.com`, así que
-  `zoho-embed.js` —que solo enriquece `iframe.zf-embed` y los contenedores
-  `.zoho-form`— **no hace nada aquí**. La atribución no viaja.
-- Su campo oculto `zf_redirect_url` está **vacío**. Al enviar, Zoho muestra su
-  propia pantalla de gracias en lugar de `/gracias-sesion.html`, así que
-  `generate_lead` no se dispara nunca.
-- Ninguna página del sitio enlaza a esa URL y no está en el sitemap.
-
-Para que sirviera de verdad harían falta dos cosas: poner
-`zf_redirect_url` a `https://destiny.mx/gracias-sesion.html?form_type=sesion&d=cipriani-residences`
-y rellenar por JS los campos ocultos con lo que guarda `DestinyAttr`. Antes de
-invertir ahí conviene decidir si esa página se usa o se borra.
+Se puso cuando el formulario vivía en un iframe de Zoho: al redirigir dentro del
+recuadro, la página de gracias se pintaba en 700 px y la conversión no se medía
+nunca. Desde el 2026-08-05 no hay iframes, pero la línea se queda: cuesta nada y
+sigue cubriendo el caso de que alguien incruste la página de gracias desde fuera.
 
 ---
 
-## La atribución hacia Zoho — el eslabón que falta
+## Los formularios de Zoho — retirados el 2026-08-05
 
-`zoho-embed.js` agrega los datos de atribución al `src` del iframe de Zoho.
-Eso ya funciona: se puede verificar en el HTML.
+Aquí vivían dos secciones largas: una sobre el formulario autoalojado de
+Cipriani y otra sobre los 16 campos ocultos que había que crear en el panel de
+Zoho Forms para que la atribución sobreviviera. **Las dos quedaron sin objeto:
+Zoho se eliminó por completo del sitio.**
 
-**Pero Zoho descarta lo que no tiene un campo donde guardarlo.** Hay que crear,
-dentro de cada formulario en el panel de Zoho Forms, un **campo oculto** por
-cada parámetro, con el nombre de enlace exacto:
+Lo que se comprobó antes de borrarlo, trayendo los cuatro formularios en vivo:
+**ninguno tenía un solo campo oculto de atribución**. `zoho-embed.js` llevaba
+años mandando 16 parámetros en el `src` del iframe y Zoho los descartaba en
+silencio. Ni un lead llegó nunca con su `gclid`. El eslabón no estaba roto de
+Zoho en adelante: estaba roto *en* Zoho.
 
-```
-gclid          wbraid         gbraid         fbclid        msclkid
-utm_source     utm_medium     utm_campaign   utm_term      utm_content
-landing_page   referrer       first_seen
-desarrollo     form_type      page_url
-```
+Y había un segundo problema, más caro: al vivir el formulario en un iframe de
+otro dominio, el envío ocurría fuera de destiny.mx y el navegador no podía
+disparar la conversión en el momento del envío.
 
-Formularios a los que hay que hacerlo:
+Hoy los formularios son nativos. Ver **`FORMULARIOS.md`** para el motor, los
+nueve tipos y el JSON que se manda. Lo que queda de aquella cadena:
 
-- `HOMETOFUFORM27062026V1` (agenda, club, scorecard)
-- `FORMNEWSLETTER26072026V1` (radar, newsletter)
-- `MERCEDESBENZFORM24062026V1`
-- `CIPRIANIFORM27052026V1`
+| Qué era | Qué es ahora |
+|---|---|
+| 4 formularios en el panel de Zoho | `TIPOS` en `assets/forms.js` |
+| 16 campos ocultos por formulario | El objeto `atribucion` del payload |
+| `zoho-embed.js` | `forms.js` |
+| `/forms/CIPRIANIFORM27052026V1/` | Borrado. Nada lo enlazaba y no podía convertir |
+| 4 escenarios de Make, uno por formulario | 1 escenario con router por `form_type` (Prompt 3) |
 
-Si Zoho no permite alguno de esos nombres y le asigna otro (`SingleLine3`, por
-ejemplo), **no se cambia en cada página**: se mapea en el objeto `FIELD_MAP` al
-inicio de `assets/zoho-embed.js`.
+Los cuatro escenarios viejos de Make (5514580 HOME-TOFU, 5223878 Cipriani,
+5485213 Mercedes-Benz, 5775240 Newsletter) siguen existiendo en el equipo
+2342480 y **hay que apagarlos** cuando el escenario nuevo esté vivo. Dos cosas
+que se sabían de ellos y conviene no repetir en el nuevo:
 
-Después de crear los campos en Zoho falta el último tramo, y **el CRM es
-HubSpot, no Zoho CRM**. La cadena real es:
+- El de Cipriani mandaba `hs_analytics_source` **fijo en `"PAID_SOCIAL"`** para
+  todos los leads. Debe salir del `utm_source` real.
+- El de HOME-TOFU llevaba **0 ejecuciones** desde el 28-jun-2026, con su webhook
+  activo y sin cola. Encaja con lo demás: el formulario principal no estaba
+  llamando a su webhook.
 
-```
-sitio → iframe de Zoho Forms → webhook → Make → HubSpot
-```
-
-Escenarios de Make involucrados (equipo 2342480):
-
-| Escenario | id | Formulario | Destino |
-|---|---|---|---|
-| Integración Zoho Forms — HOME-TOFU | 5514580 | HOMETOFUFORM27062026V1 | HubSpot |
-| Integration Zoho Forms - Cipriani | 5223878 | CIPRIANIFORM27052026V1 | HubSpot |
-| Integración Zoho Forms — Mercedes-Benz | 5485213 | MERCEDESBENZFORM24062026V1 | HubSpot |
-| Integración Zoho Forms — Newsletter | 5775240 | FORMNEWSLETTER26072026V1 | ActiveCampaign |
-
-Hacen falta las tres cosas, en este orden: campos ocultos en Zoho → propiedades
-personalizadas en HubSpot → mapeo en el módulo `upsertAContact` de Make. Si se
-hace solo la primera, la atribución muere un paso más adelante.
-
-**Estado verificado el 2026-07-30:** los formularios de Zoho tienen **cero**
-campos de atribución y HubSpot **ninguna** propiedad personalizada para
-recibirla. El puente está roto de Zoho en adelante.
-
-Dos cosas más que hay que corregir al hacerlo:
-
-- El escenario de Cipriani manda `hs_analytics_source` **fijo en
-  `"PAID_SOCIAL"`** para todos los leads. Debe salir del `utm_source` real.
-- El escenario HOME-TOFU (5514580) lleva **0 ejecuciones** desde el 28-jun-2026.
-  Su webhook (`hookId` 2511344) está activo y sin cola, así que o no ha entrado
-  un solo lead por el formulario principal, o el formulario de Zoho no lo está
-  llamando. **Verificar esto antes de crear nada.**
-
-Verificación rápida del tramo que SÍ funciona: abre
-`destiny.mx/agenda?gclid=prueba123`, inspecciona el iframe y confirma que su
-`src` contiene `gclid=prueba123`. Verificado el 2026-07-30: llegan los 9
-parámetros.
+HubSpot sigue sin propiedades personalizadas para la atribución. Eso no lo
+resuelve la migración: lo crea el escenario de Make del Prompt 3.
 
 ---
 

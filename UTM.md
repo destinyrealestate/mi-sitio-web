@@ -94,6 +94,6 @@ python3 scripts/build-utm.py --una /agenda instagram reel 2026-w31 och-reel-01
 
 - la navegación entre `destiny.mx` y `blog.destiny.mx`
 - visitas directas posteriores (una visita sin UTM **no borra** la original)
-- el salto al iframe del formulario de Zoho
+- el envío del formulario nativo (viaja en el objeto `atribucion` del payload)
 
 Y viajan con **cada** evento del `dataLayer`. Ver `MEDICION.md`.

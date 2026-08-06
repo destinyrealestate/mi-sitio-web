@@ -35,6 +35,16 @@ Meta no podían medirla en el momento del envío.
 | `assets/styles.css` | Bloque final `FORMULARIOS NATIVOS`. Solo lo que el sistema `.field` no tenía |
 | `forms-demo.html` | Banco de pruebas con los nueve tipos juntos. `noindex`, sin enlazar |
 
+Y lo que se retiró con la migración:
+
+| Archivo | Qué pasó |
+|---|---|
+| `assets/zoho-embed.js` | Borrado |
+| `/forms/CIPRIANIFORM27052026V1/` | Borrado. Exportación cruda de Zoho que nada enlazaba y que no podía convertir |
+| `assets/property.js` | Deja de montar formularios. Cipriani posteaba a `htmlRecords/submit` y Mercedes incrustaba un iframe; los dos son ahora el formulario nativo de propiedad |
+| `assets/data.js` | Pierde el pipeline viejo de leads (Netlify Forms + HubSpot + webhook + redirección). Dos caminos de envío compitiendo por el mismo formulario es como se pierden leads |
+| `scripts/build-pages.py` · `scripts/patch-head.py` | Actualizados. Sin esto, la próxima corrida habría vuelto a escribir los iframes |
+
 Lo que **no** hace `forms.js`: medir. No hay un solo `gtag`, `fbq` ni
 `dataLayer.push` dentro. Al enviarse con éxito llama a `window.destinyTrack` y
 `assets/tracking.js` decide qué sale a cada plataforma. Esa separación ya existía
@@ -104,17 +114,59 @@ de propiedad, que monta su formulario por JS):
 | `newsletter` | correo | `newsletter_signup` | Subscribe | 100 | `/gracias-newsletter` |
 | `radar` | correo | `newsletter_signup` | Subscribe | 100 | `/gracias-newsletter` |
 
-Y dos variantes de `lead` para las campañas de Google Ads, con los calificadores
-que pide `LANDINGS-ADS.md`:
+Y tres variantes de `lead`:
 
-| Variante | Campos | Gracias |
-|---|---|---|
-| `preconstruccion` | nombre, WhatsApp, correo, capital, cuándo invertir | `/gracias-preconstruccion` |
-| `dolares` | nombre, WhatsApp, correo, capital, cuándo invertir | `/gracias-dolares` |
+| Variante | Campos | Gracias | Por qué existe |
+|---|---|---|---|
+| `preconstruccion` | nombre, WhatsApp, correo, capital, cuándo invertir | `/gracias-preconstruccion` | Los calificadores que pide `LANDINGS-ADS.md` |
+| `dolares` | nombre, WhatsApp, correo, capital, cuándo invertir | `/gracias-dolares` | Igual, la otra campaña |
+| `patrimonio` | nombre, correo, teléfono, país, monto | `/gracias.html` | Escala de monto que arranca en $250K |
 
 `propiedad` y `zona` resuelven solos el desarrollo y la zona: leen `?p=` o `?z=`
 de la URL y buscan el nombre legible en el catálogo de `assets/data.js`. Por eso
 esas dos páginas necesitan que `data.js` cargue antes que `forms.js`.
+
+### Por qué hay dos escalas de dinero
+
+`presupuesto` arranca en $500K y es la escala que pedía Zoho: se conserva tal
+cual para no partir en dos el histórico de leads en HubSpot.
+
+`monto` arranca en $250K. Es la que ya usaban Marca, Inversión y Artículo, que
+son páginas de descubrimiento y no la ficha de un proyecto de varios millones.
+Bajar ese piso al resto del sitio habría metido ruido en las páginas de
+propiedad; subirlo en esas tres habría dejado fuera a un inversionista que hoy
+sí cabe. Por eso son dos campos y no uno.
+
+---
+
+## 4bis. Dónde está cada formulario
+
+22 formularios en 16 páginas.
+
+| Página | Contenedor |
+|---|---|
+| `index.html` | `newsletter` · `lead` + `data-gracias="/gracias-sesion"` |
+| `Guia.html` | `guia` |
+| `agenda.html` | `agenda` |
+| `club.html` | `club` |
+| `radar.html` | `radar` |
+| `scorecard.html` | `scorecard` |
+| `invertir-en-dolares.html` | `lead` variante `dolares` (×2) |
+| `preconstruccion-miami.html` | `lead` variante `preconstruccion` (×2) |
+| `Propiedad.html` | `propiedad`, dentro de `#formPropiedad` |
+| `Zona.html` | `zona` |
+| `Marca.html` · `Inversion.html` · `Articulo.html` | `lead` variante `patrimonio` |
+| `cipriani-lp1/2/3.html` | `propiedad` (×2 cada una) |
+
+El home usa `lead` y no `agenda` porque el inventario de conversiones lo cuenta
+como `form_lead` (500 MXN); `/agenda` es la que vale 2000. La página de gracias
+sí es la de sesión, que es a donde llegaba antes desde Zoho.
+
+En `Propiedad.html`, los botones "Solicitar dossier" y "Solicitar price list" no
+abren otro formulario: `property.js` reusa el mismo cambiándole el encabezado,
+la nota y el texto del botón, y escribiéndole `data-context`. forms.js lee ese
+atributo **al enviar**, no al dibujar, así que el cambio viaja a Make y a la
+página de gracias sin volver a montar nada.
 
 ---
 
