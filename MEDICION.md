@@ -344,6 +344,87 @@ artículos se leen sin JavaScript.
 
 ---
 
+## Las conversiones de Google Ads dentro de GTM (2026-08-05)
+
+El contenedor dejó de ir vacío. **Versión 2 publicada**: cinco etiquetas, cinco
+variables de capa de datos, una de datos del usuario y tres activadores. **Nada
+de esto tocó el código del sitio**: los eventos que consume ya los dejaba
+`tracking.js`.
+
+Comprobado contra el contenedor en vivo (`gtm.js?id=GTM-KW8TPGGG`), no solo
+contra la interfaz: los tres rótulos viajan con sus valores (500 / 2000 / 500) y
+las cuatro etiquetas de Ads llevan `once_per_load: true`.
+
+**Dónde vive.** La cuenta de GTM es `Destiny Real Estate` (id `6368951919`,
+contenedor `259896060`) y **no** está bajo `lic.carlos.cataneo@gmail.com` como
+cuenta principal — es el `authuser=6` de ese navegador. Buscarlo en la cuenta
+por defecto no da nada. Ojo también con que existe un contenedor gemelo
+`GTM-N6ZQ256`, también llamado *Destiny Real Estate / destiny.mx*, en otra
+cuenta (`authuser=5`), vacío y sin usar. El que el sitio carga es
+`GTM-KW8TPGGG`. No confundirlos.
+
+| Etiqueta | Tipo | Rótulo | Valor | Activador |
+|---|---|---|---|---|
+| Vinculador de conversiones | Vinculación de conversiones | — | — | All Pages |
+| Ads · form_lead | Conversión de Ads | `D636CNu6xdwcELeigbdE` | 500 MXN | `generate_lead` con `form_type` ≠ `sesion` |
+| Ads · agenda_solicitada | Conversión de Ads | `p8UOCOG6xdwcELeigbdE` | 2000 MXN | `generate_lead` con `form_type` = `sesion` |
+| Ads · whatsapp_click | Conversión de Ads | `eUBKCN66xdwcELeigbdE` | 500 MXN | `click_whatsapp` |
+| Ads · Conversiones mejoradas | User-provided Data Event | — | — | los dos de `generate_lead` |
+
+Los nombres de evento son los que **ya existían** (`generate_lead`,
+`click_whatsapp`), no `form_lead` / `whatsapp_click`. No hay ningún evento
+`agenda_solicitada` en el sitio: la agenda es otro formulario de Zoho con
+`form_type = "sesion"`, y es esa condición la que separa los 2000 de los 500.
+
+Las conversiones mejoradas van en etiqueta aparte (*Google Ads User-provided
+Data Event*), no en una casilla de la etiqueta de conversión: la de conversión
+ya no la trae. Lee `UPD - Datos del lead`, que a su vez lee `user_email` y
+`user_phone` del `dataLayer`.
+
+### La trampa: cada evento llega DOS veces al dataLayer
+
+`tracking.js` emite cada evento por dos vías (ver el encabezado de ese archivo):
+`dataLayer.push({event: …})` **y** `gtag('event', …)`. Lo que no era evidente es
+que la segunda **también termina en `window.dataLayer`**, porque `tags.js`
+define `gtag` justamente como un push a ese array. GTM lee las dos y dispara la
+etiqueta dos veces:
+
+```
+índice  9 → dataLayer.push({event:'generate_lead', …})
+índice 10 → gtag('event','generate_lead', {…})
+```
+
+Verificado en Tag Assistant: sin corregir, `form_lead` salía *Activado 2 veces*
+en un solo envío. **Cada lead se habría cobrado doble en Google Ads.**
+
+**El arreglo:** las cuatro etiquetas de Ads llevan *Configuración avanzada →
+Opciones de activación de la etiqueta* = **`Una vez por página`** (no el
+`Una vez por evento` que trae de fábrica). Con eso el segundo `generate_lead`
+muestra *Etiquetas activadas: Ninguna*. En `whatsapp_click` implica además que
+varios clics en la misma página cuentan uno solo, que es lo que Ads quiere para
+una acción de tipo cliente potencial.
+
+**Toda etiqueta nueva que se cuelgue de un evento de `tracking.js` necesita lo
+mismo.** Es la regla menos obvia de este contenedor.
+
+### Detalle al validar
+
+La vista previa de GTM congela el estado del contenedor en el momento en que se
+abre. Después de editar una etiqueta hay que **volver a pulsar Vista previa** o
+los cambios no aparecen, aunque se recargue la página.
+
+### Pendientes que salieron de esta validación
+
+- `/gracias-sesion` (sin `.html`) da **404**: el `.htaccess` solo tiene rutas
+  limpias para `gracias-preconstruccion`, `gracias-dolares` y `gracias-guia`.
+  Si alguien configura esa redirección en Zoho con la ruta limpia, la conversión
+  se pierde. Hoy funciona como `/gracias-sesion.html`.
+- `tracking.js` manda `currency: "USD"` y `value: 0` en `generate_lead`. Las
+  etiquetas de Ads llevan el valor fijo en MXN, así que no estorba, pero los dos
+  números se contradicen y conviene alinearlos.
+
+---
+
 ## Consentimiento
 
 `assets/consent.js` implementa Consent Mode v2:
@@ -397,11 +478,12 @@ Borrar solo el `localStorage` ya no sirve de nada: la cookie lo repone.
 - Los campos ocultos en Zoho Forms, las propiedades en HubSpot y el mapeo en
   Make — ver la sección del puente de atribución. Es el pendiente de más valor:
   hoy ningún contacto del CRM sabe de dónde vino.
-- Publicar etiquetas dentro del contenedor de GTM (el contenedor ya está
-  instalado y cargando, pero va vacío a propósito — ver la sección de GTM).
-- Crear las acciones de conversión en Google Ads y disparar sus rótulos desde
-  GTM. La etiqueta base (`AW-18368975159`) ya está puesta, pero sola no registra
-  ni una conversión.
+- ~~Publicar etiquetas dentro del contenedor de GTM.~~ Publicadas el 2026-08-05
+  como **Versión 2**, «Conversiones de Google Ads — fase 1» — ver «Las
+  conversiones de Google Ads dentro de GTM».
+- ~~Crear las acciones de conversión en Google Ads y disparar sus rótulos desde
+  GTM.~~ Los tres rótulos ya están en el contenedor. La etiqueta base
+  (`AW-18368975159`) sigue viniendo del código y no se duplica.
 - Recuperar el acceso administrativo a la propiedad GA4 `G-J8KK325F2B`.
 
 ---

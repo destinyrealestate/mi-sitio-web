@@ -34,7 +34,9 @@ os.chdir(ROOT)
 RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  # Landings de Google Ads y sus páginas de gracias
                  "/preconstruccion-miami", "/invertir-en-dolares", "/guia",
-                 "/gracias-preconstruccion", "/gracias-dolares", "/gracias-guia"}
+                 "/gracias-preconstruccion", "/gracias-dolares", "/gracias-guia",
+                 # Gracias de la agenda: dispara agenda_solicitada en GTM
+                 "/gracias-sesion"}
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 
