@@ -15,7 +15,7 @@ Ver `FORMULARIOS.md` para el payload y `MEDICION.md` para la capa del navegador.
 | Tags ActiveCampaign | **11 a 22** (12 tags) |
 | HubSpot | Escribe en las propiedades que ya existían |
 | Meta CAPI | **Pendiente** — falta el token |
-| Propiedades `dst_*` de HubSpot | **Pendientes** — ver Brief 2 |
+| Propiedades `dst_*` de HubSpot | ✅ **creadas y verificadas** el 2026-08-06 · falta mapearlas en el módulo 3 |
 
 El escenario se construyó sin router: los nueve tipos comparten el mismo flujo y
 lo que cambia (lista, tag, PDF, origen legible) se resuelve en un solo
@@ -35,10 +35,27 @@ No al revés. La prueba también confirma que la URL del webhook es correcta y e
 viva: una URL equivocada devolvería 404, no ese 410.
 
 **Lo que falta para encenderlo:**
-1. Crear las 18 propiedades `dst_*` en HubSpot (Brief 2) y mapearlas en el módulo 3.
-2. Token de la CAPI de Meta → agregar el módulo HTTP con el `event_id`.
+1. Mapear las 18 propiedades `dst_*` en el módulo 3. Ya existen en HubSpot, así
+   que mapearlas ya no tiene riesgo.
+2. Token de la CAPI de Meta → agregar el módulo HTTP con el `event_id`. El
+   `SetVariables` ya calcula `meta_event`, así que ese módulo solo tiene que
+   leerlo.
 3. Antiduplicados con Data Store (5 min por correo + form_type).
 4. Revisarlo y **activarlo**.
+
+### Corregido el 2026-08-06 — el correo de entrega con enlace roto
+
+La primera versión filtraba el módulo 7 con `exist` sobre `{{2.pdf_url}}`. Para
+newsletter y radar esa variable queda como cadena vacía, y `exist` es ambiguo con
+las cadenas vacías: podía mandarse un correo de entrega con un enlace a ninguna
+parte.
+
+Había un segundo caso peor que ese: un formulario de propiedad **sin**
+`desarrollo_slug` construía la URL `https://destiny.mx/dossiers/.pdf`, que sí
+habría pasado cualquier filtro de "no está vacío".
+
+Los dos están arreglados. `pdf_url` solo se arma cuando hay slug de verdad, y el
+filtro ahora exige que la cadena contenga `.pdf`.
 
 ---
 

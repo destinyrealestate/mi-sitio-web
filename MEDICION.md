@@ -110,10 +110,14 @@ Los tres rótulos existentes están **en GTM** (que es quien dispara hoy) y
 se pasen a código. Si se crea o rehace una acción en Ads, hay que actualizar los
 dos sitios o quedarán desalineados.
 
-`newsletter_signup` sigue con el rótulo vacío en las dos partes: la acción
-todavía no existe en Google Ads. `tracking.js` lo trata a propósito como "sin
-rótulo" en vez de mandar una conversión incompleta — una conversión sin rótulo
-se descarta en silencio y da la falsa impresión de estar midiendo.
+Los cuatro rótulos ya existen y están en los dos sitios:
+
+| Acción | Rótulo | Valor |
+|---|---|---|
+| `form_lead` | `D636CNu6xdwcELeigbdE` | 500 MXN |
+| `whatsapp_click` | `eUBKCN66xdwcELeigbdE` | 500 MXN |
+| `agenda_solicitada` | `p8UOCOG6xdwcELeigbdE` | 2000 MXN |
+| `newsletter_signup` | `mofbCOvqmN0cELeigbdE` | 100 MXN |
 
 ---
 
@@ -364,12 +368,19 @@ antes de confirmar, y publicar solo después de validar con Tag Assistant.
 | Ads · form_lead | `D636CNu6xdwcELeigbdE` | 500 MXN | `dst_form_lead` |
 | Ads · agenda_solicitada | `p8UOCOG6xdwcELeigbdE` | 2000 MXN | `dst_agenda_solicitada` |
 | Ads · whatsapp_click | `eUBKCN66xdwcELeigbdE` | 500 MXN | `dst_whatsapp_click` |
-| Ads · newsletter_signup | **PENDIENTE** | 100 MXN | `dst_newsletter_signup` |
+| Ads · newsletter_signup | `mofbCOvqmN0cELeigbdE` | 100 MXN | `dst_newsletter_signup` |
 
-La última va **pausada** en el archivo: la acción de conversión todavía no
-existe en Google Ads. Hay que crearla con categoría *Suscribirse*, 100 MXN,
-recuento *Una*, y marcada como **secundaria** — si entra como principal, el
-algoritmo persigue suscripciones baratas en lugar de inversionistas.
+La acción `newsletter_signup` se creó el 2026-08-06: categoría *Suscribirse*,
+100 MXN, recuento *Una*.
+
+**No se pudo marcar como secundaria.** Google deshabilita esa opción cuando el
+objetivo no es predeterminado de la cuenta. En la práctica se comporta igual,
+porque Ads solo la cuenta en la columna *Conversiones* de una campaña que use
+explícitamente el objetivo *Suscribirse*. De ahí sale una regla operativa:
+
+⛔ **No agregar el objetivo "Suscribirse" a las campañas de Fase 1.** Si se
+agrega, el algoritmo empieza a perseguir suscripciones de 100 pesos en lugar de
+inversionistas de varios millones.
 
 Ya no hace falta separar la agenda por `form_type = "sesion"`: cada acción tiene
 su propio evento.

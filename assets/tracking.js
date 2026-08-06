@@ -66,13 +66,20 @@
     form_lead:         "D636CNu6xdwcELeigbdE",
     whatsapp_click:    "eUBKCN66xdwcELeigbdE",
     agenda_solicitada: "p8UOCOG6xdwcELeigbdE",
-    // PENDIENTE: falta crear la acción en Google Ads — categoría Suscribirse,
-    // 100 MXN, recuento Una, marcada como SECUNDARIA. Si entra como principal,
-    // el algoritmo persigue suscripciones baratas en vez de inversionistas.
-    // Mientras esté vacío, newsletter_signup mide en GA4 y en Meta pero no
-    // manda conversión a Ads. Es lo correcto: una conversión sin rótulo se
-    // descarta en silencio y da la falsa impresión de estar midiendo.
-    newsletter_signup: ""
+    /* Creada en Google Ads el 2026-08-06, categoría Suscribirse, 100 MXN,
+       recuento Una.
+
+       NO se pudo marcar como secundaria: Google deshabilita esa opción
+       cuando el objetivo no es predeterminado de la cuenta. En la práctica
+       se comporta igual, porque Ads solo la cuenta en la columna
+       Conversiones de una campaña que use explícitamente el objetivo
+       Suscribirse. De ahí sale una regla que hay que respetar:
+
+       ⛔ NO agregar el objetivo "Suscribirse" a las campañas de Fase 1.
+
+       Si se agrega, el algoritmo empieza a perseguir suscripciones de 100
+       pesos en lugar de inversionistas de varios millones. */
+    newsletter_signup: "mofbCOvqmN0cELeigbdE"
   };
 
   var VALORES = {

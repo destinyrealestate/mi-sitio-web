@@ -28,9 +28,21 @@
         "name": "DL - form_type",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "form_type" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "form_type"
+          }
         ],
         "fingerprint": "0"
       },
@@ -41,9 +53,21 @@
         "name": "DL - form_variant",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "form_variant" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "form_variant"
+          }
         ],
         "fingerprint": "0"
       },
@@ -54,9 +78,21 @@
         "name": "DL - value",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "value" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "value"
+          }
         ],
         "fingerprint": "0"
       },
@@ -67,9 +103,21 @@
         "name": "DL - event_id",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "event_id" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "event_id"
+          }
         ],
         "fingerprint": "0"
       },
@@ -80,9 +128,21 @@
         "name": "DL - user_email",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "user_email" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "user_email"
+          }
         ],
         "fingerprint": "0"
       },
@@ -93,9 +153,21 @@
         "name": "DL - user_phone",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "user_phone" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "user_phone"
+          }
         ],
         "fingerprint": "0"
       },
@@ -106,9 +178,21 @@
         "name": "DL - desarrollo",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "desarrollo" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "desarrollo"
+          }
         ],
         "fingerprint": "0"
       },
@@ -119,9 +203,21 @@
         "name": "DL - gclid",
         "type": "v",
         "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "gclid" }
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "gclid"
+          }
         ],
         "fingerprint": "0"
       }
@@ -137,8 +233,16 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "dst_form_lead" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "dst_form_lead"
+              }
             ]
           }
         ],
@@ -154,8 +258,16 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "dst_agenda_solicitada" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "dst_agenda_solicitada"
+              }
             ]
           }
         ],
@@ -171,8 +283,16 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "dst_whatsapp_click" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "dst_whatsapp_click"
+              }
             ]
           }
         ],
@@ -188,8 +308,16 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "dst_newsletter_signup" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "dst_newsletter_signup"
+              }
             ]
           }
         ],
@@ -204,9 +332,21 @@
         "name": "Vinculador de conversiones",
         "type": "gclidw",
         "parameter": [
-          { "type": "BOOLEAN", "key": "enableCrossDomain", "value": "false" },
-          { "type": "BOOLEAN", "key": "acceptIncoming", "value": "true" },
-          { "type": "TEMPLATE", "key": "linkerScope", "value": "AUTO" }
+          {
+            "type": "BOOLEAN",
+            "key": "enableCrossDomain",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "acceptIncoming",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "linkerScope",
+            "value": "AUTO"
+          }
         ],
         "firingTriggerId": [
           "2147479553"
@@ -221,15 +361,51 @@
         "name": "Ads · form_lead",
         "type": "awct",
         "parameter": [
-          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
-          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
-          { "type": "TEMPLATE", "key": "conversionLabel", "value": "D636CNu6xdwcELeigbdE" },
-          { "type": "TEMPLATE", "key": "conversionValue", "value": "500" },
-          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
-          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
-          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+          {
+            "type": "BOOLEAN",
+            "key": "enableConversionLinker",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionId",
+            "value": "18368975159"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionLabel",
+            "value": "D636CNu6xdwcELeigbdE"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionValue",
+            "value": "500"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "currencyCode",
+            "value": "MXN"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "orderId",
+            "value": "{{DL - event_id}}"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableProductReporting",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableShippingData",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableNewCustomerReporting",
+            "value": "false"
+          }
         ],
         "firingTriggerId": [
           "201"
@@ -244,15 +420,51 @@
         "name": "Ads · agenda_solicitada",
         "type": "awct",
         "parameter": [
-          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
-          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
-          { "type": "TEMPLATE", "key": "conversionLabel", "value": "p8UOCOG6xdwcELeigbdE" },
-          { "type": "TEMPLATE", "key": "conversionValue", "value": "2000" },
-          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
-          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
-          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+          {
+            "type": "BOOLEAN",
+            "key": "enableConversionLinker",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionId",
+            "value": "18368975159"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionLabel",
+            "value": "p8UOCOG6xdwcELeigbdE"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionValue",
+            "value": "2000"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "currencyCode",
+            "value": "MXN"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "orderId",
+            "value": "{{DL - event_id}}"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableProductReporting",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableShippingData",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableNewCustomerReporting",
+            "value": "false"
+          }
         ],
         "firingTriggerId": [
           "202"
@@ -267,14 +479,46 @@
         "name": "Ads · whatsapp_click",
         "type": "awct",
         "parameter": [
-          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
-          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
-          { "type": "TEMPLATE", "key": "conversionLabel", "value": "eUBKCN66xdwcELeigbdE" },
-          { "type": "TEMPLATE", "key": "conversionValue", "value": "500" },
-          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
-          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+          {
+            "type": "BOOLEAN",
+            "key": "enableConversionLinker",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionId",
+            "value": "18368975159"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionLabel",
+            "value": "eUBKCN66xdwcELeigbdE"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionValue",
+            "value": "500"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "currencyCode",
+            "value": "MXN"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableProductReporting",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableShippingData",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableNewCustomerReporting",
+            "value": "false"
+          }
         ],
         "firingTriggerId": [
           "203"
@@ -286,20 +530,55 @@
         "accountId": "6368951919",
         "containerId": "259896060",
         "tagId": "305",
-        "name": "Ads · newsletter_signup (PAUSADA — falta el rotulo)",
+        "name": "Ads · newsletter_signup",
         "type": "awct",
-        "notes": "PAUSADA A PROPOSITO. La accion de conversion newsletter_signup todavia no existe en Google Ads. Hay que crearla con categoria Suscribirse, 100 MXN, recuento Una, y marcada como SECUNDARIA para que no ensucie la optimizacion de campanas: si entra como principal, el algoritmo persigue suscripciones baratas en lugar de inversionistas. Cuando exista, pegar su rotulo en conversionLabel y despausar.",
-        "paused": true,
+        "notes": "Accion creada en Google Ads el 2026-08-06: categoria Suscribirse, 100 MXN, recuento Una. NO se pudo marcar como secundaria porque Google deshabilita esa opcion cuando el objetivo no es predeterminado de la cuenta. Regla que se deriva de eso: NO agregar el objetivo Suscribirse a las campanas de Fase 1, o el algoritmo empieza a perseguir suscripciones baratas en lugar de inversionistas.",
         "parameter": [
-          { "type": "BOOLEAN", "key": "enableConversionLinker", "value": "true" },
-          { "type": "TEMPLATE", "key": "conversionId", "value": "18368975159" },
-          { "type": "TEMPLATE", "key": "conversionLabel", "value": "PEGAR_ROTULO_AQUI" },
-          { "type": "TEMPLATE", "key": "conversionValue", "value": "100" },
-          { "type": "TEMPLATE", "key": "currencyCode", "value": "MXN" },
-          { "type": "TEMPLATE", "key": "orderId", "value": "{{DL - event_id}}" },
-          { "type": "BOOLEAN", "key": "enableProductReporting", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableShippingData", "value": "false" },
-          { "type": "BOOLEAN", "key": "enableNewCustomerReporting", "value": "false" }
+          {
+            "type": "BOOLEAN",
+            "key": "enableConversionLinker",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionId",
+            "value": "18368975159"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionLabel",
+            "value": "mofbCOvqmN0cELeigbdE"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "conversionValue",
+            "value": "100"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "currencyCode",
+            "value": "MXN"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "orderId",
+            "value": "{{DL - event_id}}"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableProductReporting",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableShippingData",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "enableNewCustomerReporting",
+            "value": "false"
+          }
         ],
         "firingTriggerId": [
           "204"

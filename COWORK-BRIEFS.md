@@ -19,11 +19,11 @@ tocado**, así que destiny.mx en vivo sigue con Zoho: es a propósito.
 | Lista ActiveCampaign `Leads Web 2026` | ✅ creada · **id 7** |
 | 12 tags de ActiveCampaign | ✅ creados · **ids 11–22** |
 | Webhook de Make | ✅ **2662269** |
-| Escenario de Make **5871285** | ⚠️ armado, **INACTIVO**, sin Meta CAPI |
-| 18 propiedades `dst_*` en HubSpot | ❌ Brief B |
+| Escenario de Make **5871285** | ⚠️ armado, **INACTIVO**, sin Meta CAPI ni `dst_*` mapeadas |
+| 18 propiedades `dst_*` en HubSpot | ✅ creadas y verificadas el 2026-08-06 |
 | Módulo de Meta CAPI | ❌ Brief A · falta el token |
 | Contenedor de GTM importado | ❌ Brief C |
-| Acción `newsletter_signup` en Google Ads | ❌ Brief C |
+| Acción `newsletter_signup` en Google Ads | ✅ creada · rótulo ya pegado en el repo |
 | Despliegue | ❌ Brief D |
 | PDF del Scorecard | ❌ Brief E |
 
@@ -54,17 +54,17 @@ en la cuenta por defecto no da nada. Ojo también con el contenedor gemelo
 ### El orden
 
 ```
-Brief B (HubSpot)  ─→  Brief A (terminar Make)  ─┐
-Brief C (GTM + Ads) ────────────────────────────┴─→  Brief D (desplegar)
+Brief A (terminar Make · necesita el token)  ─┐
+Brief C (importar GTM, sin publicar)         ─┴─→  Brief D (desplegar y publicar juntos)
 
-Brief E (PDFs)  ──── en paralelo, cuando quieras
+Brief E (PDF del Scorecard)  ──── en paralelo, cuando quieras
 ```
 
 ---
 
 ## Brief A · Terminar y encender el escenario de Make
 
-Requiere el Brief B hecho y el token de la CAPI de Meta.
+Ya no depende del Brief B. Sigue necesitando el token de la CAPI de Meta.
 
 ```
 En Make, equipo 2342480, hay un escenario llamado
@@ -89,7 +89,8 @@ Del 3 al 7, cada módulo lleva builtin:Resume en su ruta de error.
 FALTA 1 — MAPEAR LAS PROPIEDADES dst_* EN EL MÓDULO 3
 Hoy el módulo de HubSpot solo escribe en las propiedades que ya existían (origen,
 estatus_art, hablame_de_ti_quiero_conocerte_mas, hs_analytics_source). Las 18
-propiedades dst_* las crea el Brief B; cuando existan, mapéalas:
+propiedades dst_* YA EXISTEN, creadas y verificadas el 2026-08-06, así que
+mapearlas ya no tiene riesgo:
 
   dst_gclid            ← {{1.atribucion.gclid}}
   dst_wbraid           ← {{1.atribucion.wbraid}}
@@ -106,8 +107,18 @@ propiedades dst_* las crea el Brief B; cuando existan, mapéalas:
   dst_primer_contacto  ← {{toString(1.atribucion.first_touch)}}
   dst_calidad_lead     ← {{2.calidad}}
 
-NO las mapees antes de que existan. Si mapeas una propiedad inexistente, HubSpot
-rechaza el contacto entero y se pierde el lead completo por un campo.
+Las tres enumeraciones aceptan SOLO estos valores, y el SetVariables del módulo 2
+ya produce los correctos:
+  dst_form_type     lead · agenda · guia · club · scorecard · propiedad · zona ·
+                    newsletter · radar
+  dst_form_variant  preconstruccion · dolares · patrimonio
+  dst_calidad_lead  ok · correo_desechable · telefono_invalido · patron_spam
+Un valor fuera de esa lista hace que HubSpot rechace el contacto entero.
+
+Si necesitas llamadas crudas a la API de HubSpot: el módulo hubspotcrm:MakeAPICall
+exige el encabezado Content-Type: application/json explícito, y el body como TEXTO
+JSON, no como objeto (si le pasas objeto manda "[object Object]" y HubSpot responde
+400). Usa la conexión 9833579, la de 41 permisos.
 
 FALTA 2 — EL MÓDULO DE META CAPI
 Va entre el 5 y el 6. Lee esto entero antes de escribirlo:
@@ -140,12 +151,10 @@ Lo que hace falta es la CAPI web, con el módulo HTTP de Make:
     "access_token": "<variable de escenario, NO en el blueprint>"
   }
 
-El mapeo de event_name por form_type:
-  lead, guia, propiedad, zona   → Lead
-  club, scorecard               → CompleteRegistration
-  agenda                        → Schedule
-  newsletter, radar             → Subscribe
-Calcúlalo en el SetVariables del módulo 2, junto a los demás.
+El event_name YA está calculado: el SetVariables del módulo 2 expone
+{{2.meta_event}} con el mapeo correcto (Lead para lead/guia/propiedad/zona,
+CompleteRegistration para club/scorecard, Schedule para agenda, Subscribe para
+newsletter/radar). Solo tienes que leerlo.
 
 El event_id es lo único que le dice a Meta que el evento del Pixel y el del
 servidor son el mismo. Normaliza ANTES de hashear, no después.
@@ -190,111 +199,33 @@ son 5514580, 5223878, 5485213 y 5775240.
 
 ---
 
-## Brief B · Las 18 propiedades de HubSpot
+## Brief B · ~~Las 18 propiedades de HubSpot~~ — HECHO
 
-```
-Crea 18 propiedades de contacto en HubSpot (portal 8199998) para guardar la
-atribución de los formularios de destiny.mx. Hoy no existe ninguna: comprobado por
-API el 2026-08-06. Sin ellas, el escenario de Make recibe la atribución completa y
-no tiene dónde escribirla.
+Creadas y verificadas por API el 2026-08-06, en el grupo `dst_atribucion`
+("Atribución web (Destiny)"), con las tres enumeraciones y sus opciones literales.
+No hay nada que hacer aquí.
 
-GRUPO
-Crea primero un grupo de propiedades:
-  nombre interno: dst_atribucion
-  etiqueta:       Atribución web (Destiny)
-
-El prefijo dst_ distingue de un vistazo estas propiedades de las nativas de HubSpot
-y de las que ya existían en el portal.
-
-LAS 18 — todas de objeto CONTACT, todas en el grupo dst_atribucion
-
-Identificadores de clic · string / text:
-  dst_gclid      · Google Ads · gclid      · Identificador de clic de Google Ads. Es lo que empata el lead con la campaña que lo trajo.
-  dst_wbraid     · Google Ads · wbraid     · Identificador de Google cuando el navegador bloquea cookies de terceros (Safari/iOS, web a app).
-  dst_gbraid     · Google Ads · gbraid     · Igual que wbraid, para tráfico de app a web.
-  dst_msclkid    · Microsoft Ads · msclkid · Identificador de clic de Bing.
-  dst_ttclid     · TikTok · ttclid         · Se captura de antemano para tener histórico el día que se encienda el canal.
-  dst_li_fat_id  · LinkedIn · li_fat_id    · Mismo criterio que TikTok.
-
-UTM · string / text:
-  dst_utm_source · UTM source   · Fuente de la campaña.
-  dst_utm_medium · UTM medium   · Medio de la campaña.
-  dst_utm_campaign · UTM campaign · Nombre de la campaña.
-  dst_utm_term   · UTM term     · Término de búsqueda o segmento.
-  dst_utm_content · UTM content · Variante creativa.
-
-Contexto del formulario:
-  dst_form_type     · Tipo de formulario · enumeration / select
-        Opciones EXACTAS: lead, agenda, guia, club, scorecard, propiedad, zona, newsletter, radar
-  dst_form_variant  · Variante del formulario · enumeration / select
-        Opciones EXACTAS: preconstruccion, dolares, patrimonio
-  dst_pagina_origen · Página de origen · string / text
-  dst_propiedad     · Propiedad de interés · string / text
-  dst_zona          · Zona de interés · string / text
-
-Recorrido y calidad:
-  dst_primer_contacto · Primer contacto · string / textarea
-        JSON del primer contacto: campaña, click ID, referente y fecha. Se escribe
-        una vez y no se toca. El anuncio que descubre al inversionista casi nunca es
-        el que cierra la conversión tres semanas después, y sin esto esa primera
-        campaña desaparece del registro.
-  dst_calidad_lead · Calidad del lead · enumeration / select
-        Opciones EXACTAS: ok, correo_desechable, telefono_invalido, patron_spam
-
-Las opciones tienen que ser literales: el escenario de Make escribe esos valores
-y una opción mal escrita hace que HubSpot rechace el contacto entero.
-
-LO QUE NO HAY QUE TOCAR
-Ya existen y el escenario las reutiliza. No las dupliques ni las modifiques:
-  origen · estatus_art ("Estatus DRE") · hablame_de_ti_quiero_conocerte_mas
-  hs_analytics_source · hs_facebook_click_id
-
-La marca de calidad va en dst_calidad_lead y NO en estatus_art. Si se escribiera
-ahí, un lead marcado como spam borraría el estado de venta que el equipo lleva a
-mano.
-
-CÓMO
-POST /crm/v3/properties/contacts, o desde Configuración › Propiedades. Hazlo
-idempotente: comprueba si existe y no falles si ya está.
-
-AL TERMINAR
-Dame la lista de las creadas y confirma que las tres enumeraciones tienen
-exactamente las opciones de arriba.
-```
+Un dato que salió de crearlas y sirve para el Brief A: el módulo
+`hubspotcrm:MakeAPICall` de Make falla si no le mandas el encabezado
+`Content-Type: application/json` explícito, y si le pasas el cuerpo como objeto en
+vez de como texto JSON lo serializa como `[object Object]` y HubSpot responde 400.
+Usa la conexión `9833579`, la de 41 permisos; la `9067982` puede no traer los
+scopes de esquemas.
 
 ---
 
-## Brief C · GTM y Google Ads
+## Brief C · GTM
 
-El único que necesita cambiar de cuenta de Google.
+La parte de Google Ads ya está hecha y el rótulo ya está pegado en el repositorio.
+Solo queda importar el contenedor.
 
 ```
-Dos cambios de plataforma. Los dos están en el authuser=6 de Chrome, que es
-it.destiny.real.estate@gmail.com — NO en lic.carlos.cataneo@gmail.com. Ya lo
-comprobé: desde la cuenta principal, la cuenta de Ads 721-558-8421 no aparece y la
-única cuenta Destiny visible (370-038-3619, administradora) tiene CERO acciones de
-conversión.
+⛔ NO PUBLIQUES EL CONTENEDOR. Lee el punto 2 antes de tocar nada.
 
-⛔ NO PUBLIQUES NADA HASTA EL FINAL. Lee el punto 3 antes de tocar GTM.
-
-1 · GOOGLE ADS — crear la acción newsletter_signup
-Cuenta 721-558-8421 (AW-18368975159).
-  Objetivo:  Suscribirse
-  Valor:     100 MXN
-  Recuento:  Una
-  Marcarla como SECUNDARIA. Esto no es opcional: si entra como principal, el
-  algoritmo persigue suscripciones baratas de 100 pesos en lugar de inversionistas
-  de varios millones, y la campaña se degrada sola.
-
-Saca su rótulo (la parte después de la diagonal, como D636CNu6xdwcELeigbdE) y
-pégalo en DOS lugares del repositorio:
-  - assets/tracking.js, en la constante ETIQUETAS, campo newsletter_signup
-  - gtm-destiny.json, en la etiqueta "Ads · newsletter_signup", donde dice
-    PEGAR_ROTULO_AQUI — y quítale el "paused": true
-
-2 · GTM — importar el contenedor
-Contenedor GTM-KW8TPGGG (cuenta 6368951919, contenedor 259896060). Ojo con el
-gemelo GTM-N6ZQ256, que está vacío y no se usa.
+1 · IMPORTAR EL CONTENEDOR
+Contenedor GTM-KW8TPGGG (cuenta 6368951919, contenedor 259896060). Está en el
+authuser=6 de Chrome, que es it.destiny.real.estate@gmail.com, NO en
+lic.carlos.cataneo@gmail.com. Ojo con el gemelo GTM-N6ZQ256, vacío y sin uso.
 
   Administración › Importar contenedor
   Archivo:            gtm-destiny.json del repositorio
@@ -302,28 +233,38 @@ gemelo GTM-N6ZQ256, que está vacío y no se usa.
   Modo:               Combinar › Sobrescribir etiquetas, activadores y variables
                       en conflicto
 
-Revisa la vista previa de cambios antes de confirmar.
+El archivo ya trae los cuatro rótulos, incluido newsletter_signup
+(mofbCOvqmN0cELeigbdE), y esa etiqueta ya viene despausada. Revisa la vista previa
+de cambios antes de confirmar.
 
 Después, a mano: la etiqueta que YA existe "Ads · Conversiones mejoradas" (tipo
 User-provided Data Event) necesita que le cambies el activador a dst_form_lead y
-dst_agenda_solicitada. No viene en el archivo a propósito: su tipo de etiqueta no
-se reproduce con seguridad en una exportación hecha a mano y una importación mal
-formada puede dañar un contenedor que hoy funciona.
+dst_agenda_solicitada. No viene en el archivo a propósito: su tipo no se reproduce
+con seguridad en una exportación hecha a mano, y una importación mal formada puede
+dañar un contenedor que hoy funciona.
 
 POR QUÉ CAMBIAN LOS NOMBRES DE LOS ACTIVADORES
-Los activadores publicados escuchan generate_lead y click_whatsapp. El sitio nuevo
-emite dst_form_lead, dst_agenda_solicitada, dst_newsletter_signup y
-dst_whatsapp_click. El prefijo dst_ no es capricho: tags.js define gtag como un
-push al dataLayer, así que un gtag('event','form_lead') también aterriza ahí y GTM
-lo leía como un segundo evento. Cada lead se contaba dos veces. Con nombres
-distintos en cada vía, eso ya no puede pasar. Está explicado en MEDICION.md.
+Los publicados escuchan generate_lead y click_whatsapp. El sitio nuevo emite
+dst_form_lead, dst_agenda_solicitada, dst_newsletter_signup y dst_whatsapp_click.
+El prefijo dst_ evita el doble conteo: tags.js define gtag como un push al
+dataLayer, así que un gtag('event','form_lead') también aterrizaba ahí y GTM lo
+leía como un segundo evento. Está explicado en MEDICION.md.
 
-3 · CUÁNDO PUBLICAR
-NO publiques el contenedor todavía. El sitio en vivo sigue emitiendo los nombres
-viejos: si publicas ahora, las conversiones de hoy se apagan.
+2 · CUÁNDO PUBLICAR
+NO publiques todavía. El sitio en vivo sigue emitiendo los nombres viejos: si
+publicas ahora, las conversiones de hoy se apagan. Publicar GTM y desplegar el
+sitio son el MISMO paso y van en el Brief D. Deja los cambios guardados en el
+espacio de trabajo, sin publicar, y avísame.
 
-Publicar GTM y desplegar el sitio son el MISMO paso, y va en el Brief D. Deja los
-cambios guardados en el espacio de trabajo, sin publicar, y avísame.
+3 · UNA REGLA QUE VIENE DE GOOGLE ADS
+newsletter_signup no se pudo marcar como secundaria: Google deshabilita esa opción
+cuando el objetivo no es predeterminado de la cuenta. En la práctica se comporta
+igual, pero de ahí sale una regla al armar las campañas:
+
+  NO agregar el objetivo "Suscribirse" a las campañas de Fase 1.
+
+Si se agrega, el algoritmo empieza a perseguir suscripciones de 100 pesos en lugar
+de inversionistas de varios millones.
 ```
 
 ---
@@ -338,7 +279,7 @@ y cada paso tiene una razón; no los reordenes.
 
 REQUISITOS — los tres, antes de empezar
   [ ] Brief A terminado y el escenario de Make 5871285 ACTIVO
-  [ ] Brief B terminado (las 18 propiedades existen)
+  [x] Las 18 propiedades dst_* existen — hecho y verificado el 2026-08-06
   [ ] Brief C terminado, con los cambios de GTM guardados SIN publicar
 
 PASO 1 — Comprobar que el escenario está encendido
