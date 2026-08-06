@@ -62,10 +62,19 @@ MARK_HEAD = "<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->"
 # GA4 + Pixel de Meta + Contentsquare. Los IDs viven en assets/tags.js, no aquí.
 TAGS_LINE = f'<script src="/assets/tags.js?v={V}"></script>'
 
-FOOT_BLOCK = f"""<!-- CAPA DE MEDICIÓN -->
-<script src="/assets/tracking.js?v={V}"></script>
-<script src="/assets/forms.js?v={V}"></script>
-<!-- FIN CAPA DE MEDICIÓN -->"""
+# forms.js NO va en todas las páginas: solo en las que tienen un contenedor
+# [data-destiny-form]. En una página de gracias o en el aviso de privacidad
+# sería una descarga que no dibuja nada.
+FOOT_TRACKING = f'<script src="/assets/tracking.js?v={V}"></script>'
+FOOT_FORMS = f'<script src="/assets/forms.js?v={V}"></script>'
+
+
+def foot_block(html: str) -> str:
+    lineas = ["<!-- CAPA DE MEDICIÓN -->", FOOT_TRACKING]
+    if "data-destiny-form" in html:
+        lineas.append(FOOT_FORMS)
+    lineas.append("<!-- FIN CAPA DE MEDICIÓN -->")
+    return "\n".join(lineas)
 
 CS_OLD = '<script src="https://t.contentsquare.net/uxa/7dccdd22cb616.js"></script>'
 CS_NEW = '<script async src="https://t.contentsquare.net/uxa/7dccdd22cb616.js"></script>'
@@ -122,8 +131,9 @@ def patch(path: Path, desarrollo: str, page_type: str, extra: str) -> list:
         if i < 0:
             notes.append("!! sin </body>: capa de medición NO insertada")
         else:
-            s = s[:i] + FOOT_BLOCK + "\n" + s[i:]
-            notes.append("foot: tracking+forms")
+            bloque = foot_block(s)
+            s = s[:i] + bloque + "\n" + s[i:]
+            notes.append("foot: tracking" + ("+forms" if FOOT_FORMS in bloque else ""))
 
     if s != original:
         path.write_text(s, encoding="utf-8")

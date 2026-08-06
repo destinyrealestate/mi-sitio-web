@@ -30,6 +30,21 @@ Uso:  python3 scripts/build-pages.py && python3 scripts/patch-head.py
 import sys
 from pathlib import Path
 
+# ══════════════════════════════════════════════════════════════════════
+#  ⚠️  ESTE GENERADOR ESTÁ DESFASADO DEL HTML QUE HAY EN EL REPOSITORIO
+# ══════════════════════════════════════════════════════════════════════
+#  Comprobado el 2026-08-05: si se corre tal cual, REGRESA tres cosas que
+#  ya se corrigieron a mano en las páginas vivas:
+#
+#    - el logo vuelve a logo-light.png 150x42 (hoy es @2x, 270x68)
+#    - styles.css vuelve a ?v=52 (hoy va en ?v=58)
+#    - desaparecen los enlaces de "Preferencias de cookies" del pie
+#
+#  Los formularios sí están al día: escribe el contenedor nativo correcto.
+#  Antes de correrlo, o se actualizan esas tres cosas aquí, o se revisa el
+#  `git diff` página por página. No lo corras a ciegas.
+# ══════════════════════════════════════════════════════════════════════
+
 ROOT = Path(__file__).resolve().parent.parent
 
 WA = "https://api.whatsapp.com/send?phone=525611659009"
