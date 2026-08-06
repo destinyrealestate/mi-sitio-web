@@ -35,8 +35,10 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  # Landings de Google Ads y sus páginas de gracias
                  "/preconstruccion-miami", "/invertir-en-dolares", "/guia",
                  "/gracias-preconstruccion", "/gracias-dolares", "/gracias-guia",
-                 # Gracias de la agenda: dispara agenda_solicitada en GTM
-                 "/gracias-sesion"}
+                 # Gracias anteriores a las landings: cada una dispara una
+                 # conversión en GTM (gracias-sesion es agenda_solicitada)
+                 "/gracias-sesion", "/gracias-club", "/gracias-scorecard",
+                 "/gracias-newsletter"}
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 

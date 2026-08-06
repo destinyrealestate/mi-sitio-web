@@ -70,13 +70,14 @@ AddDefaultCharset UTF-8
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
 
-  # /gracias-sesion es la que dispara agenda_solicitada (2000 MXN), la
-  # conversión más cara del contenedor. Nació sin ruta limpia, así que
-  # /gracias-sesion respondía 404 y solo servía /gracias-sesion.html: si
-  # alguien configuraba esa redirección en Zoho con la ruta limpia, la
-  # conversión se perdía sin hacer ruido. Añadida el 2026-08-05.
-  RewriteRule ^gracias-sesion$   gracias-sesion.html   [L]
-  RewriteRule ^gracias-sesion/$  /gracias-sesion       [R=301,L]
+  # Las páginas de gracias anteriores a las landings nacieron sin ruta
+  # limpia: respondían 404 y solo servía la versión .html. Cada una dispara
+  # una conversión en GTM, así que configurar la redirección en Zoho con la
+  # ruta limpia la perdía sin hacer ruido — gracias-sesion es la más cara
+  # (agenda_solicitada, 2000 MXN). Añadidas el 2026-08-05. Las .html siguen
+  # vivas: hay redirecciones de Zoho y enlaces viejos apuntando ahí.
+  RewriteRule ^(gracias-sesion|gracias-club|gracias-scorecard|gracias-newsletter)$   $1.html   [L]
+  RewriteRule ^(gracias-sesion|gracias-club|gracias-scorecard|gracias-newsletter)/$  /$1       [R=301,L]
 
   # La guía: /guia responde 200 y /Guia.html sigue vivo para los enlaces
   # viejos, que llegan con esa mayúscula exacta.
