@@ -1144,3 +1144,91 @@ p { text-wrap: pretty; }
   .hl--3 { grid-template-columns: 1fr; }
   .lp-steps--3 { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   FORMULARIOS NATIVOS (assets/forms.js)
+   ══════════════════════════════════════════════════════════════════
+   Bloque nuevo del 5 de agosto de 2026, al migrar de los iframes de Zoho
+   a formularios propios. Es CORTO a propósito: el sistema de campos del
+   sitio (.form, .field, .form__head, .form__note, .form__secure) ya
+   existía arriba y forms.js lo reutiliza tal cual. Aquí solo va lo que
+   ese sistema no tenía: textarea, honeypot, estados de envío y la
+   leyenda de consentimiento que antes ponía zoho-embed.js en línea.
+
+   El día que se retire este bloque, el resto del sitio no se entera.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* El textarea no existía en el sistema de campos: hereda el mismo look
+   que input y select para que no desentone. */
+.field textarea {
+  width: 100%; font-family: var(--sans); font-size: 15px; color: var(--ink);
+  padding: 13px 14px; background: var(--cream); border: 1px solid var(--line-soft);
+  border-radius: var(--r); resize: vertical; min-height: 92px; display: block;
+  transition: border-color .3s var(--ease), background .3s var(--ease);
+}
+.field textarea:focus { outline: none; border-color: var(--gold); background: var(--paper); }
+.field textarea::placeholder { color: rgba(90,82,73,.55); }
+.field.error textarea { border-color: #B4453A; background: #FBEEEC; }
+
+/* Foco visible para teclado. El :focus de los campos cambia el borde, que
+   es suficiente con el ratón pero no para quien navega con Tab: el anillo
+   se agrega solo cuando el navegador detecta navegación por teclado. */
+.dstf .field input:focus-visible,
+.dstf .field select:focus-visible,
+.dstf .field textarea:focus-visible,
+.dstf-submit:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 2px;
+}
+
+/* Honeypot. Fuera de la pantalla, no display:none: hay bots que ignoran
+   los campos con display:none precisamente porque saben que son trampas. */
+.dstf-hp {
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; overflow: hidden;
+}
+
+/* Estado "enviando": el botón se apaga y le sale un spinner. */
+.dstf-submit[disabled] { opacity: .72; cursor: progress; }
+.dstf[data-estado="enviando"] .dstf-submit .ar {
+  display: inline-block; width: 13px; height: 13px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: dstfSpin .7s linear infinite; vertical-align: -1px;
+}
+@keyframes dstfSpin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .dstf[data-estado="enviando"] .dstf-submit .ar { animation-duration: 2.4s; }
+}
+
+/* Error de envío. Nunca un alert(): un modal del navegador bloquea la
+   página y en móvil se siente como un fallo del sitio, no del envío. */
+.dstf-error {
+  margin-top: 16px; padding: 16px 18px; border-radius: var(--r);
+  background: #FBEEEC; border: 1px solid rgba(180,69,58,.28);
+}
+.dstf-error p { font-size: 13.5px; line-height: 1.5; color: #8E3227; margin: 0; }
+.dstf-error .dstf-retry {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer;
+  margin-top: 12px; padding: 9px 20px; border-radius: 999px;
+  border: 1px solid #B4453A; background: transparent; color: #8E3227;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.dstf-error .dstf-retry:hover { background: #B4453A; color: #fff; }
+.dstf-error-alt { margin-top: 10px !important; font-size: 12.5px !important; opacity: .82; }
+.dstf-error-alt a { color: #8E3227; text-decoration: underline; }
+
+/* Leyenda de consentimiento: la exige el Aviso de Privacidad y antes la
+   inyectaba zoho-embed.js con estilos en línea. */
+.form-legal {
+  font-size: 12.5px; line-height: 1.55; color: var(--ink-soft);
+  opacity: .72; text-align: center; margin: 14px 0 0;
+}
+.form-legal a { color: inherit; text-decoration: underline; }
+
+/* Solo para forms-demo.html y pruebas en localhost: vuelca el JSON que
+   recibiría Make en vez de redirigir. No aparece nunca en producción. */
+.dstf-local {
+  margin-top: 18px; padding: 16px; border-radius: var(--r);
+  background: var(--ink); color: #9BE7A8; font-size: 11.5px; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap; word-break: break-word; max-height: 340px; overflow: auto;
+}
