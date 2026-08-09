@@ -1,0 +1,27 @@
+# ============================================================
+# Carpeta de trabajo de la migración del blog. NADA de aquí se sirve.
+# ============================================================
+# El deploy es un checkout del repo entero, así que todo lo versionado
+# queda accesible por URL. Hasta el 2026-08-08,
+# destiny.mx/wordpress/wp-viejo-export-entradas.xml respondía 200 con
+# 3.2 MB: el export completo del WordPress viejo, con 34 comentarios que
+# incluyen el correo de personas reales, nombres de autor y contenido que
+# nunca se publicó. Dato personal de terceros servido a quien lo pidiera,
+# que es justo lo que el aviso de privacidad promete no hacer.
+#
+# Por qué un .htaccess aquí y no una regla por extensión en la raíz:
+# los sitemaps de la raíz también son .xml y tienen que seguir vivos.
+# Bloquear "\.xml$" arriba se los llevaría por delante y el sitio
+# desaparecería de Search Console sin hacer ruido.
+#
+# Nada del sitio enlaza a esta carpeta: verificado antes de bloquearla.
+# Si algún día hay que consultar estos archivos, se leen desde el repo
+# en local o por SSH — no se abre la carpeta al público.
+
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>
