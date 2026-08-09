@@ -70,6 +70,37 @@
 
   var WEBHOOK_LISTO = MAKE_WEBHOOK_URL.indexOf("http") === 0;
 
+  /* ------------------------------------------------------------------
+     SEÑA COMPARTIDA CON MAKE
+     ------------------------------------------------------------------
+     Viaja en cada envío como el campo `origen`. El primer paso del
+     escenario es un filtro que descarta todo lo que no traiga este valor
+     exacto.
+
+     Qué resuelve: la URL del webhook está aquí en claro —tiene que
+     estarlo, esto es un sitio estático— y los dos filtros antibot (el
+     honeypot y MIN_SEGUNDOS) corren en el navegador. Sin esta seña,
+     cualquiera que abra este archivo puede hacer POST directo al webhook
+     y meter leads falsos. Eso no solo ensucia HubSpot: como Make dispara
+     la CAPI de Meta, cada lead falso es una conversión falsa, y eso le
+     enseña a las campañas de Ads y de Meta a buscar al público
+     equivocado. El daño no se ve en un panel; se ve en el costo por lead
+     tres semanas después.
+
+     Qué NO resuelve, y conviene tenerlo claro: el valor también está en
+     este archivo, así que quien se tome la molestia de leerlo puede
+     copiarlo. Esto detiene el abuso automatizado y a los bots que
+     rastrean webhooks expuestos —que es el escenario realista—, no a un
+     atacante decidido. La defensa completa exigiría un endpoint
+     intermedio que firme del lado del servidor, y eso es dejar de ser un
+     sitio estático.
+
+     ⛔ ORDEN AL CAMBIARLO: desplegar el sitio PRIMERO y ajustar el filtro
+     de Make DESPUÉS. Al revés, todos los leads reales caen al piso
+     durante la ventana entre los dos pasos.
+     ------------------------------------------------------------------ */
+  var ORIGEN = "dstf-39bpb2omjvq461upg75e97itp29o370a";
+
   /* Tiempo mínimo de llenado. Por debajo de esto se descarta como bot.
      Un humano no llena ni el formulario de una sola casilla en 3 segundos. */
   var MIN_SEGUNDOS = 3;
@@ -560,6 +591,10 @@
 
     var ctx = contexto();
     var p = {
+      /* Lo lee el filtro de la primera posición del escenario de Make.
+         Si falta o no coincide, el envío se descarta ahí mismo. */
+      origen: ORIGEN,
+
       form_type: cfg.tipo,
       form_variant: cfg.variante || null,
       form_context: host.getAttribute("data-context") || null,
