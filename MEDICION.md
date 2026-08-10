@@ -11,7 +11,7 @@ Tres archivos, en este orden obligatorio dentro del `<head>` de cada página:
 ```
 1. assets/consent.js       Modo de consentimiento de Google. Va PRIMERO.
 2. assets/attribution.js   Guarda gclid / wbraid / gbraid / UTM en cookies.
-3. assets/tags.js          GA4 + Google Ads + Pixel de Meta + Contentsquare. IDs en un solo lugar.
+3. assets/tags.js          GA4 + Google Ads + Pixel de Meta + Pixel de OpenAI + Contentsquare. IDs en un solo lugar.
 ```
 
 Y al final del `<body>`:
@@ -36,11 +36,12 @@ el comentario "no mover".
 
 ## Eventos
 
-Cada evento sale por tres vías, con **dos nombres distintos a propósito**:
+Cada evento sale por cuatro vías, con **dos nombres distintos a propósito**:
 
 1. `dataLayer.push({event: 'dst_<nombre>'})` — es lo que consume GTM.
 2. `gtag('event', '<nombre>', …)` — GA4.
 3. `fbq(...)` — Pixel de Meta, con el `event_id` para deduplicar contra la CAPI.
+4. `oaiq('measure', …)` — Pixel de OpenAI, con el mismo `event_id`.
 
 Los dos nombres son distintos porque `gtag` también escribe en el `dataLayer`;
 ver "Los eventos del dataLayer llevan prefijo `dst_`" más abajo.
@@ -76,6 +77,67 @@ window.DESTINY_DEBUG = true;   // imprime cada evento con su carga completa
 window.DestinyAttr.all();      // qué atribución tiene guardada este visitante
 window.destinyTrack('prueba', {a: 1});   // dispara un evento a mano
 ```
+
+---
+
+## Pixel de OpenAI (ChatGPT Ads) — `LZf9xnoYjgDpBLbXzJm8Ck`
+
+Instalado el 2026-08-10. Base en `assets/tags.js`, eventos en `assets/tracking.js`,
+igual que el Pixel de Meta. **No va por GTM**: no hay plantilla oficial, y meterlo
+como HTML personalizado costaría la guarda de consentimiento.
+
+### Tres cosas que no funcionan como Meta
+
+**1 · El consentimiento tiene API propia, y se declara ANTES del init.**
+El SDK asume "concedido" mientras nadie diga lo contrario, así que
+`oaiq("consent", false)` tiene que salir antes de `oaiq("init", …)` o el
+visitante que rechazó ya se midió. `consent.js` vuelve a llamarlo cuando el
+visitante cambia de opinión desde el banner, para no depender de una recarga.
+
+**2 · La vista de página no es automática.** `fbq("init")` manda el PageView
+solo; `oaiq("init")` no manda nada. Por eso `tags.js` cierra con un
+`oaiq("measure", "page_viewed", …)` explícito. Si se borra esa línea, el pixel
+queda instalado y sin medir una sola visita.
+
+**3 · El vocabulario de eventos es cerrado.** Un nombre inventado no se mide:
+o es uno de los estándar, o va como evento `custom` con `custom_event_name`.
+Los nombres estándar se agrupan por "forma" de datos, y la forma tiene que
+coincidir con el evento:
+
+| Forma | Eventos | Campos |
+|---|---|---|
+| `contents` | `page_viewed`, `contents_viewed`, `items_added`, `checkout_started`, `order_created` | `amount`, `currency`, `contents[]` |
+| `customer_action` | `lead_created`, `registration_completed`, `appointment_scheduled` | `amount`, `currency` |
+| `plan_enrollment` | `subscription_created`, `trial_started` | `plan_id`, `amount`, `currency` |
+
+### Qué mandamos
+
+El mapa vive en la constante `OPENAI` de `tracking.js`:
+
+| Evento nuestro | Evento de OpenAI |
+|---|---|
+| `form_lead` | `lead_created` |
+| `whatsapp_click` | `lead_created` |
+| `click_telefono` | `lead_created` |
+| `agenda_solicitada` | `appointment_scheduled` |
+| `newsletter_signup` | `registration_completed` |
+
+La conversión configurada en el Ads Manager de OpenAI es `lead_created`; las
+otras dos se mandan para tener la foto completa. WhatsApp y teléfono entran
+como `lead_created` porque en este sitio son contacto directo y OpenAI no tiene
+un equivalente al `Contact` de Meta.
+
+El valor va en `amount` + `currency` **en MXN**, igual que en Ads y en Meta.
+El `event_id` viaja en el cuarto argumento (`{ event_id }`), listo para
+deduplicar el día que Make mande también por la API de conversiones.
+
+### Lo que falta
+
+- **Datos de identidad.** `oaiq("init", { user: { email_sha256, external_id_sha256,
+  country, city, zip_code } })` mejora el emparejamiento, igual que las
+  conversiones mejoradas de Ads. Requiere hashear con SHA-256 en el navegador
+  (`crypto.subtle.digest`, que es asíncrono) — no está puesto.
+- **API de conversiones.** El `event_id` ya sale; falta el lado de Make.
 
 ---
 

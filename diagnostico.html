@@ -238,10 +238,11 @@
     var piezas = [
       ["consent.js", !!window.DESTINY_CONSENT, "Modo de consentimiento. Va PRIMERO."],
       ["attribution.js", !!window.DestinyAttr, "Guarda los click IDs y los UTM."],
-      ["tags.js", !!window.DestinyTags, "GA4, Google Ads, Pixel de Meta, GTM y Contentsquare."],
+      ["tags.js", !!window.DestinyTags, "GA4, Google Ads, Pixel de Meta, Pixel de OpenAI, GTM y Contentsquare."],
       ["tracking.js", !!window.DestinyMedicion, "El único lugar donde se mide."],
       ["gtag", typeof window.gtag === "function", "Función de Google. La define tags.js."],
       ["fbq", typeof window.fbq === "function", "Pixel de Meta."],
+      ["oaiq", typeof window.oaiq === "function", "Pixel de OpenAI (ChatGPT Ads)."],
       ["dataLayer", Array.isArray(window.dataLayer), "Lo que consume GTM."]
     ];
     var h = '<tr><th>Pieza</th><th>Estado</th><th>Qué hace</th></tr>';
@@ -256,6 +257,9 @@
       h += fila('Google Ads', '<code>' + window.DestinyTags.GOOGLE_ADS_ID + '</code>');
       h += fila('GTM', '<code>' + window.DestinyTags.GTM_ID + '</code>');
       h += fila('Pixel de Meta', '<code>' + window.DestinyTags.META_PIXEL_ID + '</code>');
+      h += fila('Pixel de OpenAI', window.DestinyTags.OPENAI_PIXEL_ID
+        ? '<code>' + window.DestinyTags.OPENAI_PIXEL_ID + '</code>'
+        : vacio('no instalado'));
     }
     $('tCadena').innerHTML = h;
   }
@@ -293,6 +297,9 @@
     h += fila('Pixel de Meta',
       estado === 'denied' ? pill('ok', 'bloqueado por la guarda propia')
                           : pill('ok', 'permitido'));
+    h += fila('Pixel de OpenAI',
+      estado === 'denied' ? pill('ok', 'oaiq("consent", false) declarado')
+                          : pill('ok', 'oaiq("consent", true) declarado'));
     h += fila('Cookie <code>destiny_consent_v1</code>',
       document.cookie.indexOf('destiny_consent_v1') >= 0 ? pill('ok', 'presente') : vacio('no escrita todavía'));
 
@@ -369,9 +376,9 @@
   function eventos() {
     var M = window.DestinyMedicion;
     var lista = M ? M.historial() : [];
-    var h = '<tr><th>Evento</th><th>dataLayer</th><th>Valor</th><th>Google Ads</th><th>Meta</th><th>GA4</th><th>event_id</th></tr>';
+    var h = '<tr><th>Evento</th><th>dataLayer</th><th>Valor</th><th>Google Ads</th><th>Meta</th><th>OpenAI</th><th>GA4</th><th>event_id</th></tr>';
     if (!lista.length) {
-      h += '<tr><td colspan="7">' + vacio('todavía no se ha disparado nada en esta página') + '</td></tr>';
+      h += '<tr><td colspan="8">' + vacio('todavía no se ha disparado nada en esta página') + '</td></tr>';
     }
     lista.forEach(function (e) {
       h += '<tr>' +
@@ -380,6 +387,7 @@
         '<td>' + (e.valor != null ? e.valor + ' ' + e.moneda : vacio('—')) + '</td>' +
         '<td style="font-size:12.5px;">' + (e.ads || vacio('no aplica')) + '</td>' +
         '<td style="font-size:12.5px;">' + (e.meta || vacio('—')) + '</td>' +
+        '<td style="font-size:12.5px;">' + (e.openai || vacio('no aplica')) + '</td>' +
         '<td style="font-size:12.5px;">' + (e.ga4 || vacio('—')) + '</td>' +
         '<td>' + (e.event_id ? '<code>' + e.event_id + '</code>' : vacio('sin id')) + '</td>' +
         '</tr>';

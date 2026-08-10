@@ -109,6 +109,12 @@
     saved = choice;
     write(choice);
     gtag('consent', 'update', choice === 'granted' ? GRANTED : DENIED);
+    // El Pixel de OpenAI no lee el Consent Mode: tiene su propia API y hay
+    // que avisarle aparte. Sin esta línea, quien acepta desde el banner
+    // seguiría sin medirse hasta recargar la página. El Pixel de Meta no
+    // necesita nada equivalente: tracking.js consulta el estado en cada
+    // evento antes de llamar a fbq.
+    try { if (typeof window.oaiq === 'function') window.oaiq('consent', choice === 'granted'); } catch (e) {}
     window.dataLayer.push({ event: 'consent_update', consent_state: choice });
   }
 

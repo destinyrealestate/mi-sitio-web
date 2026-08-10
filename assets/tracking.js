@@ -1,9 +1,9 @@
 /* ============================================================
    DESTINY — capa de eventos. EL ÚNICO LUGAR DONDE SE MIDE.
    ============================================================
-   Ningún otro archivo del sitio llama a gtag, a fbq ni a dataLayer.
+   Ningún otro archivo del sitio llama a gtag, a fbq, a oaiq ni a dataLayer.
    forms.js dibuja y envía formularios y avisa aquí; aquí se decide qué
-   sale a Google Ads, a Meta y a GA4.
+   sale a Google Ads, a Meta, a GA4 y al Pixel de OpenAI.
 
    ------------------------------------------------------------
    1 · POR QUÉ LOS EVENTOS DEL dataLayer LLEVAN PREFIJO dst_
@@ -100,6 +100,26 @@
     click_telefono: "Contact"
   };
 
+  /* Evento estándar del Pixel de OpenAI por acción. El vocabulario es
+     cerrado (lead_created, registration_completed, appointment_scheduled,
+     order_created…): un nombre inventado no se mide, hay que mandarlo como
+     evento "custom". Los tres que usamos comparten la forma
+     "customer_action", que admite amount y currency.
+
+     La conversión configurada en el Ads Manager de OpenAI es lead_created;
+     las otras dos se mandan para tener la foto completa.
+
+     whatsapp_click y click_telefono también entran como lead_created: en
+     este sitio son contacto directo, no navegación, y OpenAI no tiene un
+     equivalente al "Contact" de Meta. */
+  var OPENAI = {
+    form_lead:         "lead_created",
+    whatsapp_click:    "lead_created",
+    click_telefono:    "lead_created",
+    agenda_solicitada: "appointment_scheduled",
+    newsletter_signup: "registration_completed"
+  };
+
   var CONVERSIONES = ["form_lead", "whatsapp_click", "agenda_solicitada", "newsletter_signup"];
 
   /* ---------- Guardas ---------- */
@@ -111,10 +131,15 @@
   }
   var DEV = esDesarrollo();
 
-  /* Meta no lee el Consent Mode de Google: si el visitante rechazó, hay que
-     no llamar a fbq nosotros. Google Ads y GA4 sí lo respetan solos a
-     través de gtag, así que a esos no hay que ponerles guarda. */
-  function metaPermitido() {
+  /* Ni Meta ni OpenAI leen el Consent Mode de Google: si el visitante
+     rechazó, hay que no llamarlos nosotros. Google Ads y GA4 sí lo respetan
+     solos a través de gtag, así que a esos no hay que ponerles guarda.
+
+     (OpenAI además tiene su propio oaiq("consent", …), que se declara en
+     tags.js y se actualiza en consent.js. Esta guarda es el cinturón sobre
+     los tirantes: si el SDK todavía no cargó, la llamada se queda encolada
+     y saldría igual.) */
+  function consentimientoPermitido() {
     try {
       return !(window.DESTINY_CONSENT && window.DESTINY_CONSENT.state === "denied");
     } catch (e) { return true; }
@@ -202,7 +227,7 @@
 
     var registro = {
       evento: nombre, dataLayer: "dst_" + nombre, valor: valor, moneda: moneda,
-      event_id: eventId, meta: null, ads: null, ga4: null,
+      event_id: eventId, meta: null, ads: null, ga4: null, openai: null,
       ts: new Date().toISOString()
     };
 
@@ -258,7 +283,7 @@
     var metaEvento = params.meta_event || META[nombre];
     if (DEV) {
       registro.meta = "omitido (desarrollo)";
-    } else if (!metaPermitido()) {
+    } else if (!consentimientoPermitido()) {
       registro.meta = "omitido (consentimiento denegado)";
     } else if (typeof window.fbq === "function") {
       try {
@@ -270,6 +295,30 @@
         else window.fbq("trackCustom", nombre, mp, opts);
         registro.meta = (metaEvento || nombre) + (eventId ? " · eventID " + eventId : " · SIN eventID");
       } catch (e) { registro.meta = "error: " + e.message; }
+    }
+
+    /* ---- Pixel de OpenAI ----
+       Se manda el MISMO event_id que a Meta. Aquí sirve para deduplicar
+       contra la API de conversiones de OpenAI el día que Make la mande;
+       mientras tanto no estorba. */
+    var oaEvento = params.openai_event || OPENAI[nombre];
+    if (!oaEvento) {
+      registro.openai = null;                       // evento sin equivalente
+    } else if (DEV) {
+      registro.openai = "omitido (desarrollo)";
+    } else if (!consentimientoPermitido()) {
+      registro.openai = "omitido (consentimiento denegado)";
+    } else if (typeof window.oaiq === "function") {
+      try {
+        var op = { type: "customer_action" };
+        if (valor != null) { op.amount = valor; op.currency = moneda; }
+        // Sin event_id se llama con tres argumentos, no con un cuarto en
+        // undefined: el SDK encola `arguments` tal cual y no hay por qué
+        // hacerle leer un objeto que no existe.
+        if (eventId) window.oaiq("measure", oaEvento, op, { event_id: eventId });
+        else window.oaiq("measure", oaEvento, op);
+        registro.openai = oaEvento + (eventId ? " · event_id " + eventId : " · SIN event_id");
+      } catch (e) { registro.openai = "error: " + e.message; }
     }
 
     HISTORIAL.push(registro);
@@ -300,7 +349,9 @@
         etiquetas: ETIQUETAS,
         valores: VALORES,
         desarrollo: DEV,
-        meta_permitido: metaPermitido()
+        openai_pixel_id: (window.DestinyTags && window.DestinyTags.OPENAI_PIXEL_ID) || "",
+        openai_eventos: OPENAI,
+        consentimiento_permitido: consentimientoPermitido()
       };
     },
     normEmail: normEmail,

@@ -36,6 +36,9 @@
    El orden importa: al revés queda un hueco sin datos.
 
    CONTENTSQUARE se queda siempre en código: requiere carga temprana.
+   EL PIXEL DE OPENAI también, y por otro motivo: no hay plantilla oficial
+   en GTM, así que migrarlo allá significaría meterlo como HTML
+   personalizado y perder la guarda de consentimiento que tiene aquí.
    ============================================================ */
 (function () {
   "use strict";
@@ -45,12 +48,20 @@
   var META_PIXEL_ID = "27857783360524172";
   var CONTENTSQUARE_ID = "7dccdd22cb616";
   var GOOGLE_ADS_ID = "AW-18368975159";  // instalado 2026-08-03
+  var OPENAI_PIXEL_ID = "LZf9xnoYjgDpBLbXzJm8Ck";  // ChatGPT Ads, instalado 2026-08-10
 
   // false = convivencia: GA4 y Pixel salen por código, GTM va aparte.
   // true  = GA4 y Pixel se administran desde la interfaz de GTM.
   var GTM_ADMINISTRA_ETIQUETAS = false;
 
   var porCodigo = !(GTM_ID && GTM_ADMINISTRA_ETIQUETAS);
+
+  // Mismo criterio que tracking.js: en local no se ensucian los informes.
+  var DEV = (function () {
+    var h = location.hostname;
+    return h === "localhost" || h === "127.0.0.1" || h === "" || h === "::1" ||
+           /\.local$/.test(h) || location.protocol === "file:";
+  })();
 
   window.dataLayer = window.dataLayer || [];
   if (typeof window.gtag !== "function") {
@@ -98,7 +109,9 @@
      Se comprueba el estado, no se bloquea la carga del script: si el
      visitante acepta después, fbq ya está listo y el siguiente evento sale
      sin recargar la página. */
-  function metaDenegado() {
+  // La usan el Pixel de Meta y el de OpenAI: ninguno de los dos lee el
+  // Consent Mode de Google, así que la decisión hay que consultarla a mano.
+  function consentimientoDenegado() {
     try {
       return !!(window.DESTINY_CONSENT && window.DESTINY_CONSENT.state === "denied");
     } catch (e) { return false; }
@@ -114,7 +127,45 @@
       s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
     window.fbq("init", META_PIXEL_ID);
-    if (!metaDenegado()) window.fbq("track", "PageView");
+    if (!consentimientoDenegado()) window.fbq("track", "PageView");
+  }
+
+  /* ---------- Pixel de OpenAI (ChatGPT Ads) ----------
+     Va SIEMPRE por código, nunca por GTM: no existe una plantilla oficial
+     en GTM, así que `porCodigo` no aplica aquí.
+
+     Tres diferencias con Meta que conviene tener presentes:
+
+     1. El consentimiento tiene API propia y se declara ANTES del init, no
+        después. El SDK asume "concedido" si nadie dice lo contrario, así
+        que el visitante que rechazó necesita este oaiq("consent", false)
+        antes de que se inicialice nada. consent.js vuelve a llamarlo
+        cuando el visitante cambia de opinión sin recargar la página.
+
+     2. La vista de página NO es automática. A diferencia de fbq, aquí el
+        init no mide nada por su cuenta: page_viewed se manda a mano.
+
+     3. page_viewed usa la forma "contents"; los eventos de conversión usan
+        "customer_action" y salen desde tracking.js, no desde aquí. */
+  if (OPENAI_PIXEL_ID) {
+    (function (w, d, s, u) {
+      if (w.oaiq) return;
+      var q = function () { q.q.push(arguments); };
+      q.q = [];
+      w.oaiq = q;
+      var j = d.createElement(s); j.async = true; j.src = u;
+      var f = d.getElementsByTagName(s)[0];
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+
+    window.oaiq("consent", !consentimientoDenegado());
+    // debug:true escupe la actividad del SDK a la consola. El snippet que da
+    // OpenAI lo trae encendido; en producción solo es ruido para el visitante,
+    // así que se limita a desarrollo. Para encenderlo en el sitio publicado:
+    // window.DESTINY_DEBUG = true en la consola y recargar — no basta con
+    // ponerlo después, porque esto se lee una sola vez en el arranque.
+    window.oaiq("init", { pixelId: OPENAI_PIXEL_ID, debug: DEV || !!window.DESTINY_DEBUG });
+    window.oaiq("measure", "page_viewed", { type: "contents" });
   }
 
   /* ---------- Contentsquare ---------- */
@@ -128,6 +179,7 @@
     GA4_ID: GA4_ID,
     META_PIXEL_ID: META_PIXEL_ID,
     GOOGLE_ADS_ID: GOOGLE_ADS_ID,
+    OPENAI_PIXEL_ID: OPENAI_PIXEL_ID,
     modo: GTM_ID ? (GTM_ADMINISTRA_ETIQUETAS ? "gtm" : "convivencia") : "solo-codigo"
   };
 })();
