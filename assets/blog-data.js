@@ -1,5 +1,5 @@
 /* ============================================================
-   DESTINY — datos del blog (61 artículos)
+   DESTINY — datos del blog (64 artículos)
    ============================================================ */
 window.DESTINY_BLOG = (function () {
   "use strict";
@@ -10,6 +10,9 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["Del TCO a las llaves: la letra chica de la entrega", "tco-a-las-llaves-entrega-preconstruccion", 2026, "14 ago 2026", 7, 14, 1],
+    ["1428 Brickell: qué te dice el crédito de $565M de JPMorgan", "1428-brickell-credito-jpmorgan", 2026, "12 ago 2026", 7, 12, 1],
+    ["Crédito para extranjero en Miami: cómo financiar sin historial en EE.UU.", "credito-extranjero-miami-2026", 2026, "10 ago 2026", 7, 10, 1],
     ["Los costos de cierre en preconstrucción que no vienen en el price list", "costos-de-cierre-preconstruccion-price-list", 2026, "7 ago 2026", 7, 7, 1],
     ["Frida Kahlo Wynwood Residences: qué compras cuando compras una marca", "frida-kahlo-wynwood-residences-analisis", 2026, "5 ago 2026", 7, 5, 1],
     ["FIRPTA: por qué te retienen el 15% al vender en Estados Unidos", "firpta-retencion-15-por-ciento-vender-propiedad-estados-unidos", 2026, "3 ago 2026", 7, 3, 1],
@@ -83,6 +86,9 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
+    "tco-a-las-llaves-entrega-preconstruccion": "assets/img/hero-living.jpg",
+    "1428-brickell-credito-jpmorgan": "assets/img/1428/ext.jpg",
+    "credito-extranjero-miami-2026": "assets/img/hero-bluehour.jpg",
     "costos-de-cierre-preconstruccion-price-list": "assets/img/midtownpark/exterior.jpg",
     "frida-kahlo-wynwood-residences-analisis": "assets/img/frida/hero.jpg",
     "firpta-retencion-15-por-ciento-vender-propiedad-estados-unidos": "https://blog.destiny.mx/wp-content/uploads/2026/08/firpta-retencion-venta-propiedad-miami-800x560.jpg",

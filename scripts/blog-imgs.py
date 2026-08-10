@@ -42,6 +42,13 @@ OVERRIDES = {
     "premium-residencias-marca-miami":             "assets/img/mandarin/hero.jpg",
     "marcas-miami-renta-vs-prestigio":             "assets/img/stregis-brickell/hero.jpg",
     "premium-marca-reventa-cuando-no":             "assets/img/cipriani/hero.jpg",
+    # Programadas en WordPress (semana 33): sí tienen imagen destacada asignada,
+    # pero el API público no devuelve las entradas en estado `future`. Estas tres
+    # líneas se pueden borrar después del 14-ago-2026: en cuanto publiquen, el
+    # script toma la portada del blog y esto deja de hacer falta.
+    "credito-extranjero-miami-2026":                          "assets/img/hero-bluehour.jpg",
+    "1428-brickell-credito-jpmorgan":                         "assets/img/1428/ext.jpg",
+    "tco-a-las-llaves-entrega-preconstruccion":               "assets/img/hero-living.jpg",
     # En WordPress, pero sin imagen destacada asignada
     "invertir-en-miami-proteger-patrimonio-2026":              "assets/img/hero-miami.jpg",
     "invertir-miami-desde-mexico-blindaje-patrimonial":        "assets/img/hero-bahia.jpg",
