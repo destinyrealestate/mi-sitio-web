@@ -48,7 +48,19 @@ PAGES = {
     "404.html":                ("404",                 "404",       ""),
 }
 
-V = "7"  # versión de caché de los scripts nuevos
+# Versión de caché de la capa de medición. Los HTML piden
+# /assets/tags.js?v={V}, así que el navegador guarda ESA url: si se edita
+# tags.js sin subir V, el visitante que ya estuvo aquí sigue ejecutando el
+# archivo viejo aunque el servidor tenga el nuevo. Comprobado el 2026-08-10
+# con el pixel de OpenAI: desplegado en el servidor y ausente en el navegador.
+#
+# ⚠️ SUBIR V EN CADA CAMBIO a consent.js, attribution.js, tags.js o tracking.js,
+# y correr este script para que los 31 HTML lo pidan con la versión nueva.
+V = "8"
+
+# forms.js va por su cuenta: se editó más veces que el resto y ya iba en 9.
+# Con un solo contador, correr este script lo habría bajado a 8.
+V_FORMS = "9"
 
 HEAD_BLOCK = f"""<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v={V}"></script>
@@ -66,7 +78,7 @@ TAGS_LINE = f'<script src="/assets/tags.js?v={V}"></script>'
 # [data-destiny-form]. En una página de gracias o en el aviso de privacidad
 # sería una descarga que no dibuja nada.
 FOOT_TRACKING = f'<script src="/assets/tracking.js?v={V}"></script>'
-FOOT_FORMS = f'<script src="/assets/forms.js?v={V}"></script>'
+FOOT_FORMS = f'<script src="/assets/forms.js?v={V_FORMS}"></script>'
 
 
 def foot_block(html: str) -> str:
