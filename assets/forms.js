@@ -653,8 +653,17 @@
      necesita —incluido el event_id, que es lo que deduplica el Pixel del
      navegador contra la CAPI que manda Make— y tracking.js decide qué va a
      Google Ads, a Meta y a GA4. */
-  function medir(cfg, p) {
-    if (typeof window.destinyTrack !== "function") return;
+  /* `listo` se llama cuando GTM terminó de disparar sus etiquetas —o al
+     cumplirse el plazo que fija tracking.js—. Redirigir antes de eso mata
+     la petición de la conversión a medio camino: `location.href` cancela
+     todo lo que esté en vuelo. Si tracking.js no cargó, se llama de
+     inmediato: el visitante no se queda atrapado por un archivo de
+     medición. */
+  function medir(cfg, p, listo) {
+    if (typeof window.destinyTrack !== "function") {
+      if (listo) listo();
+      return;
+    }
     try {
       window.destinyTrack(cfg.evento, {
         form_type: p.form_type,
@@ -668,8 +677,8 @@
         desarrollo: p.desarrollo_slug || undefined,
         desarrollo_nombre: p.desarrollo_nombre || undefined,
         zona: p.zona_nombre || undefined
-      });
-    } catch (e) {}
+      }, listo);
+    } catch (e) { if (listo) listo(); }
   }
 
   function destino(cfg, p) {
@@ -765,8 +774,7 @@
       }
 
       enviar(p).then(function () {
-        medir(cfg, p);
-        location.href = destino(cfg, p);
+        medir(cfg, p, function () { location.href = destino(cfg, p); });
       }).catch(function () {
         enviando = false;
         estado("normal");

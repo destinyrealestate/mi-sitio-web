@@ -310,19 +310,30 @@ conversiones. En su lugar dejan debajo del formulario el JSON exacto que
 recibiría Make. Sin esa guarda, cada prueba de diseño ensuciaría Google Ads y
 Meta con leads que no existen.
 
-### Pendiente del Prompt 2: la conversión se dispara dos veces
+### La conversión se dispara al enviar, no al llegar a gracias
 
-Hoy las páginas de gracias disparan `generate_lead` al cargar (lo hace
-`tracking.js` con `data-page-type="gracias"`). Ahora `forms.js` ya dispara la
-conversión al enviar. **Mientras las dos cosas convivan, cada lead se cuenta
-dos veces.**
+Resuelto. Hubo un momento en que las páginas de gracias disparaban la conversión
+al cargar (`tracking.js` con `data-page-type="gracias"`) **y además** `forms.js`
+la disparaba al enviar: cada lead se contaba dos veces, y una tercera por cada
+recarga de la página de gracias.
 
-Se arregla en el Prompt 2, en un solo lugar: `tracking.js` deja de disparar la
-conversión por `data-page-type="gracias"` y pasa a hacerlo solo cuando lo llama
-`forms.js`. Disparar al enviar es mejor que disparar al cargar la página de
-gracias, porque no depende de que el visitante complete la redirección.
+Hoy solo dispara `forms.js`, en el envío. Es mejor por una razón de fondo: no
+depende de que el visitante complete la redirección. Si se le cae la red justo
+después de enviar, el lead ya está registrado y medido. Las páginas de gracias
+conservan un `gracias_vista` sin valor y sin conversión, para poder medir la
+caída entre envío y llegada.
 
-**No subir el sitio hasta que eso esté hecho.**
+### Por qué la redirección tarda un instante
+
+`forms.js` no salta a la página de gracias en cuanto el webhook responde: le pasa
+un callback a `tracking.js` y espera a que GTM avise que terminó de disparar sus
+etiquetas. `location.href` corta las peticiones en vuelo, así que redirigir de
+inmediato mataba la conversión a medio camino en las conexiones lentas.
+
+La espera tiene dos topes: `eventTimeout: 1200` de GTM, y un `setTimeout` de
+1500 ms por si GTM ni siquiera cargó —bloqueador de anuncios, red caída— y por lo
+tanto nunca va a llamar a nadie. El visitante nunca se queda atrapado por un
+archivo de medición. Mientras espera, el botón sigue en estado *enviando*.
 
 ### La etiqueta de `newsletter_signup` no existe todavía
 

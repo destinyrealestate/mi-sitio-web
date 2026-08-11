@@ -13,7 +13,7 @@
      Pixel cada vez que se abre. Se abre poco y por una sola persona. -->
 <script src="/assets/consent.js?v=8"></script>
 <script src="/assets/attribution.js?v=8"></script>
-<script src="/assets/tags.js?v=8"></script>
+<script src="/assets/tags.js?v=9"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -179,14 +179,20 @@
       contenedor gemelo <code>GTM-N6ZQ256</code>, que está vacío y no se usa.</li>
 
       <li><strong>Llena un formulario de cada tipo</strong> y confirma en Tag Assistant que
-      cada envío dispara la etiqueta <strong>una sola vez</strong>. Si sale “Activado 2 veces”,
-      el contenedor todavía tiene los activadores viejos (<code>generate_lead</code>,
-      <code>click_whatsapp</code>) además de los nuevos <code>dst_*</code>.</li>
+      cada envío dispara la etiqueta <strong>una sola vez</strong>. Los eventos que escucha el
+      contenedor son <code>generate_lead</code> y <code>click_whatsapp</code>; el resto sale
+      con prefijo <code>dst_</code> justamente para que ningún activador los confunda con los
+      que <code>gtag</code> escribe para GA4.</li>
+
+      <li><strong>Mira el <code>form_type</code> del formulario de sesión.</strong> Tiene que
+      llegar como <code>sesion</code> —no como <code>agenda</code>— o Ads cobrará la sesión
+      como lead de 500 en lugar de 2000. El tipo real viaja aparte, en
+      <code>form_tipo</code>.</li>
 
       <li><strong>Comprueba los valores:</strong> 500 MXN en <code>form_lead</code>,
-      2000 en <code>agenda_solicitada</code>, 100 en <code>newsletter_signup</code>.
-      La moneda tiene que ser <strong>MXN</strong> en las dos partes — la etiqueta de Ads y el
-      <code>dataLayer</code>.</li>
+      2000 en <code>agenda_solicitada</code>. La moneda tiene que ser <strong>MXN</strong> en
+      las dos partes — la etiqueta de Ads y el <code>dataLayer</code>. El newsletter manda
+      100 MXN al <code>dataLayer</code>, pero hoy no hay etiqueta en GTM que lo dispare.</li>
 
       <li><strong>Depurador de Meta.</strong> En el Administrador de Eventos, pestaña
       <em>Probar eventos</em>, pega la URL del sitio. Al enviar un formulario debe aparecer
@@ -216,7 +222,7 @@
   </footer>
 </div>
 
-<script src="/assets/tracking.js?v=8"></script>
+<script src="/assets/tracking.js?v=9"></script>
 <script>
 (function () {
   "use strict";
@@ -254,7 +260,10 @@
     if (window.DestinyTags) {
       h += fila('Modo de etiquetas', '<code>' + window.DestinyTags.modo + '</code>');
       h += fila('GA4', '<code>' + window.DestinyTags.GA4_ID + '</code>');
-      h += fila('Google Ads', '<code>' + window.DestinyTags.GOOGLE_ADS_ID + '</code>');
+      h += fila('Google Ads', '<code>' + window.DestinyTags.GOOGLE_ADS_ID + '</code>' +
+        (window.DestinyTags.ADS_POR_GTM
+          ? ' <span style="color:var(--soft);font-size:12px;">— la etiqueta base la carga GTM, no el código</span>'
+          : ''));
       h += fila('GTM', '<code>' + window.DestinyTags.GTM_ID + '</code>');
       h += fila('Pixel de Meta', '<code>' + window.DestinyTags.META_PIXEL_ID + '</code>');
       h += fila('Pixel de OpenAI', window.DestinyTags.OPENAI_PIXEL_ID

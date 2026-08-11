@@ -18,14 +18,13 @@
    ni un solo día mientras se construye el contenedor.
 
    REGLA QUE NO SE PUEDE ROMPER: mientras GTM_ADMINISTRA_ETIQUETAS sea
-   false, NO crear dentro de GTM ninguna etiqueta de GA4, del Pixel de
-   Meta ni la etiqueta base de Google Ads (AW-). Si se crean, cada visita
-   y cada evento se contarían DOS veces. GTM es aquí el contenedor para lo
-   que NO sale por código (remarketing de LinkedIn, etc.).
+   false, NO crear dentro de GTM ninguna etiqueta de GA4 ni del Pixel de
+   Meta. Si se crean, cada visita y cada evento se contarían DOS veces.
 
-   Google Ads sí puede usar GTM para las CONVERSIONES (cada una necesita
-   su etiqueta de conversión con su rótulo), porque la etiqueta base ya
-   está puesta aquí y GTM la reutiliza en lugar de duplicarla.
+   GOOGLE ADS ES LA EXCEPCIÓN, y desde el 2026-08-11 vive ENTERO en GTM:
+   la etiqueta base AW- y las de conversión. Este archivo ya no configura
+   nada de Ads. Pasó lo que la regla de arriba advertía: durante una semana
+   la etiqueta base estuvo en los dos lados a la vez.
 
    Para migrar de verdad a GTM el día que se quiera:
      1. Crear en GTM la etiqueta de configuración de GA4, la del Pixel y
@@ -47,6 +46,8 @@
   var GA4_ID = "G-J8KK325F2B";
   var META_PIXEL_ID = "27857783360524172";
   var CONTENTSQUARE_ID = "7dccdd22cb616";
+  // Solo informativo: desde el 2026-08-11 la etiqueta base de Ads la carga
+  // GTM, no este archivo. Ver el bloque "Etiqueta de Google Ads" más abajo.
   var GOOGLE_ADS_ID = "AW-18368975159";  // instalado 2026-08-03
   var OPENAI_PIXEL_ID = "LZf9xnoYjgDpBLbXzJm8Ck";  // ChatGPT Ads, instalado 2026-08-10
 
@@ -92,13 +93,20 @@
     window.gtag("config", GA4_ID);
   }
 
-  /* ---------- Etiqueta de Google Ads ---------- */
-  // Si Ads se administra desde GTM, poner GOOGLE_ADS_ID en "" y crear allá la
-  // etiqueta junto con el enlazador de conversiones.
-  if (GOOGLE_ADS_ID && porCodigo) {
-    if (!GA4_ID) script("https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID);
-    window.gtag("config", GOOGLE_ADS_ID, { allow_enhanced_conversions: true });
-  }
+  /* ---------- Etiqueta de Google Ads: LA CARGA GTM, NO ESTE ARCHIVO ----------
+     Aquí vivía un `gtag("config", GOOGLE_ADS_ID, …)`. Se quitó el 2026-08-11
+     porque el contenedor (versión 3) trae su propia Etiqueta de Google
+     AW-18368975159 disparándose en la inicialización: la etiqueta base
+     estaba cargando DOS veces en cada página.
+
+     No duplicaba conversiones —esas son eventos aparte—, pero sí las
+     señales de remarketing y la vista de página de Ads.
+
+     El ID se conserva en la constante de arriba porque lo leen tracking.js
+     y diagnostico.html. Que exista NO significa que se configure aquí.
+     Para volver a disparar Ads por código hay que restaurar este bloque
+     antes de poner CONVERSIONES_POR_CODIGO en true; está explicado en la
+     cabecera de tracking.js. */
 
   /* ---------- Pixel de Meta ----------
      META NO LEE EL CONSENT MODE DE GOOGLE. Google Ads y GA4 respetan solos
@@ -179,6 +187,7 @@
     GA4_ID: GA4_ID,
     META_PIXEL_ID: META_PIXEL_ID,
     GOOGLE_ADS_ID: GOOGLE_ADS_ID,
+    ADS_POR_GTM: true,            // la etiqueta base no sale de este archivo
     OPENAI_PIXEL_ID: OPENAI_PIXEL_ID,
     modo: GTM_ID ? (GTM_ADMINISTRA_ETIQUETAS ? "gtm" : "convivencia") : "solo-codigo"
   };

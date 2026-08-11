@@ -6,12 +6,18 @@
    sale a Google Ads, a Meta, a GA4 y al Pixel de OpenAI.
 
    ------------------------------------------------------------
-   1 · POR QUÉ LOS EVENTOS DEL dataLayer LLEVAN PREFIJO dst_
+   1 · CÓMO SE LLAMA CADA EVENTO Y POR QUÉ
    ------------------------------------------------------------
-   `tags.js` define gtag como un push a window.dataLayer. Eso significa
-   que un `gtag('event','form_lead',…)` TAMBIÉN aterriza en el dataLayer
-   y GTM lo lee como un evento más. Con el mismo nombre en las dos vías,
-   cada activador se cumplía dos veces:
+   Un evento sale de aquí con DOS nombres a la vez:
+
+     · al dataLayer, con el nombre que escucha el contenedor de GTM;
+     · a GA4, con su nombre propio por `gtag('event', …)`.
+
+   Los dos nombres tienen que ser DISTINTOS, y ese es el detalle que hay
+   que entender antes de tocar nada. `tags.js` define gtag como un push a
+   window.dataLayer, así que un `gtag('event','generate_lead',…)` TAMBIÉN
+   aterriza en el dataLayer y GTM lo lee como un evento más. Con el mismo
+   nombre en las dos vías, cada activador se cumple dos veces:
 
      índice  9 → dataLayer.push({event:'generate_lead', …})
      índice 10 → gtag('event','generate_lead', {…})
@@ -19,30 +25,38 @@
    Verificado en Tag Assistant el 2026-08-05: la etiqueta salía "Activado
    2 veces" en un solo envío. Cada lead se habría cobrado doble en Ads.
 
-   Se parcheó entonces poniendo las etiquetas en "Una vez por página".
-   Eso tapa el síntoma pero deja la trampa puesta para la siguiente
-   etiqueta que alguien cree. Aquí se arregla de raíz: **lo que va al
-   dataLayer para GTM lleva prefijo `dst_`, y lo que va a GA4 va con su
-   nombre limpio por gtag.** Los dos nombres ya no se pueden confundir, y
-   un activador de GTM no puede dispararse dos veces por el mismo evento.
+   La tabla de abajo (GTM_EVENTO) respeta esa regla: el nombre de GA4 es
+   siempre el interno (`form_lead`, `agenda_solicitada`, `whatsapp_click`)
+   y el del dataLayer es el que pide el contenedor (`generate_lead`,
+   `click_whatsapp`). Ninguno de los dos coincide, así que ningún
+   activador puede dispararse dos veces.
 
-   Al desplegar esto HAY QUE importar el contenedor nuevo (gtm-destiny.json):
-   los activadores publicados escuchan `generate_lead` y `click_whatsapp`,
-   que ya no se emiten. Ver MEDICION.md.
+   ⚠️ AL AGREGAR UN EVENTO NUEVO: si el nombre que va al dataLayer llegara
+   a ser igual al que se manda a GA4, vuelve el doble conteo. Los eventos
+   que GTM no escucha llevan prefijo `dst_` justamente para no chocar
+   nunca; solo se le pone nombre limpio a lo que el contenedor escucha.
+
+   Historia: entre el 2026-08-05 y el 2026-08-11 TODOS los eventos salieron
+   con prefijo `dst_`, incluidos los tres que el contenedor escucha. En ese
+   periodo Google Ads no registró ni una conversión: el contenedor esperaba
+   `generate_lead` y el sitio emitía `dst_form_lead`. Ver MEDICION.md.
 
    ------------------------------------------------------------
    2 · QUIÉN DISPARA LAS CONVERSIONES DE GOOGLE ADS
    ------------------------------------------------------------
-   Hoy las dispara GTM (contenedor GTM-KW8TPGGG, versión 2 publicada).
-   Por eso CONVERSIONES_POR_CODIGO arranca en false: si este archivo
-   también las disparara, cada conversión se contaría DOS veces —una por
-   código y otra por GTM— y el costo por lead que reporta Ads saldría a la
-   mitad del real.
+   Hoy las dispara GTM (contenedor GTM-KW8TPGGG, versión 3 publicada el
+   2026-08-11). Por eso CONVERSIONES_POR_CODIGO arranca en false: si este
+   archivo también las disparara, cada conversión se contaría DOS veces
+   —una por código y otra por GTM— y el costo por lead que reporta Ads
+   saldría a la mitad del real.
 
-   Para pasarlas a código hay que hacer las dos cosas, en este orden:
-     1. Pausar o borrar en GTM las cuatro etiquetas "Ads · …".
-     2. Recién entonces poner CONVERSIONES_POR_CODIGO en true.
-   Al revés queda un hueco sin conversiones.
+   Para pasarlas a código hay que hacer las TRES cosas, en este orden:
+     1. Pausar o borrar en GTM las etiquetas "Ads · …".
+     2. Devolver a tags.js el `gtag("config", GOOGLE_ADS_ID)` que se quitó
+        el 2026-08-11: sin la etiqueta base configurada, un
+        `gtag("event","conversion",{send_to:"AW-…/rótulo"})` no llega.
+     3. Recién entonces poner CONVERSIONES_POR_CODIGO en true.
+   En otro orden queda un hueco sin conversiones o un doble conteo.
 
    GA4 y el Pixel de Meta SÍ salen por código siempre: GTM no los
    administra (ver la regla de convivencia en tags.js), y el Pixel además
@@ -122,6 +136,39 @@
 
   var CONVERSIONES = ["form_lead", "whatsapp_click", "agenda_solicitada", "newsletter_signup"];
 
+  /* ---------- Los nombres que escucha GTM ----------
+     Esta tabla es un CONTRATO con el contenedor publicado: cambiar una
+     línea aquí sin cambiar el activador de GTM apaga esa conversión sin
+     que nada avise. Lo que no esté en la tabla sale como `dst_<nombre>`,
+     que ningún activador escucha.
+
+     Contenedor GTM-KW8TPGGG, versión 3:
+       generate_lead + form_type = 'sesion'  → Ads · agenda_solicitada (2000)
+       generate_lead + form_type ≠ 'sesion'  → Ads · form_lead (500)
+       click_whatsapp                        → Ads · whatsapp_click (500)
+
+     newsletter_signup NO está aquí a propósito. En Ads existe su acción
+     de conversión (Suscribirse, 100 MXN), pero no hay etiqueta que la
+     dispare en GTM y no debe contarse como form_lead: inflaría los leads
+     con suscriptores de correo y le enseñaría al algoritmo a perseguir
+     newsletters en lugar de inversionistas. Sale como
+     dst_newsletter_signup, listo para el día que se cree la etiqueta. */
+  var GTM_EVENTO = {
+    form_lead:         "generate_lead",
+    agenda_solicitada: "generate_lead",
+    whatsapp_click:    "click_whatsapp"
+  };
+
+  /* Los dos leads viajan con el mismo nombre de evento, así que lo único
+     que distingue a la sesión de claridad —y sus 2000 MXN— es form_type.
+     forms.js manda la clave de su catálogo de tipos ("agenda"); el
+     contenedor espera "sesion". Se traduce aquí, en un solo lugar, en vez
+     de renombrar el tipo en forms.js: ese nombre también viaja a Make, a
+     HubSpot y a las páginas de gracias, y renombrarlo allá rompería el
+     historial de leads por un detalle de medición. El valor original no se
+     pierde: viaja en form_tipo. */
+  var GTM_FORM_TYPE = { agenda_solicitada: "sesion" };
+
   /* ---------- Guardas ---------- */
 
   function esDesarrollo() {
@@ -199,7 +246,13 @@
      EL EMISOR
      ================================================================== */
 
-  function emitir(nombre, params) {
+  /* `listo` es opcional. Cuando se pasa, se llama en cuanto GTM terminó de
+     disparar sus etiquetas para este evento. Lo usa forms.js para no
+     redirigir a la página de gracias antes de que la conversión salga:
+     `location.href` corta las peticiones pendientes, y las etiquetas de
+     GTM se evalúan de forma asíncrona. Sin esta espera, la conversión del
+     formulario se perdía en las conexiones lentas. */
+  function emitir(nombre, params, listo) {
     params = params || {};
 
     var esConversion = CONVERSIONES.indexOf(nombre) >= 0;
@@ -210,10 +263,12 @@
     var email = normEmail(params.user_email);
     var tel = normTel(params.user_phone);
 
-    /* El payload que ve GTM. Lleva la atribución completa para que
+    /* El payload que ve GTM. Lleva la atribución completa —incluido el
+       gclid que guardó attribution.js en su cookie de 90 días— para que
        cualquier etiqueta nueva pueda leerla sin volver a resolverla. */
+    var eventoGTM = GTM_EVENTO[nombre] || ("dst_" + nombre);
     var payload = Object.assign(
-      { event: "dst_" + nombre, evento: nombre, desarrollo: desarrollo() },
+      { event: eventoGTM, evento: nombre, desarrollo: desarrollo() },
       atribucion(),
       params
     );
@@ -223,10 +278,38 @@
     if (email) payload.user_email = email;
     if (tel) payload.user_phone = tel;
 
+    /* Una variable del dataLayer CONSERVA su valor entre pushes de la misma
+       página: si un push de generate_lead llegara sin form_type, GTM leería
+       el de la vez anterior y podría cobrar una sesión de 2000 por un lead
+       de 500. Por eso form_type siempre se escribe, aunque quien llame no
+       lo mande. */
+    if (GTM_FORM_TYPE[nombre]) {
+      if (params.form_type) payload.form_tipo = params.form_type;
+      payload.form_type = GTM_FORM_TYPE[nombre];
+    } else if (eventoGTM === "generate_lead" && !payload.form_type) {
+      payload.form_type = nombre;
+    }
+
+    /* eventTimeout: si una etiqueta se cuelga, GTM llama igual al callback
+       al cumplirse el plazo. El setTimeout de más es para el caso en que
+       GTM ni siquiera cargó —bloqueador de anuncios, red caída— y por lo
+       tanto nunca va a llamar a nadie. */
+    if (typeof listo === "function") {
+      var avisado = false;
+      var avisar = function () {
+        if (avisado) return;
+        avisado = true;
+        try { listo(); } catch (e) {}
+      };
+      payload.eventCallback = avisar;
+      payload.eventTimeout = 1200;
+      setTimeout(avisar, 1500);
+    }
+
     window.dataLayer.push(payload);
 
     var registro = {
-      evento: nombre, dataLayer: "dst_" + nombre, valor: valor, moneda: moneda,
+      evento: nombre, dataLayer: eventoGTM, valor: valor, moneda: moneda,
       event_id: eventId, meta: null, ads: null, ga4: null, openai: null,
       ts: new Date().toISOString()
     };
@@ -334,10 +417,10 @@
   window.destinyTrack = emitir;
 
   window.DestinyMedicion = {
-    formLead:         function (p) { emitir("form_lead", p); },
-    agendaSolicitada: function (p) { emitir("agenda_solicitada", p); },
-    newsletterSignup: function (p) { emitir("newsletter_signup", p); },
-    whatsappClick:    function (p) { emitir("whatsapp_click", p); },
+    formLead:         function (p, listo) { emitir("form_lead", p, listo); },
+    agendaSolicitada: function (p, listo) { emitir("agenda_solicitada", p, listo); },
+    newsletterSignup: function (p, listo) { emitir("newsletter_signup", p, listo); },
+    whatsappClick:    function (p, listo) { emitir("whatsapp_click", p, listo); },
     emitir: emitir,
 
     // Lo que consume diagnostico.html
@@ -348,6 +431,8 @@
         conversiones_por_codigo: CONVERSIONES_POR_CODIGO,
         etiquetas: ETIQUETAS,
         valores: VALORES,
+        gtm_evento: GTM_EVENTO,
+        gtm_form_type: GTM_FORM_TYPE,
         desarrollo: DEV,
         openai_pixel_id: (window.DestinyTags && window.DestinyTags.OPENAI_PIXEL_ID) || "",
         openai_eventos: OPENAI,
@@ -363,7 +448,14 @@
      ==================================================================
      Delegación en document con captura: funciona con enlaces que se
      agregan después de cargar la página —los pinta app.js, property.js y
-     el pie— sin volver a enganchar nada. */
+     el pie— sin volver a enganchar nada.
+
+     No se hace preventDefault ni se retrasa la navegación, y no hace falta:
+     TODOS los enlaces de WhatsApp del sitio son api.whatsapp.com con
+     target="_blank", así que la página no se descarga y el evento sale
+     tranquilo. El día que alguien ponga un enlace de WhatsApp sin
+     target="_blank", ese clic se va a perder: hay que retrasar la
+     navegación como se hace en forms.js con el eventCallback. */
 
   document.addEventListener("click", function (ev) {
     var a = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
