@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=58">
+<link rel="stylesheet" href="assets/styles.css?v=59">
 <style>
   /* Inversión directa — grid responsivo 4 → 2 → 1 */
   #inversion .adv__grid { grid-template-columns: repeat(4, 1fr); }
@@ -376,38 +376,6 @@
   </div>
 </section>
 
-<!-- ===================== CALCULADORA ===================== -->
-<section class="section dark secbg" id="calc" data-screen-label="Calculadora" style="background-image:url('assets/img/delano/living.jpg');">
-  <div class="wrap calc">
-    <div class="reveal">
-      <span class="eyebrow">Calcula tu inversión</span>
-      <h2 class="h-1" style="margin:16px 0 18px;">¿Cuánto puede rendir tu <span class="serif-em">capital en Miami?</span></h2>
-      <p class="lede">Mueve el monto y el financiamiento, y descubre el flujo y la plusvalía estimados al instante.</p>
-      <div class="ctl">
-        <label>Monto de inversión <b id="calcMontoVal">$1,000,000</b></label>
-        <input type="range" id="calcMonto" min="250000" max="5000000" step="50000" value="1000000">
-      </div>
-      <div class="ctl">
-        <label>Financiamiento</label>
-        <div class="calc__seg">
-          <button type="button" class="seg-btn" data-ltv="0">Contado</button>
-          <button type="button" class="seg-btn active" data-ltv="0.5">50%</button>
-          <button type="button" class="seg-btn" data-ltv="0.7">70%</button>
-        </div>
-      </div>
-    </div>
-    <div class="reveal d1">
-      <div class="calc__out">
-        <div class="calc__cell"><div class="big" id="calcRenta">—</div><div class="lab">Renta neta anual estimada</div></div>
-        <div class="calc__cell"><div class="big" id="calcFlujo">—</div><div class="lab">Flujo mensual (tras hipoteca)</div></div>
-        <div class="calc__cell"><div class="big" id="calcPlus">—</div><div class="lab">Plusvalía proyectada a 5 años</div></div>
-        <div class="calc__cell"><div class="big" id="calcCapital">—</div><div class="lab">Capital propio requerido</div></div>
-      </div>
-      <p class="note">Estimación referencial (cap rate 6.5%, tasa 6.375% a 30 años, apreciación 6% anual). No constituye garantía de rendimiento; tu caso real lo revisamos en la sesión.</p>
-      <a class="btn btn-gold" href="#agenda" style="margin-top:22px;">Ver mi caso real <span class="ar">→</span></a>
-    </div>
-  </div>
-</section>
 
 <!-- ===================== LEAD MAGNET ===================== -->
 <section class="section dark magnet secbg" id="newsletter" data-screen-label="Newsletter" style="background-image:url('assets/img/blog-skyline2.jpg');">
@@ -663,7 +631,7 @@
 
 <script src="assets/data.js?v=56"></script>
 <script src="assets/blog-data.js?v=55"></script>
-<script src="assets/app.js?v=9"></script>
+<script src="assets/app.js?v=10"></script>
 <!-- CAPA DE MEDICIÓN -->
 <script src="/assets/tracking.js?v=9"></script>
 <script src="/assets/forms.js?v=10"></script>

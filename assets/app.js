@@ -99,33 +99,6 @@
   /* ---------- Shell (nav, drawer, scroll, reveal, form) ---------- */
   D.initShell();
 
-  /* ---------- Calculadora de inversión ---------- */
-  const calcRange = $("#calcMonto");
-  if (calcRange) {
-    const fmt = (n) => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
-    let ltv = 0.5;
-    const setT = (id, v) => { const e = $("#" + id); if (e) e.textContent = v; };
-    const render = () => {
-      const M = +calcRange.value;
-      setT("calcMontoVal", "$" + M.toLocaleString("en-US"));
-      const rentaNeta = M * 0.065;
-      const financiado = M * ltv, capital = M - financiado;
-      const r = 0.06375 / 12, n = 360;
-      const mortgage = financiado > 0 ? financiado * r / (1 - Math.pow(1 + r, -n)) : 0;
-      const flujoMensual = rentaNeta / 12 - mortgage;
-      const plus5 = M * (Math.pow(1.06, 5) - 1);
-      setT("calcRenta", fmt(rentaNeta));
-      setT("calcFlujo", (flujoMensual >= 0 ? "+" : "") + fmt(flujoMensual));
-      setT("calcPlus", fmt(plus5));
-      setT("calcCapital", fmt(capital));
-    };
-    calcRange.addEventListener("input", render);
-    $$("#calc .seg-btn").forEach(b => b.addEventListener("click", () => {
-      $$("#calc .seg-btn").forEach(x => x.classList.remove("active"));
-      b.classList.add("active"); ltv = +b.dataset.ltv; render();
-    }));
-    render();
-  }
   requestAnimationFrame(() => $$(".hero .reveal").forEach(el => el.classList.add("in")));
 
   /* ---------- FAQ acordeón ---------- */

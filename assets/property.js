@@ -273,14 +273,6 @@
   const hlEl = $("#pHighlights");
   if (hlEl) hlEl.innerHTML = hls.map(h => `<div class="hl__card"><div class="hl__k">${h[0]}</div><div class="hl__v">${h[1]}</div><div class="hl__d">${h[2]}</div></div>`).join("");
 
-  // estimador de renta
-  const range = $("#roiRange"), amt = $("#roiAmt"), low = $("#roiLow"), high = $("#roiHigh");
-  const fmt = n => "$" + Math.round(n).toLocaleString("en-US");
-  if (range) {
-    const roi = () => { const v = +range.value; amt.textContent = fmt(v); low.textContent = fmt(v * 0.06); high.textContent = fmt(v * 0.08); };
-    range.addEventListener("input", roi); roi();
-  }
-
   // barra fija: mostrar tras el hero, ocultar cerca del formulario
   const sticky = $("#stickybar"), agendaSec = $("#agenda");
   if (sticky && agendaSec) {
