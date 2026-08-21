@@ -1,5 +1,5 @@
 /* ============================================================
-   DESTINY — datos del blog (64 artículos)
+   DESTINY — datos del blog (70 artículos)
    ============================================================ */
 window.DESTINY_BLOG = (function () {
   "use strict";
@@ -10,8 +10,14 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["Capital contribution: el cargo de cierre que no es depósito y no se devuelve", "capital-contribution-preconstruccion-miami", 2026, "21 ago 2026", 7, 21, 1],
+    ["One Twenty Brickell: el \"desde $600,000\" que ya no puedes comprar", "one-twenty-brickell-analisis", 2026, "19 ago 2026", 7, 19, 1],
+    ["Financiamiento para extranjero, Parte 2: convencional, DSCR o portfolio y el prepago 5-4-3-2-1", "financiamiento-extranjero-dscr-portfolio-prepago", 2026, "17 ago 2026", 7, 17, 1],
+    ["Del TCO a las llaves: qué pasa entre que el edificio 'ya está' y el día que entras", "proceso-de-entrega-preconstruccion-tco-llaves", 2026, "14 ago 2026", 7, 14, 1],
     ["Del TCO a las llaves: la letra chica de la entrega", "tco-a-las-llaves-entrega-preconstruccion", 2026, "14 ago 2026", 7, 14, 1],
+    ["Delano Residences Miami: qué compras cuando el edificio todavía no existe", "delano-residences-miami-analisis", 2026, "12 ago 2026", 7, 12, 1],
     ["1428 Brickell: qué te dice el crédito de $565M de JPMorgan", "1428-brickell-credito-jpmorgan", 2026, "12 ago 2026", 7, 12, 1],
+    ["Financiamiento para extranjero, Parte 1: sí te prestan, y esto es lo que el banco mira", "financiamiento-extranjero-estados-unidos-requisitos", 2026, "10 ago 2026", 7, 10, 1],
     ["Crédito para extranjero en Miami: cómo financiar sin historial en EE.UU.", "credito-extranjero-miami-2026", 2026, "10 ago 2026", 7, 10, 1],
     ["Los costos de cierre en preconstrucción que no vienen en el price list", "costos-de-cierre-preconstruccion-price-list", 2026, "7 ago 2026", 7, 7, 1],
     ["Frida Kahlo Wynwood Residences: qué compras cuando compras una marca", "frida-kahlo-wynwood-residences-analisis", 2026, "5 ago 2026", 7, 5, 1],
@@ -86,11 +92,17 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
-    "tco-a-las-llaves-entrega-preconstruccion": "assets/img/hero-living.jpg",
-    "1428-brickell-credito-jpmorgan": "assets/img/1428/ext.jpg",
-    "credito-extranjero-miami-2026": "assets/img/hero-bluehour.jpg",
-    "costos-de-cierre-preconstruccion-price-list": "assets/img/midtownpark/exterior.jpg",
-    "frida-kahlo-wynwood-residences-analisis": "assets/img/frida/hero.jpg",
+    "capital-contribution-preconstruccion-miami": "assets/img/hero-bahia.jpg",
+    "one-twenty-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/one-twenty-brickell-analisis-800x560.jpg",
+    "financiamiento-extranjero-dscr-portfolio-prepago": "assets/img/hero-dusk.jpg",
+    "proceso-de-entrega-preconstruccion-tco-llaves": "assets/img/hero-living.jpg",
+    "tco-a-las-llaves-entrega-preconstruccion": "https://blog.destiny.mx/wp-content/uploads/2026/08/tco-a-las-llaves-entrega-preconstruccion-800x560.jpg",
+    "delano-residences-miami-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/delano-residences-miami-analisis-800x560.jpg",
+    "1428-brickell-credito-jpmorgan": "https://blog.destiny.mx/wp-content/uploads/2026/08/1428-brickell-credito-jpmorgan-800x560.jpg",
+    "financiamiento-extranjero-estados-unidos-requisitos": "assets/img/hero-bluehour.jpg",
+    "credito-extranjero-miami-2026": "https://blog.destiny.mx/wp-content/uploads/2026/08/credito-extranjero-miami-2026-800x560.jpg",
+    "costos-de-cierre-preconstruccion-price-list": "https://blog.destiny.mx/wp-content/uploads/2026/08/costos-de-cierre-preconstruccion-price-list-800x560.jpg",
+    "frida-kahlo-wynwood-residences-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/frida-kahlo-wynwood-residences-analisis-800x560.jpg",
     "firpta-retencion-15-por-ciento-vender-propiedad-estados-unidos": "https://blog.destiny.mx/wp-content/uploads/2026/08/firpta-retencion-venta-propiedad-miami-800x560.jpg",
     "costos-de-cierre-preconstruccion-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/costos-de-cierre-preconstruccion-miami-800x560.jpg",
     "bentley-residences-miami": "https://blog.destiny.mx/wp-content/uploads/2026/07/bentley-residences-miami-800x560.jpg",
