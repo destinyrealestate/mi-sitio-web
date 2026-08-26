@@ -38,7 +38,9 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  # Gracias anteriores a las landings: cada una dispara una
                  # conversión en GTM (gracias-sesion es agenda_solicitada)
                  "/gracias-sesion", "/gracias-club", "/gracias-scorecard",
-                 "/gracias-newsletter"}
+                 "/gracias-newsletter",
+                 # Landings de proyecto (A/B de estructura) — noindex
+                 "/bentley-lp1", "/bentley-lp2", "/bentley-lp3"}
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 

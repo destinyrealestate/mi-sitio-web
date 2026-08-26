@@ -106,6 +106,15 @@ AddDefaultCharset UTF-8
   RewriteRule ^(preconstruccion-miami|invertir-en-dolares)$   $1.html   [L]
   RewriteRule ^(preconstruccion-miami|invertir-en-dolares)/$  /$1       [R=301,L]
 
+  # ----------------------------------------------------------
+  # Landings de proyecto (A/B de estructura). Mismo contenido, el
+  # formulario en distinta posición: son las URLs de destino de los
+  # anuncios de Meta y Google y también se mandan por WhatsApp, así
+  # que tienen que ser limpias. Van noindex y fuera del sitemap.
+  # ----------------------------------------------------------
+  RewriteRule ^(bentley-lp1|bentley-lp2|bentley-lp3)$   $1.html   [L]
+  RewriteRule ^(bentley-lp1|bentley-lp2|bentley-lp3)/$  /$1       [R=301,L]
+
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
 
