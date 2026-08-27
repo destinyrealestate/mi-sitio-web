@@ -43,9 +43,26 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO — video de fondo sin audio (scoped a esta LP) -->
+<style>
+/* El <img> del hero queda como cartel de respaldo; el video se funde encima
+   cuando ya puede reproducirse. El degradado de .hero__bg::after sigue arriba
+   de los dos porque el pseudo-elemento pinta despues de los hijos. */
+.hero--prop .hero__video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  opacity:0; transition:opacity .9s ease; pointer-events:none;
+}
+.hero--prop .hero__video.is-ready{opacity:1;}
+@media (prefers-reduced-motion: reduce){ .hero--prop .hero__video{display:none;} }
+</style>
 <header class="hero hero--prop" data-screen-label="Propiedad Hero">
-  <div class="hero__bg"><img fetchpriority="high" alt="" id="pHeroImg" referrerpolicy="no-referrer"></div>
+  <div class="hero__bg">
+    <img fetchpriority="high" alt="" id="pHeroImg" referrerpolicy="no-referrer">
+    <video id="pHeroVideo" class="hero__video" muted playsinline autoplay loop
+           preload="none" aria-hidden="true" tabindex="-1"
+           data-src="assets/video/bentley-hero.mp4?v=1"></video>
+  </div>
   <div class="hero__inner wrap">
     <div class="breadcrumb">
       <a href="index.html">Inicio</a><span class="sep">/</span>
@@ -67,6 +84,35 @@
     <div class="hero__scarcity" id="pScarcity"><span class="dot"></span> Preventa · unidades limitadas</div>
   </div>
 </header>
+
+<!-- HERO VIDEO: solo se descarga en pantallas grandes, con conexion decente y sin
+     ahorro de datos. En movil / datos limitados se queda la imagen del hero. -->
+<script>
+(function(){
+  var v = document.getElementById('pHeroVideo');
+  if(!v) return;
+
+  var mqMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(mqMotion && mqMotion.matches){ v.remove(); return; }
+  if(window.innerWidth < 768){ v.remove(); return; }
+
+  var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if(c && (c.saveData || /^(slow-)?2g$/.test(c.effectiveType || '') || c.effectiveType === '3g')){
+    v.remove(); return;
+  }
+
+  v.addEventListener('canplay', function(){ v.classList.add('is-ready'); });
+  v.addEventListener('error', function(){ v.remove(); });
+
+  v.muted = true;              // sin audio: el archivo ya viene sin pista de sonido
+  v.volume = 0;
+  v.preload = 'auto';
+  v.src = v.getAttribute('data-src');
+
+  var p = v.play();
+  if(p && p.catch) p.catch(function(){ /* si el navegador lo bloquea, queda la imagen */ });
+})();
+</script>
 
 <!-- FACTS BAR -->
 <div class="factsbar" data-screen-label="Facts">
