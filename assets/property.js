@@ -96,6 +96,46 @@
   const heroSrc = (p.gallery && p.gallery[0]) ? toUrl(p.gallery[0]) : (D.BASE + p.img);
   $("#pHeroImg").src = heroSrc;
   $("#pHeroImg").alt = p.name;
+
+  /* ---------- video de fondo del hero (solo proyectos con `heroVideo`) ----------
+     El <img> del hero queda como cartel de respaldo y el video se funde encima
+     cuando ya puede reproducirse. Solo se descarga en pantallas grandes, con
+     conexión decente y sin ahorro de datos: en móvil o datos limitados se queda
+     la imagen. El archivo va sin pista de audio, y además lo silenciamos.
+     Las LP que ya traen su propio #pHeroVideo en el HTML se saltan este bloque. */
+  (function () {
+    if (!p.heroVideo || document.getElementById("pHeroVideo")) return;
+    const bg = $(".hero--prop .hero__bg");
+    if (!bg) return;
+
+    const mqMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mqMotion && mqMotion.matches) return;
+    if (window.innerWidth < 768) return;
+
+    const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (c && (c.saveData || /^(slow-)?2g$/.test(c.effectiveType || "") || c.effectiveType === "3g")) return;
+
+    const v = document.createElement("video");
+    v.id = "pHeroVideo";
+    v.className = "hero__video";
+    v.muted = true;
+    v.volume = 0;
+    v.autoplay = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("aria-hidden", "true");
+    v.tabIndex = -1;
+    v.addEventListener("canplay", () => v.classList.add("is-ready"));
+    v.addEventListener("error", () => v.remove());
+    v.preload = "auto";
+    v.src = p.heroVideo;
+    bg.appendChild(v);
+
+    const play = v.play();
+    if (play && play.catch) play.catch(() => { /* si el navegador lo bloquea, queda la imagen */ });
+  })();
+
   // galería dinámica — muestra TODOS los renders disponibles
   const gal = $("#pGallery");
   if (gal) {
@@ -110,15 +150,34 @@
       for (let i = 0; i < 4; i++) g += `<div class="ph"><span>${labels[i]}</span></div>`;
       gal.innerHTML = g;
     }
-    // video del proyecto (solo proyectos con campo `video`) — al final de la galería
+    /* video del proyecto (solo proyectos con campo `video`). Si la página trae su
+       propia sección #pVideoBox —arriba de la galería— lo montamos ahí, con la
+       carátula del hero y un botón de play (sin autoplay); si no existe, cae al
+       final de la galería como antes. */
     if (p.video) {
-      const vid = document.createElement("div");
-      vid.className = "pVideo reveal d1";
-      vid.style.marginTop = "18px";
-      vid.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}" style="width:100%;aspect-ratio:16/9;height:auto;display:block;border-radius:14px;background:#000;object-fit:cover;">`
-        + `<source src="${p.video}" type="video/mp4">`
-        + `</video>`;
-      gal.insertAdjacentElement("afterend", vid);
+      const src = `<source src="${p.video}" type="video/mp4">`;
+      const box = $("#pVideoBox");
+      if (box) {
+        box.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}">${src}</video>`;
+        const sec = box.closest("section");
+        if (sec) sec.hidden = false;
+        set("#pVideoTitle", `${p.name}, por dentro.`);
+        const vid = box.querySelector("video");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "lpvid__play";
+        btn.setAttribute("aria-label", `Reproducir el video de ${p.name}`);
+        btn.innerHTML = "<i></i>";
+        box.appendChild(btn);
+        btn.addEventListener("click", () => vid.play());
+        vid.addEventListener("play", () => box.classList.add("playing"));
+      } else {
+        const vid = document.createElement("div");
+        vid.className = "pVideo reveal d1";
+        vid.style.marginTop = "18px";
+        vid.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}" style="width:100%;aspect-ratio:16/9;height:auto;display:block;border-radius:14px;background:#000;object-fit:cover;">${src}</video>`;
+        gal.insertAdjacentElement("afterend", vid);
+      }
     }
   }
   $("#pBadges").innerHTML = p.badges.map((b, i) =>
