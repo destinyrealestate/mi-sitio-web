@@ -10,6 +10,12 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["El apartado no es tu enganche: los $580,000 que separan tu unidad", "apartado-no-es-enganche-preconstruccion-miami", 2026, "5 sep 2026", 8, 5, 1],
+    ["Bentley Residences: un piso cada cinco días (y por qué la entrega es 2028, no 2026)", "bentley-residences-avance-obra-entrega-2028", 2026, "3 sep 2026", 8, 3, 1],
+    ["Miami suma 11 meses al alza y casi la mitad de la obra nueva la compra un extranjero", "miami-11-meses-al-alza-comprador-extranjero-2026", 2026, "1 sep 2026", 8, 1, 1],
+    ["Property Management: quién cuida tu renta cuando no estás (y cuánto se lleva)", "property-management-renta-miami", 2026, "29 ago 2026", 7, 29, 1],
+    ["2200 Brickell: la preconstrucción que ya casi puedes tocar", "2200-brickell-analisis", 2026, "27 ago 2026", 7, 27, 1],
+    ["Comprar preconstrucción sin miedo: cómo la ley protege tu dinero (y qué pasa si el developer no termina)", "escrow-preconstruccion-miami-proteccion-legal", 2026, "25 ago 2026", 7, 25, 1],
     ["Capital contribution: el cargo de cierre que no es depósito y no se devuelve", "capital-contribution-preconstruccion-miami", 2026, "21 ago 2026", 7, 21, 1],
     ["One Twenty Brickell: el \"desde $600,000\" que ya no puedes comprar", "one-twenty-brickell-analisis", 2026, "19 ago 2026", 7, 19, 1],
     ["Financiamiento para extranjero, Parte 2: convencional, DSCR o portfolio y el prepago 5-4-3-2-1", "financiamiento-extranjero-dscr-portfolio-prepago", 2026, "17 ago 2026", 7, 17, 1],
@@ -92,6 +98,12 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
+    "apartado-no-es-enganche-preconstruccion-miami": "assets/img/bentley/entrance.jpg",
+    "bentley-residences-avance-obra-entrega-2028": "assets/img/bentley/tower.jpg",
+    "miami-11-meses-al-alza-comprador-extranjero-2026": "assets/img/hero-turquesa.jpg",
+    "property-management-renta-miami": "assets/img/onepark/living.jpg",
+    "2200-brickell-analisis": "assets/img/midtownpark/exterior.jpg",
+    "escrow-preconstruccion-miami-proteccion-legal": "assets/img/rivage/arrival.jpg",
     "capital-contribution-preconstruccion-miami": "assets/img/hero-bahia.jpg",
     "one-twenty-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/one-twenty-brickell-analisis-800x560.jpg",
     "financiamiento-extranjero-dscr-portfolio-prepago": "assets/img/hero-dusk.jpg",

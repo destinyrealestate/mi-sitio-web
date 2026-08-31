@@ -48,6 +48,15 @@ OVERRIDES = {
     "proceso-de-entrega-preconstruccion-tco-llaves":           "assets/img/hero-living.jpg",
     "financiamiento-extranjero-dscr-portfolio-prepago":        "assets/img/hero-dusk.jpg",
     "capital-contribution-preconstruccion-miami":              "assets/img/hero-bahia.jpg",
+    # Semanas 35 y 36: publicadas sin imagen destacada en WordPress. En cuanto se
+    # suban las portadas reales (los prompts van en el .md de cada entrada), borrar
+    # su línea de aquí y el script las tomará del blog.
+    "escrow-preconstruccion-miami-proteccion-legal":           "assets/img/rivage/arrival.jpg",
+    "2200-brickell-analisis":                                  "assets/img/midtownpark/exterior.jpg",
+    "property-management-renta-miami":                         "assets/img/onepark/living.jpg",
+    "miami-11-meses-al-alza-comprador-extranjero-2026":        "assets/img/hero-turquesa.jpg",
+    "bentley-residences-avance-obra-entrega-2028":             "assets/img/bentley/tower.jpg",
+    "apartado-no-es-enganche-preconstruccion-miami":           "assets/img/bentley/entrance.jpg",
     # En WordPress, pero sin imagen destacada asignada
     "invertir-en-miami-proteger-patrimonio-2026":              "assets/img/hero-miami.jpg",
     "invertir-miami-desde-mexico-blindaje-patrimonial":        "assets/img/hero-bahia.jpg",
