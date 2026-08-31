@@ -115,6 +115,9 @@ AddDefaultCharset UTF-8
   RewriteRule ^(bentley-lp1|bentley-lp2|bentley-lp3)$   $1.html   [L]
   RewriteRule ^(bentley-lp1|bentley-lp2|bentley-lp3)/$  /$1       [R=301,L]
 
+  RewriteRule ^(frida-lp1|frida-lp2|frida-lp3)$   $1.html   [L]
+  RewriteRule ^(frida-lp1|frida-lp2|frida-lp3)/$  /$1       [R=301,L]
+
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
 

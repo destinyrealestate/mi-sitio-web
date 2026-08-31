@@ -40,7 +40,8 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  "/gracias-sesion", "/gracias-club", "/gracias-scorecard",
                  "/gracias-newsletter",
                  # Landings de proyecto (A/B de estructura) — noindex
-                 "/bentley-lp1", "/bentley-lp2", "/bentley-lp3"}
+                 "/bentley-lp1", "/bentley-lp2", "/bentley-lp3",
+                 "/frida-lp1", "/frida-lp2", "/frida-lp3"}
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 
