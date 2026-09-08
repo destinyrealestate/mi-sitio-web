@@ -10,6 +10,9 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["El 45% de plusvalía es un ejemplo, no una promesa: cómo se calcula de verdad", "plusvalia-preconstruccion-como-se-calcula", 2026, "12 sep 2026", 8, 12, 1],
+    ["619 Brickell by Nobu: qué justifica sus precios y qué está por confirmar", "619-brickell-nobu-analisis", 2026, "10 sep 2026", 8, 10, 1],
+    ["Ventana de compra para el comprador mexicano: el dólar está quieto y tu dinero rinde más", "ventana-compra-comprador-mexicano-miami", 2026, "8 sep 2026", 8, 8, 1],
     ["El apartado no es tu enganche: los $580,000 que separan tu unidad", "apartado-no-es-enganche-preconstruccion-miami", 2026, "5 sep 2026", 8, 5, 1],
     ["Bentley Residences: un piso cada cinco días (y por qué la entrega es 2028, no 2026)", "bentley-residences-avance-obra-entrega-2028", 2026, "3 sep 2026", 8, 3, 1],
     ["Miami suma 11 meses al alza y casi la mitad de la obra nueva la compra un extranjero", "miami-11-meses-al-alza-comprador-extranjero-2026", 2026, "1 sep 2026", 8, 1, 1],
@@ -98,12 +101,15 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
-    "apartado-no-es-enganche-preconstruccion-miami": "assets/img/bentley/entrance.jpg",
-    "bentley-residences-avance-obra-entrega-2028": "assets/img/bentley/tower.jpg",
-    "miami-11-meses-al-alza-comprador-extranjero-2026": "assets/img/hero-turquesa.jpg",
-    "property-management-renta-miami": "assets/img/onepark/living.jpg",
-    "2200-brickell-analisis": "assets/img/midtownpark/exterior.jpg",
-    "escrow-preconstruccion-miami-proteccion-legal": "assets/img/rivage/arrival.jpg",
+    "plusvalia-preconstruccion-como-se-calcula": "assets/img/hero-dusk.jpg",
+    "619-brickell-nobu-analisis": "assets/img/nobu/hero.jpg",
+    "ventana-compra-comprador-mexicano-miami": "assets/img/blog-skyline2.jpg",
+    "apartado-no-es-enganche-preconstruccion-miami": "https://blog.destiny.mx/wp-content/uploads/2026/09/apartado-vs-enganche-preconstruccion-miami-featured-1536x864-1-800x560.jpg",
+    "bentley-residences-avance-obra-entrega-2028": "https://blog.destiny.mx/wp-content/uploads/2026/09/bentley-residences-sunny-isles-featured-1536x864-1-800x560.jpg",
+    "miami-11-meses-al-alza-comprador-extranjero-2026": "https://blog.destiny.mx/wp-content/uploads/2026/09/mercado-miami-once-meses-al-alza-featured-1536x864-1-800x560.jpg",
+    "property-management-renta-miami": "https://blog.destiny.mx/wp-content/uploads/2026/08/property-management-residencia-lujo-miami-featured-1536x864-1-800x560.jpg",
+    "2200-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/2200-brickell-torre-boutique-miami-featured-1536x864-1-800x560.jpg",
+    "escrow-preconstruccion-miami-proteccion-legal": "https://blog.destiny.mx/wp-content/uploads/2026/08/escrow-proteccion-legal-miami-featured-1536x864-1-800x560.jpg",
     "capital-contribution-preconstruccion-miami": "assets/img/hero-bahia.jpg",
     "one-twenty-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/08/one-twenty-brickell-analisis-800x560.jpg",
     "financiamiento-extranjero-dscr-portfolio-prepago": "assets/img/hero-dusk.jpg",
