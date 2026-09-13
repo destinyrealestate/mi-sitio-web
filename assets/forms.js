@@ -105,6 +105,128 @@
      Un humano no llena ni el formulario de una sola casilla en 3 segundos. */
   var MIN_SEGUNDOS = 3;
 
+  /* ------------------------------------------------------------------
+     COLA DE REINTENTO EN localStorage
+     ------------------------------------------------------------------
+     Todo envío se guarda ANTES de intentar el fetch al webhook. Si el
+     fetch responde OK, se borra. Si no responde OK —adblocker que
+     bloquea hook.us2.make.com, VPN corporativa, red intermitente, iOS
+     Safari privado, timeout, HTTP 5xx— la entrada queda en la cola y
+     se reintenta:
+       · al cargar cualquier página del sitio (2 s después de arrancar),
+       · cuando el navegador vuelve online tras estar offline,
+       · en pagehide via navigator.sendBeacon (última bala antes de
+         cerrar la pestaña).
+
+     Formato: array de {id, ts, payload, tries}.
+       · id      event_id del payload — la deduplicación con el Pixel
+                 sigue funcionando si se reenvía.
+       · ts      cuándo se encoló, para purgar entradas viejas.
+       · tries   cuántas veces se intentó ya. Se descarta después de
+                 COLA_MAX_TRIES para no morder el mismo hueso para
+                 siempre.
+
+     Antes existía este comportamiento: si el fetch fallaba, el payload
+     moría en el navegador y el lead se perdía. Confirmado por GA4 el
+     12-sep-2026 (10 usuarios en /gracias.html vs 2 ejecuciones en Make
+     en la misma ventana). Esta cola lo resuelve sin cambiar la UI.
+     ------------------------------------------------------------------ */
+  var COLA_KEY = "dstf_cola_reintento_v1";
+  var COLA_TTL_MS = 7 * 24 * 60 * 60 * 1000;   // 7 días
+  var COLA_MAX_TRIES = 20;
+
+  function colaLeer() {
+    try {
+      var raw = localStorage.getItem(COLA_KEY);
+      if (!raw) return [];
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
+  }
+
+  function colaGuardar(arr) {
+    try {
+      var ahora = Date.now();
+      var limpio = [];
+      for (var i = 0; i < arr.length; i++) {
+        var e = arr[i];
+        if (!e || !e.ts) continue;
+        if ((ahora - e.ts) >= COLA_TTL_MS) continue;
+        if ((e.tries || 0) >= COLA_MAX_TRIES) continue;
+        limpio.push(e);
+      }
+      localStorage.setItem(COLA_KEY, JSON.stringify(limpio));
+    } catch (e) {}
+  }
+
+  function colaAgregar(payload) {
+    var arr = colaLeer();
+    // Si ya existe la misma id, no la duplicamos: solo actualizamos el ts.
+    var id = payload.event_id || "";
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].id === id) { arr[i].ts = Date.now(); colaGuardar(arr); return; }
+    }
+    arr.push({ id: id, ts: Date.now(), payload: payload, tries: 0 });
+    colaGuardar(arr);
+  }
+
+  function colaBorrar(id) {
+    var arr = colaLeer();
+    var out = [];
+    for (var i = 0; i < arr.length; i++) if (arr[i].id !== id) out.push(arr[i]);
+    colaGuardar(out);
+  }
+
+  function colaMarcarIntento(id) {
+    var arr = colaLeer();
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].id === id) { arr[i].tries = (arr[i].tries || 0) + 1; break; }
+    }
+    colaGuardar(arr);
+  }
+
+  /* Reintenta cada envío pendiente en background. Se llama al cargar el
+     sitio y cuando el navegador vuelve online. No bloquea nada: si el
+     fetch vuelve a fallar la entrada sigue ahí para la próxima. */
+  function colaReintentar() {
+    if (!WEBHOOK_LISTO || esLocal()) return;
+    var pendientes = colaLeer();
+    for (var i = 0; i < pendientes.length; i++) {
+      (function (entry) {
+        colaMarcarIntento(entry.id);
+        fetch(MAKE_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(entry.payload),
+          keepalive: true
+        }).then(function (r) {
+          if (r && r.ok) colaBorrar(entry.id);
+        }).catch(function () { /* seguirá en cola para el próximo intento */ });
+      })(pendientes[i]);
+    }
+  }
+
+  /* Última bala antes de cerrar la pestaña. sendBeacon manda el POST
+     aunque el navegador esté en pleno unload —fetch a esa altura ya
+     está cancelado— y no bloquea la salida. No comprueba respuesta:
+     si el servidor sí lo recibió y ejecutó, el próximo colaReintentar
+     encontrará la entrada intacta y volverá a mandarla; Make dedupe
+     por event_id (idempotente para el pipeline de Meta CAPI, y en
+     HubSpot es upsert por correo). Duplicado silencioso > lead
+     perdido. */
+  function colaBeaconOut() {
+    var pendientes = colaLeer();
+    if (!pendientes.length) return;
+    if (typeof navigator === "undefined" || typeof navigator.sendBeacon !== "function") return;
+    for (var i = 0; i < pendientes.length; i++) {
+      try {
+        var body = JSON.stringify(pendientes[i].payload);
+        var blob = new Blob([body], { type: "application/json" });
+        navigator.sendBeacon(MAKE_WEBHOOK_URL, blob);
+      } catch (e) {}
+    }
+  }
+
   /* ==================================================================
      1 · CATÁLOGO DE CAMPOS
      ==================================================================
@@ -640,12 +762,21 @@
       }
       return Promise.resolve();
     }
+    /* Guarda en la cola ANTES de intentar el fetch. Si el fetch falla o
+       la pestaña se cierra a medio camino, el lead vive en localStorage
+       y se reintenta la próxima vez. Si el fetch responde OK, se borra
+       en la línea de abajo. */
+    colaAgregar(p);
     return fetch(MAKE_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(p)
+      body: JSON.stringify(p),
+      /* keepalive permite que el POST termine aunque el navegador esté
+         a punto de descargar la nueva página (el redirect a /gracias). */
+      keepalive: true
     }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
+      colaBorrar(p.event_id);
     });
   }
 
@@ -775,7 +906,22 @@
 
       enviar(p).then(function () {
         medir(cfg, p, function () { location.href = destino(cfg, p); });
-      }).catch(function () {
+      }).catch(function (err) {
+        /* El payload ya está en la cola de localStorage (lo puso `enviar`).
+           Se reintentará en background la próxima vez que el visitante
+           cargue cualquier página del sitio, y también antes de que se
+           cierre esta pestaña vía sendBeacon. Mientras tanto, se le
+           muestra el error para que pueda reintentar a mano o irse a
+           WhatsApp. */
+        if (typeof window.destinyTrack === "function") {
+          try {
+            window.destinyTrack("form_lead_failed", {
+              form_type: cfg.tipo,
+              form_variant: cfg.variante || null,
+              motivo: (err && err.message) || "fetch_failed"
+            });
+          } catch (e) {}
+        }
         enviando = false;
         estado("normal");
         cajaError.hidden = false;
@@ -819,6 +965,27 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
   else run();
 
+  /* Reintentar en background envíos pendientes de sesiones anteriores.
+     El delay de 2 s deja que la página cargue lo importante primero
+     (medición, contenido) y encara la cola de reintento en paralelo. */
+  if (!esLocal() && WEBHOOK_LISTO) {
+    setTimeout(colaReintentar, 2000);
+    /* Cuando el visitante recupera conexión —red móvil que vuelve,
+       adblocker que se apaga, VPN que reconecta— exprimimos el
+       momento y reintentamos lo que haya quedado. */
+    try { window.addEventListener("online", colaReintentar); } catch (e) {}
+    /* Última bala antes del unload. sendBeacon manda el POST sin
+       bloquear la salida y sobrevive al cierre de la pestaña. */
+    try {
+      window.addEventListener("pagehide", colaBeaconOut);
+      /* pagehide no dispara en Safari antiguo; visibilitychange +
+         hidden funciona como respaldo. */
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "hidden") colaBeaconOut();
+      });
+    } catch (e) {}
+  }
+
   /* Las páginas de propiedad y de zona montan su formulario por JS después
      del DOM: llaman a refresh() igual que antes llamaban a DestinyZoho. */
   window.DestinyForms = {
@@ -826,6 +993,10 @@
     TIPOS: TIPOS,
     CAMPOS: CAMPOS,
     VARIANTES: VARIANTES,
-    webhookListo: WEBHOOK_LISTO
+    webhookListo: WEBHOOK_LISTO,
+    /* Expuesto para diagnostico.html: cuántos leads están esperando
+       reintento, y disparar uno manual desde ahí sin recargar el sitio. */
+    colaPendientes: function () { return colaLeer(); },
+    reintentarCola: colaReintentar
   };
 })();
