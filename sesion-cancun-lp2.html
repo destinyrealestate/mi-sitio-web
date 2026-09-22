@@ -75,7 +75,7 @@
             mask-image: linear-gradient(to bottom, #000 86%, transparent 100%); }
   .retrato figcaption { margin-top: 14px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
   .retrato figcaption strong { display: block; font-family: var(--serif); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 5px; font-weight: 500; }
-  .retrato figcaption span { display: block; margin-top: 3px; }
+  .retrato figcaption .linea { display: block; margin-top: 3px; }
   @media (max-width: 900px) { .autoridad { grid-template-columns: 1fr; } .retrato { max-width: 300px; } }
 
   /* Hero a dos columnas: el texto y, a su lado, el formulario. Es la
@@ -83,6 +83,13 @@
   .hero-split { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(32px,4vw,68px); align-items: center; }
   .hero--sesion { padding-block: clamp(120px,13vw,150px) clamp(64px,8vw,90px); }
   @media (max-width: 900px) { .hero-split { grid-template-columns: 1fr; gap: 34px; } }
+
+  /* Las cifras van en número y resaltadas. En fondo claro se usa el oro
+     oscuro y no el de marca: el #C5A058 sobre marfil se queda en 2.3:1 de
+     contraste y no pasa AA en texto de párrafo. Sobre fondo oscuro sí
+     entra el oro claro. */
+  .cifra { color: var(--bronze); font-weight: 600; font-variant-numeric: lining-nums; white-space: nowrap; }
+  .dark .cifra, .barragan .cifra, .hero .cifra { color: var(--gold-bright); }
 
   /* Los 4 pilares: 2×2 en escritorio, apilados en móvil. Sin relleno
      saturado — el color del pilar es una línea, no un bloque. */
@@ -161,7 +168,7 @@
     <div class="hero-split">
       <div>
         <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">8 y 9 de octubre &middot; Puerto Cancún &middot; Cupo limitado</span>
-        <h1 class="h-display reveal in d1" style="margin-top:18px;max-width:none;">45 minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
+        <h1 class="h-display reveal in d1" style="margin-top:18px;max-width:none;"><span class="cifra">45</span> minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
         <p class="lede reveal in d2" style="margin-top:6px;">No es una conferencia ni una presentación de departamentos. Es una revisión honesta de tu caso: qué proyectos valen la pena hoy, cómo se compra, cuánto te presta el banco siendo extranjero y cómo se conecta con tu plan de vivir allá.</p>
         <p class="hero__micro reveal in d3">Son pocos lugares. Cuando se llenan, se cierra el registro.</p>
       </div>
@@ -181,12 +188,12 @@
 <section class="section" data-screen-label="Autoridad">
   <div class="wrap" style="max-width:760px;">
     <div class="reveal">
-      <h2 class="h-1">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
+      <h2 class="h-1"><span class="cifra">25</span> años en Miami. <span class="serif-em">No improvisamos.</span></h2>
       <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Junto contigo elegimos el que hace sentido para tu perfil.</p>
       <p class="lede" style="margin-top:22px;">Y lo que traigas lo resolvemos en la misma mesa: lo legal, lo fiscal, la migración, el financiamiento. Si tu caso necesita a un especialista, lo traemos nosotros: no te mandamos a averiguarlo por tu cuenta.</p>
       <figure class="retrato">
         <img src="/assets/img/oscar-retrato-v3.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1000" height="1498" loading="lazy" decoding="async">
-        <figcaption><strong>Oscar Chapa</strong>Fundador de Destiny · 25 años en Miami<span>290+ familias mexicanas acompañadas</span></figcaption>
+        <figcaption><strong>Oscar Chapa</strong>Fundador de Destiny · <span class="cifra">25</span> años en Miami<span class="linea"><span class="cifra">290+</span> familias mexicanas acompañadas</span></figcaption>
       </figure>
     </div>
   </div>
@@ -207,7 +214,7 @@
       </div>
       <div class="pilar reveal d2" style="--marker:var(--gold);">
         <h3 class="pilar__t">Financiamiento</h3>
-        <p class="pilar__d">Sí te prestan aunque no seas residente: hasta 70% del valor. Corremos tu caso con números reales.</p>
+        <p class="pilar__d">Sí te prestan aunque no seas residente: hasta <span class="cifra">70%</span> del valor. Corremos tu caso con números reales.</p>
       </div>
       <div class="pilar reveal d3" style="--marker:var(--ink-2);">
         <h3 class="pilar__t">Migración</h3>
@@ -228,7 +235,7 @@
       </div>
       <div class="reveal d2">
         <div class="claridad__k">Sí es</div>
-        <p class="claridad__v">Cuarenta y cinco minutos para revisar tu caso y salir sabiendo qué te conviene y qué no. Salgas comprando o no.</p>
+        <p class="claridad__v"><span class="cifra">45</span> minutos para revisar tu caso y salir sabiendo qué te conviene y qué no. Salgas comprando o no.</p>
       </div>
     </div>
     <p class="remate reveal d3">Si vienes a que te presione, no vengas. Si vienes por claridad, este es tu lugar.</p>
@@ -239,7 +246,7 @@
 <section class="section" data-screen-label="Escasez">
   <div class="wrap" style="max-width:760px;">
     <h2 class="h-1 reveal">Por qué son <span class="serif-em">pocos lugares.</span></h2>
-    <p class="lede reveal d1" style="margin-top:28px;">Cada sesión es uno a uno, de cuarenta y cinco minutos. Solo alcanza el tiempo para unas cuantas personas el 8 y 9 de octubre. El que llega tarde no se queda sin silla: se queda sin la conversación.</p>
+    <p class="lede reveal d1" style="margin-top:28px;">Cada sesión es uno a uno, de <span class="cifra">45</span> minutos. Solo alcanza el tiempo para unas cuantas personas el <span class="cifra">8 y 9 de octubre</span>. El que llega tarde no se queda sin silla: se queda sin la conversación.</p>
     <p class="lede reveal d2" style="margin-top:22px;">Y hay algo que no depende de nosotros: en preconstrucción compras al precio de hoy. Ese precio no va a estar el año que viene.</p>
     <div class="reveal d3" style="margin-top:38px;">
       <a class="btn btn-primary" href="#registro">Aparta mi lugar <span class="ar">&#8594;</span></a>
