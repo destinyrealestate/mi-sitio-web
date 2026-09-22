@@ -20,20 +20,35 @@ viviendo **solo** en `assets/tags.js`.
 
 ## El hero
 
-De fondo va el render de Cipriani Residences (`assets/img/cipriani/hero.jpg`)
-y, encima, `assets/video/cipriani-hero.mp4` en mute y en bucle: 28 segundos
-recortados del film del proyecto (`assets/img/cipriani/cipriani-lifestyle.mp4`),
-sin pista de audio y a 2.8 MB.
+De fondo va Oscar dando una sesión: `assets/video/oscar-sesion-hero.mp4`,
+26 segundos en bucle recortados del levantamiento del 25 aniversario
+(`IMG_3438.MOV`, en RECURSOS de Drive), sin pista de audio y a 1.6 MB. La
+imagen de respaldo (`assets/img/oscar-sesion-poster.jpg`) es un fotograma del
+mismo corte, para que no haya salto cuando el video entra.
+
+Queda en el repo `assets/video/cipriani-hero.mp4`, que fue el primer fondo
+(28 s del film de Cipriani Residences). Para volver a él se cambian las dos
+rutas del `<div class="hero__bg">` y ya.
 
 El video **solo se descarga en pantallas de 768 px para arriba**, con conexión
 decente y sin ahorro de datos activado; si algo de eso falla, o el navegador
-bloquea el autoplay, se queda el render y nadie se entera. Mismo criterio que
-las landings de Bentley. Si se quiere otro tramo del film, se recorta así:
+bloquea el autoplay, se queda la imagen y nadie se entera. Mismo criterio que
+las landings de Bentley. Así se recorta otro tramo:
 
 ```
-ffmpeg -ss 63 -i assets/img/cipriani/cipriani-lifestyle.mp4 -t 28 -an \
+ffmpeg -ss 70 -i IMG_3438.MOV -t 26 -an -vf scale=1280:720 \
   -c:v libx264 -preset slow -crf 27 -maxrate 1100k -bufsize 2200k \
-  -pix_fmt yuv420p -movflags +faststart -r 25 assets/video/cipriani-hero.mp4
+  -pix_fmt yuv420p -movflags +faststart -r 25 assets/video/oscar-sesion-hero.mp4
+```
+
+El retrato (`assets/img/oscar-retrato-v3.jpg`) sale del PNG recortado del
+shooting de Jorge Ruiz, compuesto sobre el marfil de la sección para que no se
+vea la caja:
+
+```
+ffmpeg -i OscarChapa@JorgeRuiz_Photo_0177.png -filter_complex \
+  "[0:v]scale=1000:-1[fg];color=0xFAF9F3:s=1000x1498[bg];[bg][fg]overlay=0:0:format=auto,format=yuvj420p" \
+  -frames:v 1 -q:v 4 assets/img/oscar-retrato-v3.jpg
 ```
 
 ## El formulario

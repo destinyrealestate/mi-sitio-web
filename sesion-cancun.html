@@ -65,11 +65,17 @@
   /* Autoridad: el texto a la izquierda con el retrato de Oscar, el
      formulario a la derecha. Es el primer punto de captura de la página. */
   .autoridad { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(36px,5vw,76px); align-items: start; }
-  .retrato { margin: clamp(32px,4vw,44px) 0 0; max-width: 340px; }
-  .retrato img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 20%; display: block; border-radius: var(--r); }
+  .retrato { margin: clamp(28px,3.5vw,40px) 0 0; max-width: 380px; }
+  /* El recorte está compuesto sobre el mismo marfil de la sección, así que
+     no necesita caja. El degradado del final evita que la silla se corte en
+     seco contra el borde del bloque. */
+  .retrato img { width: 100%; height: auto; display: block;
+    -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 86%, transparent 100%); }
   .retrato figcaption { margin-top: 14px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
-  .retrato figcaption strong { display: block; font-family: var(--serif); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 4px; font-weight: 500; }
-  @media (max-width: 900px) { .autoridad { grid-template-columns: 1fr; } .retrato { max-width: 260px; } }
+  .retrato figcaption strong { display: block; font-family: var(--serif); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 5px; font-weight: 500; }
+  .retrato figcaption span { display: block; margin-top: 3px; }
+  @media (max-width: 900px) { .autoridad { grid-template-columns: 1fr; } .retrato { max-width: 300px; } }
 
   /* Los 4 pilares: 2×2 en escritorio, apilados en móvil. Sin relleno
      saturado — el color del pilar es una línea, no un bloque. */
@@ -133,13 +139,15 @@
 
 <!-- ══════════ 1 · HERO ══════════ -->
 <header class="hero hero--sesion" data-screen-label="Hero">
-  <!-- Fondo: render de Cipriani Residences y, encima, el video del proyecto
-       en mute. El video NO lleva pista de audio: se le quitó al cortarlo. -->
+  <!-- Fondo: Oscar dando una sesión, del levantamiento del 25 aniversario.
+       El video NO lleva pista de audio: se le quitó al cortarlo, así que no
+       hay nada que silenciar. La imagen es un fotograma del mismo video: es
+       lo que se ve en móvil, donde el video no se descarga. -->
   <div class="hero__bg">
-    <img src="/assets/img/cipriani/hero.jpg" alt="" aria-hidden="true" fetchpriority="high" width="1600" height="1173">
+    <img src="/assets/img/oscar-sesion-poster.jpg" alt="" aria-hidden="true" fetchpriority="high" width="1600" height="900">
     <video id="heroVideo" class="hero__video" muted playsinline autoplay loop
            preload="none" aria-hidden="true" tabindex="-1"
-           data-src="/assets/video/cipriani-hero.mp4?v=1"></video>
+           data-src="/assets/video/oscar-sesion-hero.mp4?v=1"></video>
     <div class="hero__velo"></div>
   </div>
   <div class="hero__inner wrap" style="max-width:960px;">
@@ -158,11 +166,11 @@
   <div class="wrap autoridad">
     <div class="reveal">
       <h2 class="h-1">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
-      <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Conocemos el proceso legal, fiscal, el financiamiento para extranjeros y cómo se estructura una compra pensada también en migración.</p>
-      <p class="lede" style="margin-top:22px;">No te voy a empujar el proyecto que me deja más comisión. Junto contigo elegimos el que hace sentido para tu perfil.</p>
+      <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Junto contigo elegimos el que hace sentido para tu perfil.</p>
+      <p class="lede" style="margin-top:22px;">Y lo que traigas lo resolvemos en la misma mesa: lo legal, lo fiscal, la migración, el financiamiento. Si tu caso necesita a un especialista, lo traemos nosotros: no te mandamos a averiguarlo por tu cuenta.</p>
       <figure class="retrato">
-        <img src="/assets/img/oscar-retrato-v2.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1200" height="1600" loading="lazy" decoding="async">
-        <figcaption><strong>Oscar Chapa</strong>Con quién te vas a sentar</figcaption>
+        <img src="/assets/img/oscar-retrato-v3.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1000" height="1498" loading="lazy" decoding="async">
+        <figcaption><strong>Oscar Chapa</strong>Fundador de Destiny · 25 años en Miami<span>290+ familias mexicanas acompañadas</span></figcaption>
       </figure>
     </div>
     <!-- Mismo formulario que abajo: la variante "cancun" de assets/forms.js.
