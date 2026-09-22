@@ -11,6 +11,8 @@ enlaces y no hay botón flotante de WhatsApp.
 |---|---|
 | `sesion-cancun.html` | La landing. URL pública: `https://destiny.mx/sesion-cancun` |
 | `gracias-cancun.html` | Página de gracias. URL: `/gracias-cancun` (noindex) |
+| `sesion-cancun-lp2.html` | Variante A/B: el formulario dentro del hero |
+| `sesion-cancun-lp3.html` | Variante A/B: un solo formulario, al cierre |
 | `assets/forms.js` | Aquí viven los campos y la variante `cancun` del formulario |
 
 No se creó proyecto aparte ni se metió otro pixel: la página usa la misma capa
@@ -101,6 +103,29 @@ Son los del documento de la campaña:
 Si la propiedad equivalente de HubSpot usa otros cortes, cámbialos en
 `CAMPOS.rango_sesion` dentro de `assets/forms.js` y empatan sin limpieza
 manual.
+
+## Las tres variantes
+
+Mismo contenido y mismo copy; lo único que cambia es **dónde cae el
+formulario**, que es el patrón de las landings A/B de Bentley y Frida:
+
+| URL | `data-lp` | Dónde está el formulario |
+|---|---|---|
+| `/sesion-cancun` | 1 | En la sección de autoridad, junto al retrato de Oscar, y otra vez al cierre |
+| `/sesion-cancun-lp2` | 2 | Dentro del hero, sin scroll, y otra vez al cierre |
+| `/sesion-cancun-lp3` | 3 | Una sola vez, al cierre: la página se lee entera antes de pedir nada |
+
+Las dos variantes van **noindex,follow** con canónica a `/sesion-cancun` y
+fuera del sitemap: son pruebas, no páginas que deban competir entre sí en
+Google. La original sí es indexable.
+
+Para saber de cuál vino cada lead no hace falta nada nuevo: el `data-context`
+del formulario termina en `· LP1`, `· LP2` o `· LP3` y viaja al webhook, además
+del `page_url` que ya mandaba el motor.
+
+Cuando se decida cuál gana, lo honesto es dejar una sola: se copia el bloque
+ganador a `sesion-cancun.html` y se borran las otras dos (con su regla del
+`.htaccess`).
 
 ## Medición
 

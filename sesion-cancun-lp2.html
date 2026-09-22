@@ -16,6 +16,7 @@
 <!-- Esta página muere el 9 de octubre de 2026. Cuando pase la sesión:
      poner <meta name="robots" content="noindex, nofollow"> aquí y mandar la
      URL a la landing que la sustituya desde .htaccess. -->
+<meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://destiny.mx/sesion-cancun">
 <link rel="icon" type="image/png" href="/favicon.png?v=2">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
@@ -26,7 +27,7 @@
 <!-- TODO Carlos: sustituir por una imagen propia de 1200×630 de la sesión.
      Mientras tanto usa la OG genérica del sitio. -->
 <meta property="og:image" content="https://destiny.mx/assets/img/og-default.jpg">
-<meta property="og:url" content="https://destiny.mx/sesion-cancun">
+<meta property="og:url" content="https://destiny.mx/sesion-cancun-lp2">
 <meta property="og:site_name" content="Destiny Real Estate">
 <meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary_large_image">
@@ -77,6 +78,12 @@
   .retrato figcaption span { display: block; margin-top: 3px; }
   @media (max-width: 900px) { .autoridad { grid-template-columns: 1fr; } .retrato { max-width: 300px; } }
 
+  /* Hero a dos columnas: el texto y, a su lado, el formulario. Es la
+     diferencia de esta variante. */
+  .hero-split { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(32px,4vw,68px); align-items: center; }
+  .hero--sesion { padding-block: clamp(120px,13vw,150px) clamp(64px,8vw,90px); }
+  @media (max-width: 900px) { .hero-split { grid-template-columns: 1fr; gap: 34px; } }
+
   /* Los 4 pilares: 2×2 en escritorio, apilados en móvil. Sin relleno
      saturado — el color del pilar es una línea, no un bloque. */
   .pilares { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px,3vw,44px); margin-top: clamp(40px,5vw,64px); }
@@ -123,7 +130,7 @@
   }
 </style>
 </head>
-<body class="has-lp-sticky" data-lp="1" data-desarrollo="lp-sesion-cancun" data-page-type="captura">
+<body class="has-lp-sticky" data-lp="2" data-desarrollo="lp-sesion-cancun" data-page-type="captura">
 
 <!-- NAV MÍNIMO — sin menú, sin enlaces al sitio. Cada salida es una fuga de
      tráfico pagado: el logo liga al formulario de esta misma página. -->
@@ -150,20 +157,29 @@
            data-src="/assets/video/oscar-sesion-hero.mp4?v=1"></video>
     <div class="hero__velo"></div>
   </div>
-  <div class="hero__inner wrap" style="max-width:960px;">
-    <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">8 y 9 de octubre &middot; Puerto Cancún &middot; Cupo limitado</span>
-    <h1 class="h-display reveal in d1" style="margin-top:18px;">45 minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
-    <p class="lede reveal in d2" style="margin-top:6px;max-width:58ch;">No es una conferencia ni una presentación de departamentos. Es una revisión honesta de tu caso: qué proyectos valen la pena hoy, cómo se compra, cuánto te presta el banco siendo extranjero y cómo se conecta con tu plan de vivir allá.</p>
-    <div class="hero__actions reveal in d3">
-      <a class="btn btn-gold" href="#registro">Aparta mi lugar <span class="ar">&#8594;</span></a>
+  <div class="hero__inner wrap" style="max-width:1240px;">
+    <div class="hero-split">
+      <div>
+        <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">8 y 9 de octubre &middot; Puerto Cancún &middot; Cupo limitado</span>
+        <h1 class="h-display reveal in d1" style="margin-top:18px;max-width:none;">45 minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
+        <p class="lede reveal in d2" style="margin-top:6px;">No es una conferencia ni una presentación de departamentos. Es una revisión honesta de tu caso: qué proyectos valen la pena hoy, cómo se compra, cuánto te presta el banco siendo extranjero y cómo se conecta con tu plan de vivir allá.</p>
+        <p class="hero__micro reveal in d3">Son pocos lugares. Cuando se llenan, se cierra el registro.</p>
+      </div>
+      <!-- El formulario sin scroll: es lo único que cambia respecto de
+           sesion-cancun.html, donde vive en la sección de autoridad. -->
+      <div class="form reveal in d1" id="registro">
+        <div class="form__head"><h3 class="h-3">Aparta tu lugar</h3><span class="form__sub">8 y 9 de octubre</span></div>
+        <p class="form__note">Cupo limitado. Te confirmamos el horario por WhatsApp.</p>
+        <div data-destiny-form="agenda" data-variant="cancun"
+             data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP2"></div>
+      </div>
     </div>
-    <p class="hero__micro reveal in d3">Son pocos lugares. Cuando se llenan, se cierra el registro.</p>
   </div>
 </header>
 
 <!-- ══════════ 2 · AUTORIDAD ══════════ -->
-<section class="section" id="registro" data-screen-label="Autoridad y registro">
-  <div class="wrap autoridad">
+<section class="section" data-screen-label="Autoridad">
+  <div class="wrap" style="max-width:760px;">
     <div class="reveal">
       <h2 class="h-1">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
       <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Junto contigo elegimos el que hace sentido para tu perfil.</p>
@@ -172,15 +188,6 @@
         <img src="/assets/img/oscar-retrato-v3.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1000" height="1498" loading="lazy" decoding="async">
         <figcaption><strong>Oscar Chapa</strong>Fundador de Destiny · 25 años en Miami<span>290+ familias mexicanas acompañadas</span></figcaption>
       </figure>
-    </div>
-    <!-- Mismo formulario que abajo: la variante "cancun" de assets/forms.js.
-         Dos contenedores en la misma página es lo normal en el motor; cada
-         uno se monta por separado y manda el mismo payload. -->
-    <div class="form reveal d1">
-      <div class="form__head"><h3 class="h-3">Aparta tu lugar</h3><span class="form__sub">8 y 9 de octubre</span></div>
-      <p class="form__note">Cupo limitado. Te confirmamos el horario por WhatsApp.</p>
-      <div data-destiny-form="agenda" data-variant="cancun"
-           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP1"></div>
     </div>
   </div>
 </section>
@@ -252,7 +259,7 @@
     </div>
     <div class="form reveal d1">
       <div data-destiny-form="agenda" data-variant="cancun"
-           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP1"></div>
+           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP2"></div>
       <p class="form__secure">Te confirmamos tu horario por WhatsApp. Cupo limitado; se cierra al llenarse.</p>
     </div>
   </div>

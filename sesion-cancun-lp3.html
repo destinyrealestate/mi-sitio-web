@@ -16,6 +16,7 @@
 <!-- Esta página muere el 9 de octubre de 2026. Cuando pase la sesión:
      poner <meta name="robots" content="noindex, nofollow"> aquí y mandar la
      URL a la landing que la sustituya desde .htaccess. -->
+<meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://destiny.mx/sesion-cancun">
 <link rel="icon" type="image/png" href="/favicon.png?v=2">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
@@ -26,7 +27,7 @@
 <!-- TODO Carlos: sustituir por una imagen propia de 1200×630 de la sesión.
      Mientras tanto usa la OG genérica del sitio. -->
 <meta property="og:image" content="https://destiny.mx/assets/img/og-default.jpg">
-<meta property="og:url" content="https://destiny.mx/sesion-cancun">
+<meta property="og:url" content="https://destiny.mx/sesion-cancun-lp3">
 <meta property="og:site_name" content="Destiny Real Estate">
 <meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary_large_image">
@@ -123,7 +124,7 @@
   }
 </style>
 </head>
-<body class="has-lp-sticky" data-lp="1" data-desarrollo="lp-sesion-cancun" data-page-type="captura">
+<body class="has-lp-sticky" data-lp="3" data-desarrollo="lp-sesion-cancun" data-page-type="captura">
 
 <!-- NAV MÍNIMO — sin menú, sin enlaces al sitio. Cada salida es una fuga de
      tráfico pagado: el logo liga al formulario de esta misma página. -->
@@ -162,8 +163,8 @@
 </header>
 
 <!-- ══════════ 2 · AUTORIDAD ══════════ -->
-<section class="section" id="registro" data-screen-label="Autoridad y registro">
-  <div class="wrap autoridad">
+<section class="section" data-screen-label="Autoridad">
+  <div class="wrap" style="max-width:760px;">
     <div class="reveal">
       <h2 class="h-1">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
       <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Junto contigo elegimos el que hace sentido para tu perfil.</p>
@@ -172,15 +173,6 @@
         <img src="/assets/img/oscar-retrato-v3.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1000" height="1498" loading="lazy" decoding="async">
         <figcaption><strong>Oscar Chapa</strong>Fundador de Destiny · 25 años en Miami<span>290+ familias mexicanas acompañadas</span></figcaption>
       </figure>
-    </div>
-    <!-- Mismo formulario que abajo: la variante "cancun" de assets/forms.js.
-         Dos contenedores en la misma página es lo normal en el motor; cada
-         uno se monta por separado y manda el mismo payload. -->
-    <div class="form reveal d1">
-      <div class="form__head"><h3 class="h-3">Aparta tu lugar</h3><span class="form__sub">8 y 9 de octubre</span></div>
-      <p class="form__note">Cupo limitado. Te confirmamos el horario por WhatsApp.</p>
-      <div data-destiny-form="agenda" data-variant="cancun"
-           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP1"></div>
     </div>
   </div>
 </section>
@@ -244,7 +236,7 @@
      El formulario lo dibuja assets/forms.js con la variante "cancun"
      (tipo agenda). Los campos, la página de gracias y el texto del botón
      viven en ese archivo, no aquí. -->
-<section class="section dark" id="registro-final" data-screen-label="Registro final">
+<section class="section dark" id="registro" data-screen-label="Registro">
   <div class="wrap registro">
     <div class="reveal" style="text-align:center;margin-bottom:34px;">
       <span class="eyebrow" style="justify-content:center;">8 y 9 de octubre &middot; Puerto Cancún</span>
@@ -252,7 +244,7 @@
     </div>
     <div class="form reveal d1">
       <div data-destiny-form="agenda" data-variant="cancun"
-           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP1"></div>
+           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026 · LP3"></div>
       <p class="form__secure">Te confirmamos tu horario por WhatsApp. Cupo limitado; se cierra al llenarse.</p>
     </div>
   </div>

@@ -128,6 +128,12 @@ AddDefaultCharset UTF-8
   RewriteRule ^(sesion-cancun|gracias-cancun)$   $1.html   [L]
   RewriteRule ^(sesion-cancun|gracias-cancun)/$  /$1       [R=301,L]
 
+  # Las dos variantes A/B de la misma sesión: cambia dónde cae el
+  # formulario. Van noindex con canónica a /sesion-cancun y fuera del
+  # sitemap, igual que las de Bentley y Frida.
+  RewriteRule ^(sesion-cancun-lp2|sesion-cancun-lp3)$   $1.html   [L]
+  RewriteRule ^(sesion-cancun-lp2|sesion-cancun-lp3)/$  /$1       [R=301,L]
+
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
 
