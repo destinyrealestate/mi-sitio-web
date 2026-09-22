@@ -18,7 +18,32 @@ de medición del sitio (`consent.js` → `attribution.js` → `tags.js` … →
 `tracking.js` → `forms.js`). Los IDs de GA4, Meta, Google Ads y GTM siguen
 viviendo **solo** en `assets/tags.js`.
 
+## El hero
+
+De fondo va el render de Cipriani Residences (`assets/img/cipriani/hero.jpg`)
+y, encima, `assets/video/cipriani-hero.mp4` en mute y en bucle: 28 segundos
+recortados del film del proyecto (`assets/img/cipriani/cipriani-lifestyle.mp4`),
+sin pista de audio y a 2.8 MB.
+
+El video **solo se descarga en pantallas de 768 px para arriba**, con conexión
+decente y sin ahorro de datos activado; si algo de eso falla, o el navegador
+bloquea el autoplay, se queda el render y nadie se entera. Mismo criterio que
+las landings de Bentley. Si se quiere otro tramo del film, se recorta así:
+
+```
+ffmpeg -ss 63 -i assets/img/cipriani/cipriani-lifestyle.mp4 -t 28 -an \
+  -c:v libx264 -preset slow -crf 27 -maxrate 1100k -bufsize 2200k \
+  -pix_fmt yuv420p -movflags +faststart -r 25 assets/video/cipriani-hero.mp4
+```
+
 ## El formulario
+
+Hay **dos formularios, iguales**: uno en la sección de autoridad (junto al
+retrato de Oscar, que es donde llega el visitante que apenas está decidiendo)
+y otro al cierre. El de arriba es el ancla `#registro` —a donde apuntan todos
+los CTA— y el de abajo es `#registro-final`. Es el mismo patrón de
+`preconstruccion-miami.html`. Los dos mandan el mismo payload; el motor los
+monta por separado y les da ids distintos, así que no chocan.
 
 Se dibuja con una línea de HTML; los campos no están en la página:
 

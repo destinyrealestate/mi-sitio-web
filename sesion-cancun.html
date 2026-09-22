@@ -52,6 +52,25 @@
   .hero--sesion h1 { max-width: 20ch; }
   .hero__micro { margin-top: 18px; font-size: 13px; color: rgba(250,249,243,.58); }
 
+  /* Video de fondo del hero. Se pinta encima del render y por debajo del
+     velo: si el archivo no carga o el navegador bloquea el autoplay, se
+     queda la imagen y nadie se entera. Lo enciende el script del final. */
+  .hero--sesion .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transition: opacity .9s ease; pointer-events: none; }
+  .hero--sesion .hero__video.is-ready { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .hero--sesion .hero__video { display: none; } }
+  /* Velo sobre la imagen y el video: sin esto el texto blanco no aguanta
+     el contraste contra el cielo del render. */
+  .hero--sesion .hero__velo { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,25,42,.72) 0%, rgba(19,25,42,.80) 45%, rgba(19,25,42,.90) 100%); }
+
+  /* Autoridad: el texto a la izquierda con el retrato de Oscar, el
+     formulario a la derecha. Es el primer punto de captura de la página. */
+  .autoridad { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(36px,5vw,76px); align-items: start; }
+  .retrato { margin: clamp(32px,4vw,44px) 0 0; max-width: 340px; }
+  .retrato img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 20%; display: block; border-radius: var(--r); }
+  .retrato figcaption { margin-top: 14px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+  .retrato figcaption strong { display: block; font-family: var(--serif); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 4px; font-weight: 500; }
+  @media (max-width: 900px) { .autoridad { grid-template-columns: 1fr; } .retrato { max-width: 260px; } }
+
   /* Los 4 pilares: 2×2 en escritorio, apilados en móvil. Sin relleno
      saturado — el color del pilar es una línea, no un bloque. */
   .pilares { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px,3vw,44px); margin-top: clamp(40px,5vw,64px); }
@@ -114,6 +133,15 @@
 
 <!-- ══════════ 1 · HERO ══════════ -->
 <header class="hero hero--sesion" data-screen-label="Hero">
+  <!-- Fondo: render de Cipriani Residences y, encima, el video del proyecto
+       en mute. El video NO lleva pista de audio: se le quitó al cortarlo. -->
+  <div class="hero__bg">
+    <img src="/assets/img/cipriani/hero.jpg" alt="" aria-hidden="true" fetchpriority="high" width="1600" height="1173">
+    <video id="heroVideo" class="hero__video" muted playsinline autoplay loop
+           preload="none" aria-hidden="true" tabindex="-1"
+           data-src="/assets/video/cipriani-hero.mp4?v=1"></video>
+    <div class="hero__velo"></div>
+  </div>
   <div class="hero__inner wrap" style="max-width:960px;">
     <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">8 y 9 de octubre &middot; Puerto Cancún &middot; Cupo limitado</span>
     <h1 class="h-display reveal in d1" style="margin-top:18px;">45 minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
@@ -126,11 +154,26 @@
 </header>
 
 <!-- ══════════ 2 · AUTORIDAD ══════════ -->
-<section class="section" data-screen-label="Autoridad">
-  <div class="wrap" style="max-width:760px;">
-    <h2 class="h-1 reveal">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
-    <p class="lede reveal d1" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Conocemos el proceso legal, fiscal, el financiamiento para extranjeros y cómo se estructura una compra pensada también en migración.</p>
-    <p class="lede reveal d2" style="margin-top:22px;">No te voy a empujar el proyecto que me deja más comisión. Junto contigo elegimos el que hace sentido para tu perfil.</p>
+<section class="section" id="registro" data-screen-label="Autoridad y registro">
+  <div class="wrap autoridad">
+    <div class="reveal">
+      <h2 class="h-1">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
+      <p class="lede" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Conocemos el proceso legal, fiscal, el financiamiento para extranjeros y cómo se estructura una compra pensada también en migración.</p>
+      <p class="lede" style="margin-top:22px;">No te voy a empujar el proyecto que me deja más comisión. Junto contigo elegimos el que hace sentido para tu perfil.</p>
+      <figure class="retrato">
+        <img src="/assets/img/oscar-retrato-v2.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1200" height="1600" loading="lazy" decoding="async">
+        <figcaption><strong>Oscar Chapa</strong>Con quién te vas a sentar</figcaption>
+      </figure>
+    </div>
+    <!-- Mismo formulario que abajo: la variante "cancun" de assets/forms.js.
+         Dos contenedores en la misma página es lo normal en el motor; cada
+         uno se monta por separado y manda el mismo payload. -->
+    <div class="form reveal d1">
+      <div class="form__head"><h3 class="h-3">Aparta tu lugar</h3><span class="form__sub">8 y 9 de octubre</span></div>
+      <p class="form__note">Cupo limitado. Te confirmamos el horario por WhatsApp.</p>
+      <div data-destiny-form="agenda" data-variant="cancun"
+           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026"></div>
+    </div>
   </div>
 </section>
 
@@ -193,7 +236,7 @@
      El formulario lo dibuja assets/forms.js con la variante "cancun"
      (tipo agenda). Los campos, la página de gracias y el texto del botón
      viven en ese archivo, no aquí. -->
-<section class="section dark" id="registro" data-screen-label="Registro">
+<section class="section dark" id="registro-final" data-screen-label="Registro final">
   <div class="wrap registro">
     <div class="reveal" style="text-align:center;margin-bottom:34px;">
       <span class="eyebrow" style="justify-content:center;">8 y 9 de octubre &middot; Puerto Cancún</span>
@@ -235,6 +278,28 @@
 <div class="lp-sticky"><a class="btn btn-gold" href="#registro">Aparta mi lugar</a></div>
 
 <script>
+  /* El video del hero solo se descarga en pantallas grandes, con conexión
+     decente y sin ahorro de datos. En móvil o con datos limitados se queda
+     el render, que ya viene con la página. Mismo criterio que las landings
+     de Bentley: 2.8 MB no se le cobran a nadie que llegue en 3G. */
+  (function () {
+    var v = document.getElementById("heroVideo");
+    if (!v) return;
+    var mm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mm && mm.matches) { v.remove(); return; }
+    if (window.innerWidth < 768) { v.remove(); return; }
+    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (c && (c.saveData || /^(slow-)?2g$/.test(c.effectiveType || "") || c.effectiveType === "3g")) { v.remove(); return; }
+    v.addEventListener("canplay", function () { v.classList.add("is-ready"); });
+    v.addEventListener("error", function () { v.remove(); });
+    v.muted = true;              // el archivo ya viene sin pista de audio
+    v.volume = 0;
+    v.preload = "auto";
+    v.src = v.getAttribute("data-src");
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { /* si lo bloquean, queda el render */ });
+  })();
+
   /* Dos cosas mínimas, sin librerías:
      1. la barra de navegación cambia a fondo claro al bajar,
      2. las secciones aparecen al entrar en pantalla.
