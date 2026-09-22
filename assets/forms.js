@@ -318,7 +318,9 @@
     dia_sesion: {
       tipo: "radios", label: "¿Qué día te acomoda?",
       req: true, err: "Elige un día.",
-      opciones: ["8 de octubre", "9 de octubre", "Cualquiera"]
+      /* Sin "Cualquiera" a propósito: obligar a elegir un día deja la agenda
+         cerrada desde el registro y no hay que perseguir a nadie después. */
+      opciones: ["8 de octubre", "9 de octubre"]
     },
     mensaje: {
       tipo: "textarea", label: "Mensaje (opcional)",

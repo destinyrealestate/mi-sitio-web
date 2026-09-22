@@ -70,7 +70,8 @@ Se dibuja con una línea de HTML; los campos no están en la página:
 La variante `cancun` (en `assets/forms.js`) hereda del tipo `agenda` y define:
 
 - **Campos:** nombre, WhatsApp, correo, rango de inversión (select),
-  intereses (casillas, selección múltiple) y día que le acomoda (opciones).
+  intereses (casillas, selección múltiple) y día que le acomoda: 8 o 9, sin
+  un "cualquiera" que deje la agenda abierta.
 - **Botón:** "Quiero mi lugar".
 - **Gracias:** `/gracias-cancun`.
 - **Evento de Meta:** `Lead` (el tipo `agenda` manda `Schedule`; se cambió
