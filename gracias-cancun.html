@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
+<script src="/assets/consent.js?v=8"></script>
+<script src="/assets/attribution.js?v=8"></script>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://connect.facebook.net">
+<link rel="dns-prefetch" href="https://t.contentsquare.net">
+<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
+<script src="/assets/tags.js?v=9"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/favicon.png?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="Tu lugar en la sesión privada del 8 y 9 de octubre en Puerto Cancún está apartado.">
+<title>Tu lugar está apartado — Sesión privada en Puerto Cancún</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=59">
+<style>
+  .hero--gracias { min-height: auto; background: var(--ink); padding: clamp(140px,16vw,190px) 0 clamp(90px,10vw,120px); align-items: center; }
+  .hero--gracias .hero__inner { padding-top: 0; padding-bottom: 0; }
+  .pasos { display: grid; gap: 18px; margin-top: 38px; padding-top: 28px; border-top: 1px solid var(--line-light); max-width: 52ch; }
+  .pasos li { list-style: none; font-size: 15.5px; line-height: 1.6; color: rgba(250,249,243,.80); position: relative; padding-left: 21px; }
+  .pasos li::before { content: ""; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; background: var(--gold-bright); transform: rotate(45deg); }
+</style>
+</head>
+<body data-desarrollo="lp-sesion-cancun" data-page-type="gracias" data-form-type="sesion">
+
+<!-- Sin menú, igual que la landing: la conversación sigue por WhatsApp. -->
+<nav class="nav nav--lp" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="/sesion-cancun">
+    <img class="logo-light" src="/assets/logo-light@2x.png" alt="Destiny Real Estate" width="270" height="68">
+    <img class="logo-dark" src="/assets/logo-dark@2x.png" alt="Destiny Real Estate" width="270" height="68">
+  </a>
+</nav>
+
+<header class="hero hero--gracias" data-screen-label="Gracias">
+  <div class="hero__inner wrap" style="max-width:780px;">
+    <span class="eyebrow in" style="color:var(--gold-bright);letter-spacing:.24em;">Registro recibido</span>
+    <h1 class="h-display in" style="margin-top:18px;">Listo<span id="gName"></span>. <span class="serif-em">Tu lugar está apartado.</span></h1>
+    <p class="lede in" style="margin-top:22px;">Te escribimos por WhatsApp para confirmar tu horario del 8 o 9 de octubre en Puerto Cancún.</p>
+
+    <ul class="pasos">
+      <li>La sesión es uno a uno con Oscar Chapa y dura 45 minutos.</li>
+      <li>Ven con tu caso: capital disponible, plazo y qué quieres lograr en Miami.</li>
+      <li>Si algo cambia en tu agenda, avísanos por el mismo WhatsApp y movemos tu horario.</li>
+    </ul>
+
+    <div class="hero__actions" style="margin-top:36px;">
+      <a class="btn btn-gold" href="https://api.whatsapp.com/send?phone=525611659009&amp;text=Hola%2C%20acabo%20de%20apartar%20mi%20lugar%20para%20la%20sesi%C3%B3n%20del%208%20y%209%20de%20octubre%20en%20Puerto%20Canc%C3%BAn." target="_blank" rel="noopener">Confirmar por WhatsApp <span class="ar">&#8594;</span></a>
+    </div>
+  </div>
+</header>
+
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__bot"><span>&copy; 2026 Destiny Real Estate. Todos los derechos reservados. &middot; <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> &middot; <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a></span><span>Miami &middot; FL &middot; USA — Ciudad de México &middot; MX</span></div>
+  </div>
+</footer>
+
+<script>
+  /* El nombre lo manda forms.js en la URL (?n=). Si no viene, la frase
+     funciona igual: "Listo. Tu lugar está apartado." */
+  (function () {
+    try {
+      var n = new URLSearchParams(location.search).get("n");
+      if (n) document.getElementById("gName").textContent = ", " + n;
+    } catch (e) {}
+  })();
+</script>
+
+<!-- CAPA DE MEDICIÓN -->
+<script src="/assets/tracking.js?v=9"></script>
+<!-- FIN CAPA DE MEDICIÓN -->
+</body>
+</html>

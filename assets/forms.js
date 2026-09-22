@@ -299,6 +299,27 @@
       req: false,
       opciones: ["Mañana (9 a 13 h)", "Tarde (13 a 18 h)", "Indistinto"]
     },
+    /* ---- Sesión privada de Puerto Cancún · 8 y 9 de octubre de 2026 ----
+       Los rangos son los del documento de la campaña, no los de HubSpot: si
+       la propiedad del CRM usa otros cortes, cámbialos aquí y empatan sin
+       limpieza manual. `intereses` y `dia_sesion` estrenan los dos tipos de
+       campo de grupo (casillas y opciones); ver campoHTML. */
+    rango_sesion: {
+      tipo: "select", label: "¿Cuánto estás considerando invertir?",
+      req: true, err: "Selecciona un rango.",
+      opciones: ["Menos de 300 mil USD", "300\u2013500 mil",
+                 "500 mil\u20131 mill\u00f3n", "M\u00e1s de 1 mill\u00f3n"]
+    },
+    intereses: {
+      tipo: "checks", label: "¿Qué te interesa más?",
+      req: true, err: "Marca al menos una opción.",
+      opciones: ["Proyectos", "Legal y fiscal", "Financiamiento", "Migración"]
+    },
+    dia_sesion: {
+      tipo: "radios", label: "¿Qué día te acomoda?",
+      req: true, err: "Elige un día.",
+      opciones: ["8 de octubre", "9 de octubre", "Cualquiera"]
+    },
     mensaje: {
       tipo: "textarea", label: "Mensaje (opcional)",
       ph: "Cuéntanos qué estás buscando", req: false, max: 600
@@ -376,6 +397,17 @@
        más amplia que ya usaban esas tres páginas. */
     patrimonio: {
       campos: ["nombre", "email", "telefono", "pais", "monto"]
+    },
+    /* Sesión privada de Puerto Cancún. Hereda del tipo `agenda`, así que el
+       evento interno sigue siendo agenda_solicitada: es el que GTM traduce a
+       generate_lead con form_type "sesion" y el que dispara la conversión de
+       2000 en Google Ads. Lo único que se cambia es el evento estándar de
+       Meta —Lead en vez de Schedule— porque así lo pide el brief de la
+       campaña y es el evento para el que están optimizados los anuncios. */
+    cancun: {
+      campos: ["nombre", "telefono", "email", "rango_sesion", "intereses", "dia_sesion"],
+      meta: "Lead",
+      gracias: "/gracias-cancun", cta: "Quiero mi lugar"
     }
   };
 
@@ -585,6 +617,25 @@
         ops += '<option value="' + esc(c.opciones[i]) + '">' + esc(c.opciones[i]) + "</option>";
       }
       control = '<select id="' + fid + '" name="' + nombre + '"' + req + aria + ">" + ops + "</select>";
+    } else if (c.tipo === "checks" || c.tipo === "radios") {
+      /* Grupo de casillas u opciones. Va en un <fieldset> con <legend> en
+         lugar de <label>: un solo label no puede describir seis controles,
+         y el lector de pantalla necesita saber que las opciones son una
+         sola pregunta. El name se repite en todos los controles del grupo;
+         quien lee el valor es valorCampo(), no .value. */
+      var tipoCtrl = c.tipo === "checks" ? "checkbox" : "radio";
+      var ops2 = "";
+      for (var j = 0; j < c.opciones.length; j++) {
+        var oid = fid + "_" + j;
+        ops2 += '<label class="opt" for="' + oid + '">' +
+          '<input type="' + tipoCtrl + '" id="' + oid + '" name="' + nombre + '" value="' +
+          esc(c.opciones[j]) + '"' + aria + ">" +
+          '<span>' + esc(c.opciones[j]) + "</span></label>";
+      }
+      return '<fieldset class="field field--grupo" data-campo="' + nombre + '">' +
+        "<legend>" + etiqueta + "</legend>" +
+        '<div class="opts">' + ops2 + "</div>" +
+        '<span class="err" id="' + eid + '">' + esc(c.err || "Requerido.") + "</span></fieldset>";
     } else if (c.tipo === "textarea") {
       control = '<textarea id="' + fid + '" name="' + nombre + '" rows="3"' +
         (c.max ? ' maxlength="' + c.max + '"' : "") +
@@ -662,6 +713,20 @@
 
   function digitos(s) { return (s || "").replace(/\D/g, ""); }
 
+  /* El valor de un campo, venga de un control único o de un grupo de
+     casillas. Los grupos viajan como texto separado por comas: es lo que
+     entiende HubSpot en una propiedad de selección múltiple y lo que ya
+     sabe leer el router de Make sin tocar el escenario. */
+  function valorCampo(form, nombre) {
+    var c = CAMPOS[nombre];
+    if (c && (c.tipo === "checks" || c.tipo === "radios")) {
+      var marcados = form.querySelectorAll('[name="' + nombre + '"]:checked');
+      return Array.prototype.map.call(marcados, function (n) { return n.value; }).join(", ");
+    }
+    var ctrl = form.querySelector('[name="' + nombre + '"]');
+    return ctrl ? ctrl.value.trim() : "";
+  }
+
   function valido(nombre, valor) {
     var c = CAMPOS[nombre];
     var v = (valor || "").trim();
@@ -691,7 +756,7 @@
       var n = cfg.campos[i];
       var ctrl = form.querySelector('[name="' + n + '"]');
       if (!ctrl) continue;
-      var ok = valido(n, ctrl.value);
+      var ok = valido(n, valorCampo(form, n));
       marcar(form, n, ok);
       if (!ok && !primero) primero = ctrl;
     }
@@ -707,8 +772,7 @@
     var datos = {};
     for (var i = 0; i < cfg.campos.length; i++) {
       var n = cfg.campos[i];
-      var ctrl = form.querySelector('[name="' + n + '"]');
-      datos[n] = ctrl ? ctrl.value.trim() : "";
+      datos[n] = valorCampo(form, n);
     }
 
     var ctx = contexto();

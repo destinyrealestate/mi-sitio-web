@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
+<script src="/assets/consent.js?v=8"></script>
+<script src="/assets/attribution.js?v=8"></script>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://connect.facebook.net">
+<link rel="dns-prefetch" href="https://t.contentsquare.net">
+<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
+<!-- tags.js trae GTM (GTM-KW8TPGGG), GA4, el Pixel de Meta y el de OpenAI.
+     No se pega ningún ID aquí: viven en assets/tags.js y en ningún otro lado. -->
+<script src="/assets/tags.js?v=9"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Esta página muere el 9 de octubre de 2026. Cuando pase la sesión:
+     poner <meta name="robots" content="noindex, nofollow"> aquí y mandar la
+     URL a la landing que la sustituya desde .htaccess. -->
+<link rel="canonical" href="https://destiny.mx/sesion-cancun">
+<link rel="icon" type="image/png" href="/favicon.png?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="No es una conferencia ni una presentación de departamentos. Es una revisión honesta de tu caso: qué proyectos valen la pena hoy, cómo se compra, cuánto te presta el banco siendo extranjero y cómo se conecta con tu plan de vivir allá.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sesión privada con Oscar Chapa · 8 y 9 de octubre, Puerto Cancún">
+<meta property="og:description" content="45 minutos uno a uno para revisar tu caso de inversión en Miami. Cupo limitado.">
+<!-- TODO Carlos: sustituir por una imagen propia de 1200×630 de la sesión.
+     Mientras tanto usa la OG genérica del sitio. -->
+<meta property="og:image" content="https://destiny.mx/assets/img/og-default.jpg">
+<meta property="og:url" content="https://destiny.mx/sesion-cancun">
+<meta property="og:site_name" content="Destiny Real Estate">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sesión privada con Oscar Chapa · 8 y 9 de octubre, Puerto Cancún">
+<meta name="twitter:description" content="45 minutos uno a uno para revisar tu caso de inversión en Miami. Cupo limitado.">
+<meta name="twitter:image" content="https://destiny.mx/assets/img/og-default.jpg">
+<title>Sesión privada con Oscar Chapa · Miami en preconstrucción · 8 y 9 oct, Puerto Cancún</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=59">
+<style>
+  /* ── Sólo esta landing ────────────────────────────────────────────────
+     Los colores del Brand Kit V4 ya son los tokens del sitio (--ink #13192A,
+     --ink-2 #1A2E50, --cream #FAF9F3, --gold #C5A058). El único que no
+     existía es el azul Barragán, y los tres marcadores de pilar. */
+  :root { --barragan: #2C3E5C; --pilar-proyectos: #5C1A1B; }
+
+  /* Hero sin fotografía: no hay imagen editorial aprobada para esta sesión,
+     así que se resuelve con tipografía, color y aire — nunca con stock. */
+  .hero--sesion { min-height: auto; background: var(--ink); padding: clamp(132px,16vw,180px) 0 clamp(84px,10vw,120px); align-items: center; }
+  .hero--sesion .hero__inner { padding-top: 0; padding-bottom: 0; }
+  .hero--sesion h1 { max-width: 20ch; }
+  .hero__micro { margin-top: 18px; font-size: 13px; color: rgba(250,249,243,.58); }
+
+  /* Los 4 pilares: 2×2 en escritorio, apilados en móvil. Sin relleno
+     saturado — el color del pilar es una línea, no un bloque. */
+  .pilares { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px,3vw,44px); margin-top: clamp(40px,5vw,64px); }
+  .pilar { border-top: 2px solid var(--marker,var(--gold)); padding-top: 22px; }
+  .pilar__t { font-family: var(--serif); font-size: clamp(21px,2.2vw,27px); line-height: 1.15; margin-bottom: 12px; }
+  .pilar__d { font-size: 15.5px; line-height: 1.62; color: var(--ink-soft); max-width: 46ch; }
+  @media (max-width: 760px) { .pilares { grid-template-columns: 1fr; } }
+
+  /* Qué es y qué no: azul Barragán, texto marfil. */
+  .barragan { background: var(--barragan); color: var(--cream); }
+  .barragan .eyebrow, .barragan .eyebrow::before { color: var(--gold-bright); background-color: transparent; }
+  .barragan .eyebrow::before { background: var(--gold-bright); }
+  .claridad { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,4vw,64px); margin-top: clamp(36px,4vw,52px); }
+  .claridad__k { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 14px; }
+  .claridad__v { font-family: var(--serif); font-size: clamp(20px,2.1vw,26px); line-height: 1.32; color: var(--cream); }
+  .remate { margin-top: clamp(40px,5vw,60px); padding-top: 28px; border-top: 1px solid var(--line-light); font-family: var(--serif); font-size: clamp(19px,2vw,24px); line-height: 1.4; color: var(--cream); max-width: 34ch; }
+  @media (max-width: 760px) { .claridad { grid-template-columns: 1fr; } }
+
+  /* Formulario: una sola columna centrada. Nada compite con él. */
+  .registro { max-width: 620px; margin-inline: auto; }
+  .cierre__linea { font-family: var(--serif); font-size: clamp(24px,3vw,38px); line-height: 1.28; max-width: 24ch; margin-inline: auto; text-align: center; color: var(--cream); }
+
+  /* Campos de grupo (casillas y opciones) que estrena el formulario de esta
+     sesión. Viven aquí y no en assets/styles.css porque hoy los usa una sola
+     página: el día que otro formulario los necesite, este bloque se muda al
+     sistema y esta landing no se entera. */
+  .dstf .field--grupo { border: 0; padding: 0; margin: 0 0 18px; }
+  .dstf .field--grupo legend { padding: 0; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px; }
+  .dstf .opts { display: grid; gap: 8px; }
+  .dstf .opt { display: flex; align-items: center; gap: 10px; padding: 12px 13px; background: var(--cream); border: 1px solid var(--line-soft); border-radius: var(--r); font-size: 14.5px; line-height: 1.3; color: var(--ink); cursor: pointer; margin: 0; letter-spacing: 0; text-transform: none; transition: border-color .25s var(--ease), background .25s var(--ease); }
+  .dstf .opt:hover { border-color: var(--gold); }
+  .dstf .opt:focus-within { border-color: var(--royal); box-shadow: 0 0 0 3px rgba(51,82,159,.14); }
+  .dstf .opt input { width: 17px; height: 17px; flex: 0 0 auto; padding: 0; margin: 0; border: 0; background: none; accent-color: var(--gold); }
+  .dstf .field--grupo.error .opt { border-color: #B4453A; background: #FBEEEC; }
+
+  /* El CTA final lleva la fecha y la sede dentro del botón: en un teléfono
+     no cabe en un renglón, así que aquí sí se le permite partirse. */
+  .btn--cierre { white-space: normal; max-width: 100%; text-align: center; line-height: 1.35; }
+
+  /* Respeta a quien pidió menos movimiento en el sistema. */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body class="has-lp-sticky" data-desarrollo="lp-sesion-cancun" data-page-type="captura">
+
+<!-- NAV MÍNIMO — sin menú, sin enlaces al sitio. Cada salida es una fuga de
+     tráfico pagado: el logo liga al formulario de esta misma página. -->
+<nav class="nav nav--lp" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="#registro">
+    <img class="logo-light" src="/assets/logo-light@2x.png" alt="Destiny Real Estate" width="270" height="68">
+    <img class="logo-dark" src="/assets/logo-dark@2x.png" alt="Destiny Real Estate" width="270" height="68">
+  </a>
+  <div class="nav__cta">
+    <a class="btn btn-gold" href="#registro" style="display:inline-flex;">Aparta mi lugar</a>
+  </div>
+</nav>
+
+<!-- ══════════ 1 · HERO ══════════ -->
+<header class="hero hero--sesion" data-screen-label="Hero">
+  <div class="hero__inner wrap" style="max-width:960px;">
+    <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">8 y 9 de octubre &middot; Puerto Cancún &middot; Cupo limitado</span>
+    <h1 class="h-display reveal in d1" style="margin-top:18px;">45 minutos conmigo para decidir tu inversión en Miami. <span class="serif-em">Tú y yo, tu caso sobre la mesa.</span></h1>
+    <p class="lede reveal in d2" style="margin-top:6px;max-width:58ch;">No es una conferencia ni una presentación de departamentos. Es una revisión honesta de tu caso: qué proyectos valen la pena hoy, cómo se compra, cuánto te presta el banco siendo extranjero y cómo se conecta con tu plan de vivir allá.</p>
+    <div class="hero__actions reveal in d3">
+      <a class="btn btn-gold" href="#registro">Aparta mi lugar <span class="ar">&#8594;</span></a>
+    </div>
+    <p class="hero__micro reveal in d3">Son pocos lugares. Cuando se llenan, se cierra el registro.</p>
+  </div>
+</header>
+
+<!-- ══════════ 2 · AUTORIDAD ══════════ -->
+<section class="section" data-screen-label="Autoridad">
+  <div class="wrap" style="max-width:760px;">
+    <h2 class="h-1 reveal">Veinticinco años en Miami. <span class="serif-em">No improvisamos.</span></h2>
+    <p class="lede reveal d1" style="margin-top:28px;">Tenemos en casa todos los proyectos en preconstrucción de Miami, revisados uno por uno. Conocemos el proceso legal, fiscal, el financiamiento para extranjeros y cómo se estructura una compra pensada también en migración.</p>
+    <p class="lede reveal d2" style="margin-top:22px;">No te voy a empujar el proyecto que me deja más comisión. Junto contigo elegimos el que hace sentido para tu perfil.</p>
+  </div>
+</section>
+
+<!-- ══════════ 3 · LOS 4 PILARES ══════════ -->
+<section class="section" data-screen-label="Los 4 pilares" style="background:var(--paper-2);">
+  <div class="wrap" style="max-width:1000px;">
+    <h2 class="h-1 reveal" style="max-width:20ch;">Lo que nos vamos a <span class="serif-em">sentar a ver.</span></h2>
+    <div class="pilares">
+      <div class="pilar reveal" style="--marker:var(--pilar-proyectos);">
+        <h3 class="pilar__t">Proyectos</h3>
+        <p class="pilar__d">Qué zonas y desarrolladores de Miami aguantan hoy, y cuáles yo no tocaría. No todo Miami sube igual.</p>
+      </div>
+      <div class="pilar reveal d1" style="--marker:var(--ink-2);">
+        <h3 class="pilar__t">Legal y fiscal</h3>
+        <p class="pilar__d">Cómo se compra paso a paso, con tu dinero protegido por ley en una cuenta vigilada (escrow) y cada documento cruzado antes de tu depósito.</p>
+      </div>
+      <div class="pilar reveal d2" style="--marker:var(--gold);">
+        <h3 class="pilar__t">Financiamiento</h3>
+        <p class="pilar__d">Sí te prestan aunque no seas residente: hasta 70% del valor. Corremos tu caso con números reales.</p>
+      </div>
+      <div class="pilar reveal d3" style="--marker:var(--ink-2);">
+        <h3 class="pilar__t">Migración</h3>
+        <p class="pilar__d">Cómo estructurar la compra desde el día uno para que tu inversión no le cierre la puerta a tu plan de vivir o tener residencia allá. El especialista arma tu camino.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 4 · QUÉ ES Y QUÉ NO ES ══════════ -->
+<section class="section barragan" data-screen-label="Qué es y qué no es">
+  <div class="wrap" style="max-width:920px;">
+    <h2 class="h-1 reveal" style="max-width:22ch;">Para que quede claro <span class="serif-em">antes de que te registres.</span></h2>
+    <div class="claridad">
+      <div class="reveal d1">
+        <div class="claridad__k">No es</div>
+        <p class="claridad__v">Una junta para venderte un departamento a la fuerza.</p>
+      </div>
+      <div class="reveal d2">
+        <div class="claridad__k">Sí es</div>
+        <p class="claridad__v">Cuarenta y cinco minutos para revisar tu caso y salir sabiendo qué te conviene y qué no. Salgas comprando o no.</p>
+      </div>
+    </div>
+    <p class="remate reveal d3">Si vienes a que te presione, no vengas. Si vienes por claridad, este es tu lugar.</p>
+  </div>
+</section>
+
+<!-- ══════════ 5 · POR QUÉ SON POCOS LUGARES ══════════ -->
+<section class="section" data-screen-label="Escasez">
+  <div class="wrap" style="max-width:760px;">
+    <h2 class="h-1 reveal">Por qué son <span class="serif-em">pocos lugares.</span></h2>
+    <p class="lede reveal d1" style="margin-top:28px;">Cada sesión es uno a uno, de cuarenta y cinco minutos. Solo alcanza el tiempo para unas cuantas personas el 8 y 9 de octubre. El que llega tarde no se queda sin silla: se queda sin la conversación.</p>
+    <p class="lede reveal d2" style="margin-top:22px;">Y hay algo que no depende de nosotros: en preconstrucción compras al precio de hoy. Ese precio no va a estar el año que viene.</p>
+    <div class="reveal d3" style="margin-top:38px;">
+      <a class="btn btn-primary" href="#registro">Aparta mi lugar <span class="ar">&#8594;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 6 · FORMULARIO ══════════
+     El formulario lo dibuja assets/forms.js con la variante "cancun"
+     (tipo agenda). Los campos, la página de gracias y el texto del botón
+     viven en ese archivo, no aquí. -->
+<section class="section dark" id="registro" data-screen-label="Registro">
+  <div class="wrap registro">
+    <div class="reveal" style="text-align:center;margin-bottom:34px;">
+      <span class="eyebrow" style="justify-content:center;">8 y 9 de octubre &middot; Puerto Cancún</span>
+      <h2 class="h-1" style="margin-top:16px;">Aparta <span class="serif-em">tu lugar.</span></h2>
+    </div>
+    <div class="form reveal d1">
+      <div data-destiny-form="agenda" data-variant="cancun"
+           data-context="Sesión privada Puerto Cancún · 8 y 9 oct 2026"></div>
+      <p class="form__secure">Te confirmamos tu horario por WhatsApp. Cupo limitado; se cierra al llenarse.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 7 · ÚLTIMO EMPUJÓN ══════════ -->
+<section class="section" data-screen-label="Cierre" style="background:var(--ink-deep);">
+  <div class="wrap" style="text-align:center;">
+    <p class="cierre__linea reveal">Miami no se decide en una junta de ventas. <span class="serif-em">Se decide con la información correcta y contigo enfrente.</span></p>
+    <div class="reveal d1" style="margin-top:38px;">
+      <a class="btn btn-gold btn--cierre" href="#registro">Aparta mi lugar &middot; 8 y 9 de octubre, Puerto Cancún</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PIE MÍNIMO — sin menú: ningún enlace compite con el registro ══════════ -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__top" style="grid-template-columns:1fr;">
+      <div class="foot__brand">
+        <img src="/assets/logo-light@2x.png" alt="Destiny Real Estate" style="height:42px;width:auto;margin-bottom:22px;" width="270" height="68" loading="lazy" decoding="async">
+        <p>Más de 25 años curando los activos inmobiliarios de mayor protección patrimonial en Miami para el inversionista mexicano exigente.</p>
+      </div>
+    </div>
+    <div class="foot__bot"><span>&copy; 2026 Destiny Real Estate. Todos los derechos reservados. &middot; <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> &middot; <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a></span><span>Miami &middot; FL &middot; USA — Ciudad de México &middot; MX</span></div>
+    <p class="foot__legal" style="margin-top:2px;font-size:12px;opacity:.6;max-width:90ch;">Información de mercado con fines informativos. No constituye asesoría de inversión, fiscal ni legal personalizada. Las condiciones de financiamiento dependen de cada banco y de tu perfil; se revisan caso por caso.</p>
+  </div>
+</footer>
+
+<!-- CTA fijo en móvil: el tráfico de reels y anuncios llega en celular. -->
+<div class="lp-sticky"><a class="btn btn-gold" href="#registro">Aparta mi lugar</a></div>
+
+<script>
+  /* Dos cosas mínimas, sin librerías:
+     1. la barra de navegación cambia a fondo claro al bajar,
+     2. las secciones aparecen al entrar en pantalla.
+     No se carga assets/data.js: esta landing no pinta catálogo y el peso
+     de más se nota en celular, que es de donde viene el tráfico. */
+  (function () {
+    var nav = document.getElementById("nav");
+    function alBajar() { if (nav) nav.classList.toggle("scrolled", window.scrollY > 40); }
+    alBajar();
+    window.addEventListener("scroll", alBajar, { passive: true });
+
+    var reveals = document.querySelectorAll(".reveal:not(.in)");
+    if (!("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(reveals, function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+    Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
+  })();
+</script>
+
+<!-- CAPA DE MEDICIÓN — el orden importa: tracking.js antes que forms.js.
+     forms.js va en v12: es la versión que trae la variante "cancun". -->
+<script src="/assets/tracking.js?v=9"></script>
+<script src="/assets/forms.js?v=12"></script>
+<!-- FIN CAPA DE MEDICIÓN -->
+</body>
+</html>
