@@ -1,5 +1,5 @@
 /* ============================================================
-   DESTINY — datos del blog (70 artículos)
+   DESTINY — datos del blog (75 artículos)
    ============================================================ */
 window.DESTINY_BLOG = (function () {
   "use strict";
@@ -10,6 +10,11 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["Property Management: cómo tu departamento en Miami te renta aunque vivas en México", "property-management-preconstruccion-miami", 2026, "26 sep 2026", 8, 26, 1],
+    ["Parkside Residences Brickell: entrar a Miami desde ~$400k con renta sin restricción", "parkside-residences-brickell-analisis", 2026, "24 sep 2026", 8, 24, 1],
+    ["El capital institucional ya eligió Florida: qué significa para el que invierte en Miami", "capital-institucional-florida-real-estate", 2026, "22 sep 2026", 8, 22, 1],
+    ["Developer Fee: el costo de cierre que no sale en el 'desde'", "developer-fee-preconstruccion-miami", 2026, "19 sep 2026", 8, 19, 1],
+    ["Sí te prestan en Miami siendo extranjero: cómo financiar tu inversión sin ser residente", "financiamiento-extranjero-preconstruccion-miami", 2026, "15 sep 2026", 8, 15, 1],
     ["El 45% de plusvalía es un ejemplo, no una promesa: cómo se calcula de verdad", "plusvalia-preconstruccion-como-se-calcula", 2026, "12 sep 2026", 8, 12, 1],
     ["619 Brickell by Nobu: qué justifica sus precios y qué está por confirmar", "619-brickell-nobu-analisis", 2026, "10 sep 2026", 8, 10, 1],
     ["Ventana de compra para el comprador mexicano: el dólar está quieto y tu dinero rinde más", "ventana-compra-comprador-mexicano-miami", 2026, "8 sep 2026", 8, 8, 1],
