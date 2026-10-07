@@ -81,7 +81,10 @@ window.DESTINY = (function () {
   const getZone = (s) => ZONES.find(z => z.slug === s);
 
   // Resolución de imágenes (compatible con export standalone)
-  const absUrl = (img) => /^(assets\/|uploads\/|https?:)/.test(img) ? img : BASE + img;
+  // Root-absolutas: las fichas viven en /proyectos/ y /zonas/, y una ruta
+  // relativa (assets/…) se resolvería contra la subcarpeta.
+  const absUrl = (img) => /^(https?:|\/)/.test(img) ? img
+    : /^(assets\/|uploads\/)/.test(img) ? "/" + img : BASE + img;
   const RES = (u) => (window.__resources && window.__resources[u]) || u;
   const imgURL = (img) => RES(absUrl(img));
 
@@ -104,7 +107,7 @@ window.DESTINY = (function () {
         <div class="card__specs">${specs.join("")}</div>
       </div>
       <span class="card__cta">→</span>
-      <a class="card__link" href="Propiedad.html?p=${p.slug}" aria-label="Ver ${p.name}"></a>
+      <a class="card__link" href="/proyectos/${p.slug}" aria-label="Ver ${p.name}"></a>
     </article>`;
   }
 

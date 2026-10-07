@@ -74,6 +74,22 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # ----------------------------------------------------------
+  # La era WordPress, al blog. Search Console seguía rastreando
+  # /blog/tips-invertir/{slug}/ en destiny.mx y cada una daba 404;
+  # las 75 existen con la misma ruta en blog.destiny.mx (verificado
+  # 75/75 con 200). Se conserva la ruta completa: un solo salto.
+  # No toca blog-home.html ni Blog.html: el patrón exige "blog"
+  # sola o seguida de "/", y distingue mayúsculas.
+  # ----------------------------------------------------------
+  RewriteRule ^(blog|category|tag|author|feed|wp-content)(/.*)?$ https://blog.destiny.mx/$1$2 [R=301,L,NE]
+
+  # IDs viejos de WordPress en el home (/?p=143, ?page_id=, ?attachment_id=)
+  # respondían 200 con el home: contenido duplicado. Se mandan al blog con
+  # el parámetro intacto, y WordPress resuelve el ID a la entrada.
+  RewriteCond %{QUERY_STRING} (^|&)(p|page_id|attachment_id)=[0-9]+(&|$)
+  RewriteRule ^(index\.html)?$ https://blog.destiny.mx/ [R=301,L]
+
   # Articulo.html?post={slug}  ó  ?art={slug}  →  https://blog.destiny.mx/blog/tips-invertir/{slug}/
   RewriteCond %{QUERY_STRING} (^|&)(post|art)=([a-z0-9\-]+) [NC]
   RewriteRule ^Articulo\.html$ https://blog.destiny.mx/blog/tips-invertir/%3/? [R=301,L,NE]
@@ -158,15 +174,117 @@ AddDefaultCharset UTF-8
   RewriteRule ^marca/?$      /Marca.html      [R=301,L]
   RewriteRule ^inversion/?$  /Inversion.html  [R=301,L]
 
-  # /propiedad/?proj={slug}  →  /Propiedad.html?p={slug}
+  # /propiedad/?proj={slug}  →  /proyectos/{slug}  (directo, sin pasar por
+  # Propiedad.html: un solo salto). El "?" final descarta la query.
   RewriteCond %{QUERY_STRING} (?:^|&)proj=([a-z0-9\-]+)
-  RewriteRule ^propiedad/?$  /Propiedad.html?p=%1  [R=301,L]
-  RewriteRule ^propiedad/?$  /#mapa  [R=301,L,NE]
+  RewriteRule ^propiedad/?$  /proyectos/%1?  [R=301,L]
+  RewriteRule ^propiedad/?$  /?#mapa  [R=301,L,NE]
 
-  # /zona/?z={slug}  →  /Zona.html?z={slug}
+  # /zona/?z={slug}  →  /zonas/{slug}
   RewriteCond %{QUERY_STRING} (?:^|&)z=([a-z0-9\-]+)
-  RewriteRule ^zona/?$  /Zona.html?z=%1  [R=301,L]
-  RewriteRule ^zona/?$  /#zonas  [R=301,L,NE]
+  RewriteRule ^zona/?$  /zonas/%1?  [R=301,L]
+  RewriteRule ^zona/?$  /?#zonas  [R=301,L,NE]
+
+  # ----------------------------------------------------------
+  # Fichas de proyecto y de zona con URL limpia (2026-10-07).
+  # Los HTML los genera scripts/build-fichas.py con el contenido ya
+  # escrito. Reescritura interna: la URL visible no cambia (200).
+  # Un slug que no existe cae en el 404 de marca.
+  # ----------------------------------------------------------
+  RewriteRule ^proyectos/([a-z0-9-]+)/?$  proyectos/$1.html  [L]
+  RewriteRule ^zonas/([a-z0-9-]+)/?$      zonas/$1.html      [L]
+
+  # BEGIN fichas — generado por scripts/build-fichas.py; no editar a mano.
+  # Un 301 por slug desde la plantilla vieja a la URL limpia. El "?" final
+  # descarta la query: el destino no arrastra ?p= ni ?z=.
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=mandarin-oriental(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/mandarin-oriental? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=bentley-residences-miami(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/bentley-residences-miami? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=frida-kahlo-wynwood-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/frida-kahlo-wynwood-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=619-brickell-by-nobu(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/619-brickell-by-nobu? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=one-twenty-brickell-signature(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/one-twenty-brickell-signature? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=delano-residences-miami(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/delano-residences-miami? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=the-standard-residences-brickell(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/the-standard-residences-brickell? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=four-seasons-private-residences-coconut-grove(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/four-seasons-private-residences-coconut-grove? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=midtown-park-residences-by-proper(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/midtown-park-residences-by-proper? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=miami-tropic-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/miami-tropic-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=w-pompano-beach(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/w-pompano-beach? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=faena-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/faena-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=icon-beach-hollywood(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/icon-beach-hollywood? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=continuum-club-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/continuum-club-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=rivage-bal-harbour(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/rivage-bal-harbour? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=jem-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/jem-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=pagani-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/pagani-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=st-regis-sunny-isles(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/st-regis-sunny-isles? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=one-park-tower(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/one-park-tower? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=ora-by-casa-tua(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/ora-by-casa-tua? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=the-residences-at-1428-brickell(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/the-residences-at-1428-brickell? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=st-regis-brickell(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/st-regis-brickell? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=cipriani-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/cipriani-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=the-village-coral-gables(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/the-village-coral-gables? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=casa-bella-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/casa-bella-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=nomad-wynwood(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/nomad-wynwood? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=nexo-residences(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/nexo-residences? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=viceroy-brickell(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/viceroy-brickell? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=mercedes-benz-places-miami(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/mercedes-benz-places-miami? [R=301,L]
+  # Slug inexistente o sin parámetro: a la colección. "/?#mapa" y no
+  # "/#mapa": LiteSpeed pega la query después del # y el ancla deja
+  # de funcionar (verificado en /propiedad/?foo=1 → /#mapa?foo=1).
+  RewriteRule ^Propiedad\.html$ /?#mapa [R=301,L,NE]
+  RewriteCond %{QUERY_STRING} (^|&)z=coconut-grove(&|$)
+  RewriteRule ^Zona\.html$ /zonas/coconut-grove? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=coral-gables(&|$)
+  RewriteRule ^Zona\.html$ /zonas/coral-gables? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=brickell(&|$)
+  RewriteRule ^Zona\.html$ /zonas/brickell? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=downtown-miami(&|$)
+  RewriteRule ^Zona\.html$ /zonas/downtown-miami? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=wynwood(&|$)
+  RewriteRule ^Zona\.html$ /zonas/wynwood? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=midtown(&|$)
+  RewriteRule ^Zona\.html$ /zonas/midtown? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=north-bay-village(&|$)
+  RewriteRule ^Zona\.html$ /zonas/north-bay-village? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=bal-harbour(&|$)
+  RewriteRule ^Zona\.html$ /zonas/bal-harbour? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=north-miami(&|$)
+  RewriteRule ^Zona\.html$ /zonas/north-miami? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=sunny-isles(&|$)
+  RewriteRule ^Zona\.html$ /zonas/sunny-isles? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=hollywood(&|$)
+  RewriteRule ^Zona\.html$ /zonas/hollywood? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)z=pompano-beach(&|$)
+  RewriteRule ^Zona\.html$ /zonas/pompano-beach? [R=301,L]
+  RewriteRule ^Zona\.html$ /?#zonas [R=301,L,NE]
+  # END fichas
 </IfModule>
 
 # ============================================================

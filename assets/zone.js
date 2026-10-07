@@ -1,12 +1,25 @@
 /* ============================================================
-   DESTINY — página de zona (dinámica por ?z=slug)
+   DESTINY — página de zona
+   Las zonas viven en /zonas/{slug} (generadas por
+   scripts/build-fichas.py con el contenido ya escrito en el HTML) y
+   llevan el slug en <body data-zona>.
    ============================================================ */
 (function () {
   "use strict";
   const D = window.DESTINY;
   const $ = (s) => document.querySelector(s);
   const params = new URLSearchParams(location.search);
-  const z = D.getZone(params.get("z")) || D.ZONES[0]; // default: Brickell
+  // Primero data-zona; ?z= queda de respaldo (el .htaccess ya lo manda a /zonas/{slug}).
+  const z = D.getZone((document.body && document.body.dataset.zona) || params.get("z") || "");
+
+  // Slug inexistente: antes caía en Brickell con 200 (duplicado y soft 404).
+  if (!z) {
+    const m = document.createElement("meta");
+    m.name = "robots"; m.content = "noindex";
+    document.head.appendChild(m);
+    location.replace("/#zonas");
+    return;
+  }
 
   // El desarrollo de la página lo consume tracking.js (evento view_project).
   if (document.body) document.body.setAttribute("data-desarrollo", "zona-" + z.slug);
@@ -14,28 +27,8 @@
   const set = (sel, val) => { const e = $(sel); if (e) e.textContent = val; };
   document.title = `${z.name} — Inversión en Miami | Destiny Real Estate`;
 
-  // SEO dinámico de la zona
-  (function () {
-    const DOM = "https://destiny.mx";
-    // Canónica hacia una URL que responda 200. /zona/?z= era la ruta de
-    // WordPress y hoy solo existe como redirección 301.
-    const url = `${DOM}/Zona.html?z=${z.slug}`;
-    const desc = (z.desc || `Inversión inmobiliaria en ${z.name}, Miami.`).replace(/<[^>]*>/g, "").slice(0, 180);
-    const meta = (sel, a, v) => { const e = document.querySelector(sel); if (e) e.setAttribute(a, v); };
-    meta('link[rel="canonical"]', "href", url);
-    meta('meta[property="og:url"]', "content", url);
-    meta('meta[property="og:title"]', "content", `${z.name} — Inversión en Miami | Destiny`);
-    meta('meta[property="og:description"]', "content", desc);
-    meta('meta[name="description"]', "content", desc);
-
-    // BreadcrumbList: inicio → zona.
-    const bc = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: DOM + "/" },
-      { "@type": "ListItem", position: 2, name: z.name, item: url }
-    ]};
-    const sc = document.createElement("script"); sc.type = "application/ld+json";
-    sc.textContent = JSON.stringify(bc); document.head.appendChild(sc);
-  })();
+  // Canónica, Open Graph, description y JSON-LD ya vienen escritos en el HTML
+  // de cada zona (scripts/build-fichas.py). Aquí no se tocan.
 
   // hero
   $("#zHeroImg").src = D.absUrl ? D.absUrl(z.img) : D.BASE + z.img;
@@ -90,7 +83,7 @@
   // otras zonas
   const otras = D.ZONES.filter(x => x.slug !== z.slug);
   $("#zOtras").innerHTML = otras.map(o => `
-    <a class="zone" href="Zona.html?z=${o.slug}">
+    <a class="zone" href="/zonas/${o.slug}">
       <div class="zone__idx">${o.idx}</div>
       <div class="zone__name"><div class="k">${o.kicker}</div><h3>${o.name}</h3></div>
       <div class="zone__desc">${o.desc}</div>
