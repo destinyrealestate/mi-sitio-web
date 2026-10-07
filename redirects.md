@@ -40,6 +40,19 @@ cuatro páginas apunta a la ruta corta.
 
 ---
 
+## Landings de proyecto (A/B)
+
+| URL pública | Sirve | Tipo |
+|---|---|---|
+| `/bentley-lp1` `/bentley-lp2` `/bentley-lp3` | `bentley-lp{n}.html` | reescritura interna (200) |
+| `/frida-lp1` `/frida-lp2` `/frida-lp3` | `frida-lp{n}.html` | reescritura interna (200) |
+| `/cipriani-lp1` `/cipriani-lp2` `/cipriani-lp3` | `cipriani-lp{n}.html` | reescritura interna (200), desde 2026-10-07 |
+| cualquiera de las anteriores con `/` final | la misma sin `/` | 301 |
+
+Van `noindex` y fuera del sitemap. Las `.html` siguen respondiendo 200.
+
+---
+
 ## Rescate de las rutas de la era WordPress
 
 Estas URLs estaban en el sitemap y en las canónicas del sitio, y **respondían
