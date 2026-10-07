@@ -8,8 +8,8 @@ verdad) y escribe:
 
   sitemap.xml        índice de sitemaps
   sitemap-pages.xml  páginas fijas y rutas de campaña
-  sitemap-props.xml  una entrada por proyecto de la colección
-  sitemap-zonas.xml  una entrada por zona
+  sitemap-props.xml  una entrada por proyecto de la colección (/proyectos/{slug})
+  sitemap-zonas.xml  una entrada por zona (/zonas/{slug})
 
 Por qué existe este script: el sitemap anterior estaba escrito a mano y
 listaba las rutas de la era WordPress (/marca/, /propiedad/?proj=…). 28 de sus
@@ -90,8 +90,10 @@ def main() -> int:
 
     files = {
         "sitemap-pages.xml": urlset(PAGES),
-        "sitemap-props.xml": urlset([(f"/Propiedad.html?p={s}", "0.7", "weekly") for s in props]),
-        "sitemap-zonas.xml": urlset([(f"/Zona.html?z={s}", "0.6", "monthly") for s in zonas]),
+        # Las fichas estáticas que genera scripts/build-fichas.py. Desde el
+        # 2026-10-07 Propiedad.html?p= y Zona.html?z= son 301: no van aquí.
+        "sitemap-props.xml": urlset([(f"/proyectos/{s}", "0.7", "weekly") for s in props]),
+        "sitemap-zonas.xml": urlset([(f"/zonas/{s}", "0.6", "monthly") for s in zonas]),
     }
 
     idx = ['<?xml version="1.0" encoding="UTF-8"?>',
