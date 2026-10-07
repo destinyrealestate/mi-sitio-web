@@ -41,14 +41,22 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  "/gracias-newsletter",
                  # Landings de proyecto (A/B de estructura) — noindex
                  "/bentley-lp1", "/bentley-lp2", "/bentley-lp3",
-                 "/frida-lp1", "/frida-lp2", "/frida-lp3"}
+                 "/frida-lp1", "/frida-lp2", "/frida-lp3",
+                 # Sesión de Puerto Cancún, sus variantes A/B y su gracias
+                 "/sesion-cancun", "/sesion-cancun-lp2", "/sesion-cancun-lp3",
+                 "/gracias-cancun"}
+
+# Fichas con URL limpia: /proyectos/{slug} → proyectos/{slug}.html (y zonas).
+# Las sirve una reescritura del .htaccess; aquí basta con que exista el HTML.
+FICHA = re.compile(r"^/(proyectos|zonas)/([a-z0-9-]+)/?$")
 
 SALTAR = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//", "#")
 
 
 def revisar_internos() -> int:
     roto = {}
-    for f in sorted(glob.glob("*.html") + glob.glob("articles/*.html")):
+    for f in sorted(glob.glob("*.html") + glob.glob("articles/*.html")
+                    + glob.glob("proyectos/*.html") + glob.glob("zonas/*.html")):
         s = Path(f).read_text(encoding="utf-8")
         for m in re.findall(r'(?:href|src)="([^"]+)"', s):
             if m.startswith(SALTAR) or "${" in m:
@@ -57,6 +65,11 @@ def revisar_internos() -> int:
             if not ruta:
                 continue
             if ruta in RUTAS_LIMPIAS:
+                continue
+            m2 = FICHA.match(ruta)
+            if m2:
+                if not os.path.exists(f"{m2.group(1)}/{m2.group(2)}.html"):
+                    roto.setdefault(f, set()).add(m)
                 continue
             base = "" if ruta.startswith("/") else os.path.dirname(f)
             p = os.path.normpath(os.path.join(base, ruta.lstrip("/")))
