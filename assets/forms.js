@@ -527,8 +527,9 @@
   /* ==================================================================
      4 · CONTEXTO DE PROPIEDAD / ZONA
      ==================================================================
-     La página de propiedad y la de zona comparten plantilla y se
-     diferencian por el parámetro de la URL. El nombre legible del
+     Las fichas (/proyectos/{slug}) y las zonas (/zonas/{slug}) llevan el
+     slug en <body data-prop> / <body data-zona>; ?p= y ?z= quedan de
+     respaldo para las URLs viejas. El nombre legible del
      desarrollo o de la zona se saca del catálogo de data.js: mandarle a
      Make solo el slug obligaría a mantener una segunda tabla de nombres
      dentro del escenario. ================================================== */
@@ -553,7 +554,7 @@
       if (p) { out.desarrollo_nombre = p.name; out.zona_nombre = p.zone; }
     }
 
-    var zslug = g("z") || "";
+    var zslug = g("z") || (body && body.getAttribute("data-zona")) || "";
     if (zslug) {
       out.zona_slug = zslug;
       var z = D && D.getZone ? D.getZone(zslug) : null;

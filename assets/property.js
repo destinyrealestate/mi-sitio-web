@@ -1,20 +1,37 @@
 /* ============================================================
-   DESTINY — página de propiedad (dinámica por ?p=slug)
+   DESTINY — página de propiedad
+   Las fichas viven en /proyectos/{slug} (generadas por
+   scripts/build-fichas.py con el contenido ya escrito en el HTML) y
+   llevan el slug en <body data-prop>. Las landings de proyecto también.
    ============================================================ */
 (function () {
   "use strict";
   const D = window.DESTINY;
   const $ = (s) => document.querySelector(s);
   const params = new URLSearchParams(location.search);
-  // ?p= es el parámetro actual; ?proj= es el de la era WordPress y sigue
-  // llegando desde enlaces viejos y desde el sitemap anterior.
-  const slug = params.get("p") || params.get("proj") ||
-    (document.body && document.body.dataset.prop) || "";
-  const p = D.get(slug) || D.PROPS[1]; // default: Faena
+  // Primero data-prop, que es el que llevan las fichas y las landings. ?p= y
+  // ?proj= quedan de respaldo: el .htaccess ya los manda a /proyectos/{slug}.
+  const slug = (document.body && document.body.dataset.prop) ||
+    params.get("p") || params.get("proj") || "";
+  const p = D.get(slug);
+
+  // Slug inexistente: antes caía en Faena con 200, y Google veía una copia de
+  // Faena en cada URL mal escrita. Ahora se marca noindex y se va a la colección.
+  if (!p) {
+    const m = document.createElement("meta");
+    m.name = "robots"; m.content = "noindex";
+    document.head.appendChild(m);
+    location.replace("/#mapa");
+    return;
+  }
+
+  // Las fichas viven en /proyectos/, así que toda ruta de assets/ tiene que
+  // ser root-absoluta o se resolvería contra la subcarpeta.
+  const root = (u) => (/^assets\//).test(u) ? "/" + u : u;
 
   // El desarrollo de la página se resuelve aquí y lo consume tracking.js para
-  // el evento view_project. El formulario NO lo necesita: forms.js lee ?p= y
-  // saca el nombre y la zona del catálogo por su cuenta.
+  // el evento view_project. El formulario NO lo necesita: forms.js lee
+  // data-prop y saca el nombre y la zona del catálogo por su cuenta.
   if (document.body) document.body.setAttribute("data-desarrollo", p.slug);
 
   /* ---------- El formulario en modo solicitud ----------
@@ -52,48 +69,13 @@
   const set = (sel, val) => { const e = $(sel); if (e) e.textContent = val; };
   document.title = `${p.name} · ${p.zone} — Destiny Real Estate`;
 
-  // SEO dinámico: canonical, Open Graph y JSON-LD propios de esta propiedad
-  (function () {
-    const DOM = "https://destiny.mx", TH = DOM + "/";
-    // La canónica tiene que apuntar a una URL que responda 200. /propiedad/?proj=
-    // era la ruta de WordPress y hoy solo existe como redirección 301: una canónica
-    // hacia un 301 hace que Google descarte la página.
-    const url = `${DOM}/Propiedad.html?p=${p.slug}`;
-    const abs = (g) => (/^https?:/).test(g) ? g : TH + g;
-    const img = abs(p.img);
-    const desc = (p.desc || `${p.name} en ${p.zone}, Miami.`).replace(/<[^>]*>/g, "").slice(0, 180);
-    const meta = (sel, attr, val) => { const e = document.querySelector(sel); if (e) e.setAttribute(attr, val); };
-    meta('link[rel="canonical"]', "href", url);
-    meta('meta[property="og:url"]', "content", url);
-    meta('meta[property="og:title"]', "content", `${p.name} · ${p.zone} — Destiny Real Estate`);
-    meta('meta[property="og:description"]', "content", desc);
-    meta('meta[property="og:image"]', "content", img);
-    meta('meta[name="twitter:title"]', "content", `${p.name} · ${p.zone}`);
-    meta('meta[name="twitter:description"]', "content", desc);
-    meta('meta[name="twitter:image"]', "content", img);
-    meta('meta[name="description"]', "content", desc);
-    const ld = { "@context": "https://schema.org", "@type": "Product", name: p.name, description: desc,
-      image: (p.gallery || [p.img]).slice(0, 4).map(abs),
-      brand: { "@type": "Brand", name: p.developer || "Destiny Real Estate" },
-      category: "Bienes raíces · " + p.zone + ", Miami", url: url };
-    const sc = document.createElement("script"); sc.type = "application/ld+json";
-    sc.textContent = JSON.stringify(ld); document.head.appendChild(sc);
-
-    // BreadcrumbList: inicio → zona → proyecto.
-    const zSlug = (p.zone || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    const bc = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: DOM + "/" },
-      { "@type": "ListItem", position: 2, name: p.zone, item: `${DOM}/Zona.html?z=${zSlug}` },
-      { "@type": "ListItem", position: 3, name: p.name, item: url }
-    ]};
-    const sc2 = document.createElement("script"); sc2.type = "application/ld+json";
-    sc2.textContent = JSON.stringify(bc); document.head.appendChild(sc2);
-  })();
+  // Canónica, Open Graph, description y JSON-LD ya vienen escritos en el HTML
+  // de cada ficha (scripts/build-fichas.py). Aquí no se tocan: Google y las
+  // vistas previas de WhatsApp leen el HTML crudo, no lo que pinta el JS.
 
   // hero
-  const toUrl = e => (/^(assets\/|https?:)/).test(e) ? e : "https://lh3.googleusercontent.com/d/" + e + "=w1600";
-  const heroSrc = (p.gallery && p.gallery[0]) ? toUrl(p.gallery[0]) : (D.BASE + p.img);
+  const toUrl = e => (/^(\/?assets\/|https?:)/).test(e) ? root(e) : "https://lh3.googleusercontent.com/d/" + e + "=w1600";
+  const heroSrc = (p.gallery && p.gallery[0]) ? toUrl(p.gallery[0]) : D.absUrl(p.img);
   $("#pHeroImg").src = heroSrc;
   $("#pHeroImg").alt = p.name;
 
@@ -129,7 +111,7 @@
     v.addEventListener("canplay", () => v.classList.add("is-ready"));
     v.addEventListener("error", () => v.remove());
     v.preload = "auto";
-    v.src = p.heroVideo;
+    v.src = root(p.heroVideo);
     bg.appendChild(v);
 
     const play = v.play();
@@ -146,7 +128,7 @@
       gal.innerHTML = g;
     } else {
       const labels = ["Render — lobby", "Render — amenidades", "Render — vista", "Plano tipo"];
-      let g = `<div class="big"><img src="${D.BASE + p.img}" alt="${p.name}" referrerpolicy="no-referrer"></div>`;
+      let g = `<div class="big"><img src="${D.absUrl(p.img)}" alt="${p.name}" referrerpolicy="no-referrer"></div>`;
       for (let i = 0; i < 4; i++) g += `<div class="ph"><span>${labels[i]}</span></div>`;
       gal.innerHTML = g;
     }
@@ -155,7 +137,7 @@
        carátula del hero y un botón de play (sin autoplay); si no existe, cae al
        final de la galería como antes. */
     if (p.video) {
-      const src = `<source src="${p.video}" type="video/mp4">`;
+      const src = `<source src="${root(p.video)}" type="video/mp4">`;
       const box = $("#pVideoBox");
       if (box) {
         box.innerHTML = `<video controls preload="metadata" playsinline poster="${heroSrc}">${src}</video>`;
@@ -205,7 +187,7 @@
     // Soporta varios párrafos: separar el texto en bloques con doble salto de línea.
     descEl.innerHTML = descTxt.split(/\n\n+/).map(s => s.trim()).filter(Boolean).join("<br><br>");
   }
-  const ficha = [["Zona", p.zone], ["Tipo", type], ["Modalidad de renta", p.renta ? (p.renta === "corta" ? "Renta corta permitida" : "Renta tradicional (anual)") : ""], ["Recámaras", beds], ["Amenidades", p.amenidades], ["Desarrollador", p.developer], ["Arquitectura", p.arquitecto], ["Unidades", p.units], ["Entrega", p.entrega]].filter(r => r[1]);
+  const ficha = [["Zona", p.zone], ["Tipo", type], ["Modalidad de renta", p.renta ? (p.renta === "corta" ? "Renta corta permitida" : "Renta tradicional (anual)") : ""], ["Recámaras", beds], ["Superficie", p.m2], ["Amenidades", p.amenidades], ["Desarrollador", p.developer], ["Arquitectura", p.arquitecto], ["Unidades", p.units], ["Entrega", p.entrega]].filter(r => r[1]);
   const fichaEl = $("#pFicha");
   if (fichaEl) fichaEl.innerHTML = ficha.map(r => `<div class="row"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join("");
 
@@ -219,7 +201,7 @@
     if (docsEl && p.docs) {
       docsEl.innerHTML = p.docs.map(d => {
         const ext = d.external ? ' target="_blank" rel="noopener"' : ' download';
-        return `<a class="payinfo__card payinfo__doc" href="${d.href}"${ext} style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:14px;">`
+        return `<a class="payinfo__card payinfo__doc" href="${root(d.href)}"${ext} style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:14px;">`
           + `<span><span class="payinfo__k">${d.sub || "Documento"}</span><span class="payinfo__v" style="display:block;">${d.label}</span></span>`
           + `<span class="ar" style="color:var(--gold);font-size:20px;">${d.external ? "↗" : "↓"}</span></a>`;
       }).join("");
@@ -280,13 +262,13 @@
   if (zone) {
     set("#ubicTitle", zone.name);
     set("#ubicDesc", zone.long || zone.desc);
-    if (zlink) zlink.href = `Zona.html?z=${zone.slug}`;
-    if (crumb) crumb.href = `Zona.html?z=${zone.slug}`;
+    if (zlink) zlink.href = `/zonas/${zone.slug}`;
+    if (crumb) crumb.href = `/zonas/${zone.slug}`;
   } else {
     set("#ubicTitle", p.zone);
     set("#ubicDesc", `${p.zone} es una de las zonas que cubrimos en Miami. Solicita el análisis de demanda de renta y plusvalía para esta ubicación.`);
-    if (zlink) zlink.href = "Destiny Home.html#zonas";
-    if (crumb) crumb.href = "Destiny Home.html#mapa";
+    if (zlink) zlink.href = "/#zonas";
+    if (crumb) crumb.href = "/#mapa";
   }
 
   // mapa de la propiedad — Google Maps (embed, sin API key)

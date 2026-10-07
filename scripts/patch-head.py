@@ -60,7 +60,8 @@ V = "8"
 
 # forms.js va por su cuenta: se editó más veces que el resto y ya iba en 9.
 # Con un solo contador, correr este script lo habría bajado a 8.
-V_FORMS = "9"
+# Va en 14 desde 2026-10-07 (lectura de data-zona); los HTML ya lo piden así.
+V_FORMS = "14"
 
 HEAD_BLOCK = f"""<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
 <script src="/assets/consent.js?v={V}"></script>
