@@ -60,6 +60,33 @@ la ignorara, los enlaces viejos siguen funcionando.
 
 ---
 
+## La era WordPress, al blog (2026-10-07)
+
+Search Console reportaba 525 páginas sin indexar. Buena parte eran URLs del
+WordPress viejo que Google seguía rastreando en `destiny.mx` y que daban 404.
+Las 75 entradas `/blog/tips-invertir/{slug}/` existen con la misma ruta en
+`blog.destiny.mx` (verificado: 75/75 responden 200).
+
+| Origen | Destino | Tipo |
+|---|---|---|
+| `/blog/…` `/category/…` `/tag/…` `/author/…` `/feed/…` `/wp-content/…` | `blog.destiny.mx/` + la misma ruta | 301 |
+| `/?p={número}` `/?page_id={número}` `/?attachment_id={número}` (también con `index.html`) | `blog.destiny.mx/?p={número}` | 301 |
+
+**Por qué va antes que todas las demás reglas:** es la más amplia y no choca
+con ninguna; si quedara abajo, cualquier regla nueva que empiece por `blog`
+podría ganarle sin que nadie lo note.
+
+**Lo que no atrapa, a propósito:** `blog-home.html` (el patrón exige `blog`
+sola o seguida de `/`) y `Blog.html` (la regla distingue mayúsculas; `Blog.html`
+tiene su propia regla más abajo).
+
+**Por qué el `?p=` viaja intacto:** la redirección no le quita el parámetro,
+así que llega a `blog.destiny.mx/?p=143` y WordPress lo resuelve a la entrada
+que tenía ese ID. Solo atrapa IDs numéricos: el `?p={slug}` de las fichas de
+proyecto lleva letras y nunca coincide.
+
+---
+
 ## Migración del blog (ya existía)
 
 | Origen | Destino | Tipo |

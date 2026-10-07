@@ -74,6 +74,22 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # ----------------------------------------------------------
+  # La era WordPress, al blog. Search Console seguía rastreando
+  # /blog/tips-invertir/{slug}/ en destiny.mx y cada una daba 404;
+  # las 75 existen con la misma ruta en blog.destiny.mx (verificado
+  # 75/75 con 200). Se conserva la ruta completa: un solo salto.
+  # No toca blog-home.html ni Blog.html: el patrón exige "blog"
+  # sola o seguida de "/", y distingue mayúsculas.
+  # ----------------------------------------------------------
+  RewriteRule ^(blog|category|tag|author|feed|wp-content)(/.*)?$ https://blog.destiny.mx/$1$2 [R=301,L,NE]
+
+  # IDs viejos de WordPress en el home (/?p=143, ?page_id=, ?attachment_id=)
+  # respondían 200 con el home: contenido duplicado. Se mandan al blog con
+  # el parámetro intacto, y WordPress resuelve el ID a la entrada.
+  RewriteCond %{QUERY_STRING} (^|&)(p|page_id|attachment_id)=[0-9]+(&|$)
+  RewriteRule ^(index\.html)?$ https://blog.destiny.mx/ [R=301,L]
+
   # Articulo.html?post={slug}  ó  ?art={slug}  →  https://blog.destiny.mx/blog/tips-invertir/{slug}/
   RewriteCond %{QUERY_STRING} (^|&)(post|art)=([a-z0-9\-]+) [NC]
   RewriteRule ^Articulo\.html$ https://blog.destiny.mx/blog/tips-invertir/%3/? [R=301,L,NE]
