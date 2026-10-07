@@ -107,7 +107,7 @@ window.DESTINY = (function () {
         <div class="card__specs">${specs.join("")}</div>
       </div>
       <span class="card__cta">→</span>
-      <a class="card__link" href="Propiedad.html?p=${p.slug}" aria-label="Ver ${p.name}"></a>
+      <a class="card__link" href="/proyectos/${p.slug}" aria-label="Ver ${p.name}"></a>
     </article>`;
   }
 

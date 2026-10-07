@@ -70,7 +70,7 @@
 
   /* ---------- Zonas ---------- */
   $("#zonesList").innerHTML = D.ZONES.map(z => `
-    <a class="zone" href="Zona.html?z=${z.slug}">
+    <a class="zone" href="/zonas/${z.slug}">
       <div class="zone__idx">${z.idx}</div>
       <div class="zone__thumb"><img src="${D.imgURL(z.img)}" alt="${z.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')"></div>
       <div class="zone__name"><div class="k">${z.kicker}</div><h3>${z.name}</h3></div>
