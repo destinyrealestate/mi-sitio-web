@@ -199,6 +199,8 @@ AddDefaultCharset UTF-8
   # descarta la query: el destino no arrastra ?p= ni ?z=.
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=mandarin-oriental(&|$)
   RewriteRule ^Propiedad\.html$ /proyectos/mandarin-oriental? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=house-of-wellness(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/house-of-wellness? [R=301,L]
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=bentley-residences-miami(&|$)
   RewriteRule ^Propiedad\.html$ /proyectos/bentley-residences-miami? [R=301,L]
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=frida-kahlo-wynwood-residences(&|$)
