@@ -42,6 +42,7 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  # Landings de proyecto (A/B de estructura) — noindex
                  "/bentley-lp1", "/bentley-lp2", "/bentley-lp3",
                  "/frida-lp1", "/frida-lp2", "/frida-lp3",
+                 "/cipriani-lp1", "/cipriani-lp2", "/cipriani-lp3",
                  # Sesión de Puerto Cancún, sus variantes A/B y su gracias
                  "/sesion-cancun", "/sesion-cancun-lp2", "/sesion-cancun-lp3",
                  "/gracias-cancun"}
