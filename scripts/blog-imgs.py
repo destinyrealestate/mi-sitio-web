@@ -69,6 +69,11 @@ OVERRIDES = {
     "seguridad-juridica-propiedad-estados-unidos-extranjeros": "assets/img/stregis-brickell/entrance.jpg",
     "inversion-inmobiliaria-miami-tips":                       "assets/img/hero-pool.jpg",
     "south-beach":                                             "assets/img/faena/beach.jpg",
+    # Semana 42: programadas en WordPress (14 y 16 oct). Mientras no se publiquen,
+    # el API no las devuelve; su portada ya está subida al blog. Al publicarse,
+    # el blog manda la misma URL y estas líneas se pueden borrar.
+    "house-of-wellness-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/house-of-wellness-brickell-analisis-800x560.jpg",
+    "precio-congelado-preventa-miami":     "https://blog.destiny.mx/wp-content/uploads/2026/10/precio-congelado-preventa-miami-800x560.jpg",
 }
 
 # El archivo de 2021 quedó sin portada: su featured_media apunta a adjuntos que
