@@ -1,5 +1,5 @@
 /* ============================================================
-   DESTINY — datos del blog (75 artículos)
+   DESTINY — datos del blog (93 artículos)
    ============================================================ */
 window.DESTINY_BLOG = (function () {
   "use strict";
@@ -10,6 +10,15 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["Tu precio se queda: cómo funciona el precio en la preventa en Miami", "precio-congelado-preventa-miami", 2026, "16 oct 2026", 9, 16, 1],
+    ["House of Wellness Brickell: precios, plan de pagos y el bienestar incluido en tu cuota", "house-of-wellness-brickell-analisis", 2026, "14 oct 2026", 9, 14, 1],
+    ["Los que más tienen compran en planos: qué nos enseñan los multimillonarios que llegaron a Miami", "multimillonarios-miami-compran-en-planos", 2026, "12 oct 2026", 9, 12, 1],
+    ["Tu contrato también se vende: qué es la cesión (assignment) en preconstrucción en Miami", "cesion-contrato-assignment-preconstruccion-miami", 2026, "9 oct 2026", 9, 9, 1],
+    ["619 Brickell by Nobu: precio, plan de pagos y por qué lo diseñó el mismo despacho que la sede de Citadel", "619-brickell-nobu-foster-partners-citadel", 2026, "7 oct 2026", 9, 7, 1],
+    ["Carnegie Mellon llega a Wynwood: qué significa para invertir en Miami", "carnegie-mellon-wynwood-invertir-miami", 2026, "5 oct 2026", 9, 5, 1],
+    ["Condo docs y fondo de reservas: lo que revisamos antes de tu depósito en Miami", "condo-docs-fondo-reservas-preconstruccion-miami", 2026, "2 oct 2026", 9, 2, 1],
+    ["Frida Kahlo Wynwood: cómo se paga, tipología por tipología, y cuánto te queda libre", "frida-kahlo-wynwood-plan-de-pagos", 2026, "30 sep 2026", 8, 30, 1],
+    ["¿Cuánto dinero necesitas para invertir en Miami desde México? La cuenta completa antes de firmar", "cuanto-necesitas-invertir-miami-desde-mexico", 2026, "28 sep 2026", 8, 28, 1],
     ["Property Management: cómo tu departamento en Miami te renta aunque vivas en México", "property-management-preconstruccion-miami", 2026, "26 sep 2026", 8, 26, 1],
     ["Parkside Residences Brickell: entrar a Miami desde ~$400k con renta sin restricción", "parkside-residences-brickell-analisis", 2026, "24 sep 2026", 8, 24, 1],
     ["El capital institucional ya eligió Florida: qué significa para el que invierte en Miami", "capital-institucional-florida-real-estate", 2026, "22 sep 2026", 8, 22, 1],
@@ -106,6 +115,15 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
+    "precio-congelado-preventa-miami": "https://blog.destiny.mx/wp-content/uploads/2026/10/precio-congelado-preventa-miami-800x560.jpg",
+    "house-of-wellness-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/house-of-wellness-brickell-analisis-800x560.jpg",
+    "multimillonarios-miami-compran-en-planos": "https://blog.destiny.mx/wp-content/uploads/2026/10/multimillonarios-miami-compran-en-planos-800x560.jpg",
+    "cesion-contrato-assignment-preconstruccion-miami": "https://blog.destiny.mx/wp-content/uploads/2026/10/cesion-contrato-assignment-preconstruccion-miami-800x560.jpg",
+    "619-brickell-nobu-foster-partners-citadel": "https://blog.destiny.mx/wp-content/uploads/2026/10/619-brickell-nobu-foster-partners-citadel-800x560.jpg",
+    "carnegie-mellon-wynwood-invertir-miami": "https://blog.destiny.mx/wp-content/uploads/2026/10/carnegie-mellon-wynwood-invertir-miami-800x560.jpg",
+    "condo-docs-fondo-reservas-preconstruccion-miami": "https://blog.destiny.mx/wp-content/uploads/2026/10/condo-docs-fondo-reservas-preconstruccion-miami-800x560.jpg",
+    "frida-kahlo-wynwood-plan-de-pagos": "https://blog.destiny.mx/wp-content/uploads/2026/09/frida-kahlo-wynwood-plan-de-pagos-800x560.jpg",
+    "cuanto-necesitas-invertir-miami-desde-mexico": "https://blog.destiny.mx/wp-content/uploads/2026/09/cuanto-necesitas-invertir-miami-desde-mexico-800x560.jpg",
     "plusvalia-preconstruccion-como-se-calcula": "assets/img/hero-dusk.jpg",
     "619-brickell-nobu-analisis": "assets/img/nobu/hero.jpg",
     "ventana-compra-comprador-mexicano-miami": "assets/img/blog-skyline2.jpg",
