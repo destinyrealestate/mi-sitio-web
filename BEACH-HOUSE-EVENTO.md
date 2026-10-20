@@ -95,6 +95,15 @@ El video opcional de Oscar (15 s) no está: no hay material.
    Los demás formularios salen igual que antes. La nota y el correo suman, para
    todos, el país del WhatsApp y el `form_context`. Probado en vivo con un lead real
    (contacto 256385788291 en HubSpot, dueña Camile).
+
+   **Correo de confirmación al registrado (2026-10-19):** después del aviso interno
+   hay un router con dos ramas: el PDF de guía/propiedad (sin cambios) y, solo si
+   `bh_evento = "si"`, el correo "Tu lugar está apartado — Presentación de Beach
+   House, 10 de noviembre" con fecha, hora, lugar, botón al .ics y enlace a WhatsApp.
+   Sale de carlos.cataneo@destiny.mx (la conexión de Outlook del escenario), así que
+   las respuestas llegan ahí. El router hace falta porque en un flujo lineal un
+   filtro que no pasa corta todo lo que sigue. Las demás landings no mandan correo
+   al registrado (decisión de Carlos).
 2. **Meta:** crear la conversión personalizada "Confirmación evento Beach House"
    (evento Lead + URL contiene `gracias-beach-house`, o `form_variant`).
 3. **Lead en Meta:** la prueba del 2026-10-19 se hizo con los píxeles bloqueados;
