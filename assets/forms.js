@@ -334,6 +334,13 @@
               ["+57", "Colombia"], ["+502", "Guatemala"], ["+506", "Costa Rica"],
               ["+507", "Panamá"], ["+51", "Perú"], ["+56", "Chile"], ["+54", "Argentina"]]
     },
+    /* Cuántos van: Carlos lo pidió el 2026-10-20 para planear el cupo del
+       salón. Viaja en extra.asistentes. */
+    asistentes: {
+      tipo: "radios", label: "¿Cuántas personas asisten?",
+      req: true, err: "Elige una opción.",
+      opciones: ["Solo yo", "Yo y un acompañante"]
+    },
     mensaje: {
       tipo: "textarea", label: "Mensaje (opcional)",
       ph: "Cuéntanos qué estás buscando", req: false, max: 600
@@ -424,10 +431,10 @@
       gracias: "/gracias-cancun", cta: "Quiero mi lugar"
     },
     /* Presentación privada de Beach House (CDMX, 10-nov-2026). Hereda del
-       tipo `lead`: el brief pide que dispare Lead con form_type "lead". Tres
-       campos y nada más: cada campo extra baja la conversión. */
+       tipo `lead`: el brief pide que dispare Lead con form_type "lead".
+       Pocos campos: cada campo extra baja la conversión. */
     beachhouse: {
-      campos: ["nombre", "whatsapp_pais", "email"],
+      campos: ["nombre", "whatsapp_pais", "email", "asistentes"],
       gracias: "/gracias-beach-house", cta: "Confirmar mi lugar"
     }
   };
