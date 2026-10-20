@@ -86,15 +86,20 @@ El video opcional de Oscar (15 s) no está: no hay material.
 
 ## Pendientes fuera del sitio (brief §7)
 
-1. **Make (escenario 5871285):** hoy el lead entra como cualquier `lead` del sitio,
-   con dueño Camile y el origen legible que arma el escenario. Lo que pide el brief
-   —origen HubSpot "Web Beach House Evento", proyecto Beach House y asunto de correo
-   "Prospecto web Beach House Evento — [nombre]"— requiere una ruta en Make que
-   reconozca `form_variant = "beachhouse"`.
+1. **Make (escenario 5871285) — HECHO el 2026-10-19.** Sin router: una variable
+   `bh_evento` (`form_variant = "beachhouse"`) en el módulo 2 y campos condicionales.
+   Cuando es Beach House: HubSpot `origen` = "Web Beach House Evento",
+   `dst_propiedad` = "Beach House by Turnberry", la nota empieza con
+   "Formulario: Beach House Evento" (el origen UTM sigue dentro de la nota) y el
+   correo de aviso lleva el asunto "Prospecto web Beach House Evento — [nombre]".
+   Los demás formularios salen igual que antes. La nota y el correo suman, para
+   todos, el país del WhatsApp y el `form_context`. Probado en vivo con un lead real
+   (contacto 256385788291 en HubSpot, dueña Camile).
 2. **Meta:** crear la conversión personalizada "Confirmación evento Beach House"
    (evento Lead + URL contiene `gracias-beach-house`, o `form_variant`).
-3. **Prueba real antes del 3 de noviembre:** un envío desde producción que llegue a
-   Make, a HubSpot y al correo, y el Lead en el Administrador de eventos.
+3. **Lead en Meta:** la prueba del 2026-10-19 se hizo con los píxeles bloqueados;
+   falta ver un Lead real en el Administrador de eventos (con el primer lead de la pauta
+   o con una prueba desde un navegador normal).
 4. **Comprobar que el escenario de Make está ENCENDIDO** antes de mandar tráfico
    (apagado responde 410 y no se guarda nada).
 5. **Después del 10 de noviembre:** noindex en la LP1 y mandar las tres URLs a
