@@ -100,7 +100,7 @@ El video opcional de Oscar (15 s) no está: no hay material.
    hay un router con dos ramas: el PDF de guía/propiedad (sin cambios) y, solo si
    `bh_evento = "si"`, el correo "Tu lugar está apartado — Presentación de Beach
    House, 10 de noviembre" con fecha, hora, lugar, botón al .ics y enlace a WhatsApp.
-   Sale de carlos.cataneo@destiny.mx (la conexión de Outlook del escenario), así que
+   Va con copia a camile@destiny.mx. Sale de carlos.cataneo@destiny.mx (la conexión de Outlook del escenario), así que
    las respuestas llegan ahí. El router hace falta porque en un flujo lineal un
    filtro que no pasa corta todo lo que sigue. Las demás landings no mandan correo
    al registrado (decisión de Carlos).
