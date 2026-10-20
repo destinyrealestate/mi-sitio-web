@@ -477,7 +477,7 @@
       emitir("click_email", { email_to: href.replace(/^mailto:/i, "") });
       return;
     }
-    var file = href.match(/\/([^\/?#]+\.(?:pdf|xlsx|xls|zip|docx|csv))(?:[?#]|$)/i);
+    var file = href.match(/\/([^\/?#]+\.(?:pdf|xlsx|xls|zip|docx|csv|ics))(?:[?#]|$)/i);
     if (file) {
       emitir("file_download", {
         file_name: decodeURIComponent(file[1]),
