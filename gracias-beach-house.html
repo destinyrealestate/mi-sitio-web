@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
+<script src="/assets/consent.js?v=8"></script>
+<script src="/assets/attribution.js?v=8"></script>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://connect.facebook.net">
+<link rel="dns-prefetch" href="https://t.contentsquare.net">
+<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
+<script src="/assets/tags.js?v=9"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/favicon.png?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="Tu lugar en la presentación privada de Beach House del 10 de noviembre en la Ciudad de México está apartado.">
+<title>Tu lugar está apartado — Presentación privada de Beach House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=59">
+<style>
+  .hero--gracias { min-height: auto; background: var(--ink); padding: clamp(140px,16vw,190px) 0 clamp(90px,10vw,120px); align-items: center; }
+  .hero--gracias .hero__inner { padding-top: 0; padding-bottom: 0; }
+  .resumen { margin: 38px 0 0; padding-top: 6px; border-top: 1px solid var(--line-light); max-width: 52ch; }
+  .resumen div { display: grid; grid-template-columns: 90px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line-light); }
+  .resumen dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-bright); padding-top: 3px; }
+  .resumen dd { margin: 0; font-size: 16px; line-height: 1.5; color: rgba(250,249,243,.88); }
+  .acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  .btn-claro { background: transparent; color: var(--cream); border: 1px solid rgba(250,249,243,.45); }
+  .btn-claro:hover { border-color: var(--cream); }
+  @media (max-width: 520px) { .acciones .btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body data-desarrollo="beach-house-by-turnberry" data-page-type="gracias" data-form-type="lead">
+
+<!-- Sin menú, igual que la landing: la conversación sigue por WhatsApp. -->
+<nav class="nav nav--lp" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="/beach-house-presentacion">
+    <img class="logo-light" src="/assets/logo-light@2x.png" alt="Destiny Real Estate" width="270" height="68">
+    <img class="logo-dark" src="/assets/logo-dark@2x.png" alt="Destiny Real Estate" width="270" height="68">
+  </a>
+</nav>
+
+<header class="hero hero--gracias" data-screen-label="Gracias">
+  <div class="hero__inner wrap" style="max-width:780px;">
+    <span class="eyebrow in" style="color:var(--gold-bright);letter-spacing:.24em;">Confirmación recibida</span>
+    <h1 class="h-display in" style="margin-top:18px;">Listo<span id="gName"></span>. <span class="serif-em">Tu lugar está apartado.</span></h1>
+    <p class="lede in" style="margin-top:22px;">Te mandamos por WhatsApp la dirección exacta y un recordatorio un día antes.</p>
+
+    <dl class="resumen">
+      <div><dt>Fecha</dt><dd>Martes 10 de noviembre de 2026</dd></div>
+      <div><dt>Hora</dt><dd>A partir de las 10:00 a.&nbsp;m.</dd></div>
+      <div><dt>Sede</dt><dd>Ciudad de México · la dirección exacta llega por WhatsApp</dd></div>
+    </dl>
+
+    <!-- El .ics lo cuenta tracking.js como file_download (file_extension "ics");
+         el de WhatsApp, como whatsapp_click. Son las dos métricas de esta página. -->
+    <div class="acciones">
+      <a class="btn btn-gold" href="/assets/ics/beach-house-presentacion.ics" download>Agregar al calendario</a>
+      <a class="btn btn-claro" href="https://api.whatsapp.com/send?phone=525611659009&amp;text=Hola%2C%20ya%20confirm%C3%A9%20mi%20lugar%20en%20la%20presentaci%C3%B3n%20de%20Beach%20House" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__bot"><span>&copy; 2026 Destiny Real Estate. Todos los derechos reservados. &middot; <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> &middot; <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a></span><span>Miami &middot; FL &middot; USA — Ciudad de México &middot; MX</span></div>
+  </div>
+</footer>
+
+<script>
+  /* El nombre lo manda forms.js en la URL (?n=). Si no viene, la frase
+     funciona igual: "Listo. Tu lugar está apartado." */
+  (function () {
+    try {
+      var n = new URLSearchParams(location.search).get("n");
+      if (n) document.getElementById("gName").textContent = ", " + n;
+    } catch (e) {}
+  })();
+</script>
+
+<!-- CAPA DE MEDICIÓN -->
+<script src="/assets/tracking.js?v=10"></script>
+<!-- FIN CAPA DE MEDICIÓN -->
+</body>
+</html>

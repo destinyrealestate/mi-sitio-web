@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM -->
+<script src="/assets/consent.js?v=8"></script>
+<script src="/assets/attribution.js?v=8"></script>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://connect.facebook.net">
+<link rel="dns-prefetch" href="https://t.contentsquare.net">
+<!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
+<!-- tags.js trae GTM (GTM-KW8TPGGG), GA4, el Pixel de Meta y el de OpenAI.
+     No se pega ningún ID aquí: viven en assets/tags.js y en ningún otro lado. -->
+<script src="/assets/tags.js?v=9"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Esta página muere el 10 de noviembre de 2026. Cuando pase el evento:
+     poner <meta name="robots" content="noindex, nofollow"> aquí y mandar la
+     URL a la ficha /proyectos/beach-house-by-turnberry desde .htaccess. -->
+<link rel="canonical" href="https://destiny.mx/beach-house-presentacion">
+<link rel="icon" type="image/png" href="/favicon.png?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="Presentación privada de Beach House by Turnberry en la Ciudad de México, el 10 de noviembre. El proyecto completo, las condiciones de entrada y preguntas directas con Oscar Chapa. Cupo limitado.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Te invito a conocer Beach House antes que nadie · 10 de noviembre, CDMX">
+<meta property="og:description" content="Presentación privada de Beach House by Turnberry con Oscar Chapa. Ciudad de México, 10 de noviembre. Cupo limitado.">
+<meta property="og:image" content="https://destiny.mx/assets/img/beachhouse/hero.jpg">
+<meta property="og:url" content="https://destiny.mx/beach-house-presentacion">
+<meta property="og:site_name" content="Destiny Real Estate">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Te invito a conocer Beach House antes que nadie · 10 de noviembre, CDMX">
+<meta name="twitter:description" content="Presentación privada de Beach House by Turnberry con Oscar Chapa. Ciudad de México, 10 de noviembre. Cupo limitado.">
+<meta name="twitter:image" content="https://destiny.mx/assets/img/beachhouse/hero.jpg">
+<title>Presentación privada de Beach House · 10 de noviembre, Ciudad de México</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=59">
+<style>
+  /* ── Sólo las landings del evento Beach House ─────────────────────────
+     Los colores del Brand Kit V4 ya son los tokens del sitio (--ink #13192A,
+     --ink-2 #1A2E50, --cream #FAF9F3, --gold #C5A058). El oro va solo en
+     detalles: cifras, eyebrows y el botón. */
+
+  /* Hero con el render de la torre sobre la laguna. El velo deja leer el
+     texto blanco sobre el cielo claro del render. */
+  .hero--evento { min-height: auto; background: var(--ink); padding: clamp(132px,16vw,180px) 0 clamp(84px,10vw,120px); align-items: center; }
+  .hero--evento .hero__inner { padding-top: 0; padding-bottom: 0; }
+  .hero--evento h1 { max-width: 18ch; }
+  .hero--evento .hero__bg img { object-position: center 40%; }
+  .hero--evento .hero__velo { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,25,42,.50) 0%, rgba(19,25,42,.64) 50%, rgba(19,25,42,.88) 100%); }
+  .hero__sub { margin-top: 20px; font-size: clamp(16px,1.6vw,19px); letter-spacing: .02em; color: rgba(250,249,243,.86); }
+  .hero__micro { margin-top: 18px; font-size: 13px; color: rgba(250,249,243,.62); }
+
+  /* LP2: el formulario dentro del hero, a la derecha en escritorio y bajo
+     el titular en móvil. */
+  .hero--conform .hero__inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px,5vw,72px); align-items: center; max-width: 1180px; }
+  @media (max-width: 900px) { .hero--conform .hero__inner { grid-template-columns: 1fr; } }
+
+  .cifra { color: var(--bronze); font-weight: 600; font-variant-numeric: lining-nums; white-space: nowrap; }
+  .dark .cifra, .hero .cifra { color: var(--gold-bright); }
+
+  /* Bloque 2 · Qué vas a ver: tres tarjetas sin íconos. La línea de arriba
+     es el único acento. */
+  .ver { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(24px,3vw,44px); margin-top: clamp(40px,5vw,60px); }
+  .ver__item { border-top: 1px solid var(--gold); padding-top: 22px; }
+  .ver__n { font-family: var(--serif); font-size: 15px; color: var(--bronze); margin-bottom: 14px; }
+  .ver__t { font-family: var(--serif); font-size: clamp(21px,2.2vw,26px); line-height: 1.18; margin-bottom: 12px; }
+  .ver__d { font-size: 15.5px; line-height: 1.62; color: var(--ink-soft); max-width: 36ch; }
+  @media (max-width: 760px) { .ver { grid-template-columns: 1fr; } }
+
+  /* Bloque 3 · Por qué en persona: la voz de Oscar, sin más. */
+  .cita { font-family: var(--serif); font-size: clamp(23px,2.7vw,34px); line-height: 1.36; color: var(--cream); max-width: 30ch; margin: 0; }
+  .cita__firma { margin-top: 26px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-bright); }
+
+  /* Bloque 4 · Qué es Beach House */
+  .datos { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(20px,2.6vw,36px); margin-top: clamp(36px,4vw,52px); }
+  .dato__v { font-family: var(--serif); font-size: clamp(26px,3vw,38px); line-height: 1.05; color: var(--ink); }
+  .dato__k { margin-top: 10px; font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
+  @media (max-width: 860px) { .datos { grid-template-columns: 1fr 1fr; } }
+  .ubica { margin-top: clamp(32px,4vw,48px); font-size: 16px; line-height: 1.7; color: var(--ink-soft); max-width: 64ch; }
+  .galeria { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-top: clamp(36px,4vw,52px); }
+  .galeria figure { margin: 0; overflow: hidden; border-radius: var(--r); grid-column: span 2; }
+  .galeria figure.ancha { grid-column: span 3; }
+  .galeria img { width: 100%; height: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+  @media (max-width: 760px) { .galeria { grid-template-columns: 1fr 1fr; } .galeria figure, .galeria figure.ancha { grid-column: span 1; } .galeria figure:first-child { grid-column: span 2; } }
+  .nota-render { margin-top: 12px; font-size: 11.5px; color: var(--ink-soft); }
+
+  /* Bloque 5 · Quién te lo presenta */
+  .presenta { display: grid; grid-template-columns: 300px 1fr; gap: clamp(28px,5vw,72px); align-items: center; }
+  .presenta img { width: 100%; height: auto; display: block;
+    -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 86%, transparent 100%); }
+  @media (max-width: 760px) { .presenta { grid-template-columns: 1fr; } .presenta img { max-width: 240px; } }
+
+  /* Bloque 6 · Detalles del evento */
+  .detalles { margin: clamp(32px,4vw,48px) 0 0; border-top: 1px solid var(--line); }
+  .detalles div { display: grid; grid-template-columns: 180px 1fr; gap: 20px; padding: 20px 2px; border-bottom: 1px solid var(--line); }
+  .detalles dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); padding-top: 5px; }
+  .detalles dd { margin: 0; font-family: var(--serif); font-size: clamp(19px,2vw,23px); line-height: 1.35; color: var(--ink); }
+  .detalles dd small { display: block; margin-top: 4px; font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+  @media (max-width: 600px) { .detalles div { grid-template-columns: 1fr; gap: 6px; } }
+
+  /* Bloque 7 · Formulario */
+  .registro { max-width: 560px; margin-inline: auto; }
+  /* WhatsApp con selector de país (campo telpais de assets/forms.js). */
+  .dstf .telpais { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.3fr); gap: 8px; }
+  .dstf .telpais select { min-width: 0; }
+
+  /* Bloque 8 · Preguntas frecuentes, con <details>: abre y cierra sin JS. */
+  .preguntas { max-width: 780px; margin: clamp(32px,4vw,48px) auto 0; }
+  .preguntas details { border-top: 1px solid var(--line); }
+  .preguntas details:last-child { border-bottom: 1px solid var(--line); }
+  .preguntas summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 4px; font-family: var(--serif); font-size: clamp(19px,2vw,22px); color: var(--ink); }
+  .preguntas summary::-webkit-details-marker { display: none; }
+  .preguntas summary::after { content: "+"; font-family: var(--sans); font-size: 26px; line-height: 1; color: var(--gold); transition: transform .3s var(--ease); flex: none; }
+  .preguntas details[open] summary::after { transform: rotate(45deg); }
+  .preguntas p { padding: 0 4px 26px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.7; max-width: 64ch; }
+
+  /* Bloque 9 · Cierre */
+  .cierre__linea { font-family: var(--serif); font-size: clamp(26px,3.2vw,40px); line-height: 1.24; max-width: 22ch; margin-inline: auto; text-align: center; color: var(--cream); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body class="has-lp-sticky" data-lp="1" data-desarrollo="beach-house-by-turnberry" data-page-type="captura">
+
+<!-- NAV MÍNIMO — sin menú, sin enlaces al sitio: cada salida es una fuga de
+     tráfico pagado. El logo y el botón llevan al formulario. -->
+<nav class="nav nav--lp" id="nav" data-screen-label="Nav">
+  <a class="nav__logo" href="#confirmar">
+    <img class="logo-light" src="/assets/logo-light@2x.png" alt="Destiny Real Estate" width="270" height="68">
+    <img class="logo-dark" src="/assets/logo-dark@2x.png" alt="Destiny Real Estate" width="270" height="68">
+  </a>
+  <div class="nav__cta">
+    <a class="btn btn-gold" href="#confirmar" style="display:inline-flex;">Confirmar mi lugar</a>
+  </div>
+</nav>
+
+<!-- ══════════ 1 · HERO ══════════ -->
+<header class="hero hero--evento" data-screen-label="Hero">
+  <div class="hero__bg">
+    <img src="/assets/img/beachhouse/hero.jpg" alt="" aria-hidden="true" fetchpriority="high" width="1600" height="1066">
+    <div class="hero__velo"></div>
+  </div>
+  <div class="hero__inner wrap" style="max-width:960px;">
+    <span class="eyebrow reveal in" style="color:var(--gold-bright);letter-spacing:.24em;">Presentación privada</span>
+    <h1 class="h-display reveal in d1" style="margin-top:18px;">Te invito a conocer Beach House <span class="serif-em">antes que nadie.</span></h1>
+    <p class="hero__sub reveal in d2">Presentación privada &middot; Ciudad de México &middot; <span class="cifra">10</span> de noviembre</p>
+    <div class="hero__actions reveal in d3">
+      <a class="btn btn-gold" href="#confirmar">Confirmar mi lugar <span class="ar">&#8594;</span></a>
+    </div>
+    <p class="hero__micro reveal in d3">Cupo limitado.</p>
+  </div>
+</header>
+
+<!-- ══════════ 2 · QUÉ VAS A VER ══════════ -->
+<section class="section" data-screen-label="Qué vas a ver">
+  <div class="wrap" style="max-width:1080px;">
+    <span class="eyebrow reveal">Qué vas a ver</span>
+    <h2 class="h-1 reveal" style="margin-top:16px;max-width:20ch;">Una mañana para ver el proyecto <span class="serif-em">completo, de cerca.</span></h2>
+    <div class="ver">
+      <div class="ver__item reveal">
+        <div class="ver__n">01</div>
+        <h3 class="ver__t">El proyecto completo</h3>
+        <p class="ver__d">Residencias, planos y amenidades, con el detalle que no cabe en un anuncio.</p>
+      </div>
+      <div class="ver__item reveal d1">
+        <div class="ver__n">02</div>
+        <h3 class="ver__t">Condiciones de entrada</h3>
+        <p class="ver__d">Las que solo se dan a quienes llegan primero.</p>
+      </div>
+      <div class="ver__item reveal d2">
+        <div class="ver__n">03</div>
+        <h3 class="ver__t">Preguntas directas con Oscar</h3>
+        <p class="ver__d">Cómo se compra en Miami desde México, sin rodeos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3 · POR QUÉ EN PERSONA ══════════ -->
+<section class="section dark" data-screen-label="Por qué en persona">
+  <div class="wrap" style="max-width:900px;">
+    <span class="eyebrow reveal">Por qué en persona</span>
+    <blockquote class="cita reveal d1" style="margin-top:22px;">&ldquo;Hay cosas de un proyecto que no se explican en un video. Se explican frente a frente, con los planos en la mesa y tus preguntas en voz alta. Por eso armé una sala chica, con pocas sillas.&rdquo;</blockquote>
+    <p class="cita__firma reveal d2">Oscar Chapa</p>
+  </div>
+</section>
+
+<!-- ══════════ 4 · QUÉ ES BEACH HOUSE ══════════
+     Datos del fact sheet y de la presentación oficial de Turnberry, y de la
+     lista Friends & Family del 19 de octubre de 2026. -->
+<section class="section" data-screen-label="Qué es Beach House">
+  <div class="wrap" style="max-width:1080px;">
+    <span class="eyebrow reveal">Qué es Beach House</span>
+    <h2 class="h-1 reveal" style="margin-top:16px;max-width:22ch;">Frente directo a una laguna <span class="serif-em">de siete acres.</span></h2>
+    <div class="datos">
+      <div class="reveal"><div class="dato__v"><span class="cifra">310</span></div><p class="dato__k">residencias en <span class="cifra">36</span> pisos, de 1 a 3 recámaras más den y dos pisos de penthouses</p></div>
+      <div class="reveal d1"><div class="dato__v"><span class="cifra">7</span> acres</div><p class="dato__k">de laguna Crystal navegable al pie de la torre, dentro de SoLé Mia</p></div>
+      <div class="reveal d2"><div class="dato__v"><span class="cifra">$855,000</span></div><p class="dato__k">USD, la residencia de entrada en la lista del 19 de octubre</p></div>
+      <div class="reveal d3"><div class="dato__v">Turnberry</div><p class="dato__k">desarrolla con LeFrak; arquitectura de Arquitectonica</p></div>
+    </div>
+    <p class="ubica reveal">North Miami, junto a One Park Tower, dentro de SoLé Mia: una comunidad de <span class="cifra">184</span> acres entre Aventura y Bal Harbour, al lado del Oleta River State Park.</p>
+    <div class="galeria reveal">
+      <figure class="ancha"><img src="/assets/img/beachhouse/lagoon.jpg" alt="Club de playa de Beach House sobre la laguna de SoLé Mia" width="1600" height="1066" loading="lazy" decoding="async"></figure>
+      <figure class="ancha"><img src="/assets/img/beachhouse/arrival.jpg" alt="Llegada y porte-cochère de Beach House" width="1600" height="1066" loading="lazy" decoding="async"></figure>
+      <figure><img src="/assets/img/beachhouse/hummingbird.jpg" alt="Balcones de Beach House al atardecer con vista a la bahía" width="1600" height="1066" loading="lazy" decoding="async"></figure>
+      <figure><img src="/assets/img/beachhouse/residence.jpg" alt="Interior de una residencia de Beach House" width="1600" height="1073" loading="lazy" decoding="async"></figure>
+      <figure><img src="/assets/img/beachhouse/kitchen.jpg" alt="Cocina italiana con electrodomésticos Sub-Zero y Wolf" width="1600" height="827" loading="lazy" decoding="async"></figure>
+    </div>
+    <p class="nota-render">Renders e imágenes ilustrativas del desarrollador. Precios y disponibilidad sujetos a cambio sin previo aviso.</p>
+  </div>
+</section>
+
+<!-- ══════════ 5 · QUIÉN TE LO PRESENTA ══════════ -->
+<section class="section" data-screen-label="Quién te lo presenta" style="background:var(--paper-2);">
+  <div class="wrap presenta" style="max-width:980px;">
+    <img src="/assets/img/oscar-retrato-v3.jpg" alt="Oscar Chapa, fundador de Destiny Real Estate" width="1000" height="1498" loading="lazy" decoding="async">
+    <div class="reveal">
+      <span class="eyebrow">Quién te lo presenta</span>
+      <h2 class="h-1" style="margin-top:16px;">Oscar Chapa</h2>
+      <p class="lede" style="margin-top:22px;">Fundador de Destiny Real Estate. Acompaña a compradores mexicanos en preventa en Miami desde hace <span class="cifra">25</span> años.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 6 · DETALLES DEL EVENTO ══════════ -->
+<section class="section" data-screen-label="Detalles del evento">
+  <div class="wrap" style="max-width:820px;">
+    <span class="eyebrow reveal">Detalles</span>
+    <h2 class="h-1 reveal" style="margin-top:16px;">Lo que necesitas <span class="serif-em">saber.</span></h2>
+    <dl class="detalles reveal">
+      <div><dt>Fecha</dt><dd>Martes <span class="cifra">10</span> de noviembre de <span class="cifra">2026</span></dd></div>
+      <div><dt>Hora</dt><dd>A partir de las <span class="cifra">10:00</span> a.&nbsp;m.</dd></div>
+      <div><dt>Lugar</dt><dd>Ciudad de México<small>La dirección exacta te la mandamos por WhatsApp al confirmar.</small></dd></div>
+      <div><dt>Cupo</dt><dd>Limitado</dd></div>
+      <div><dt>Costo</dt><dd>Sin costo, con confirmación previa</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ══════════ 7 · FORMULARIO ══════════
+     Lo dibuja assets/forms.js con la variante "beachhouse" (tipo lead).
+     Los campos, la página de gracias y el texto del botón viven ahí. -->
+<section class="section dark" id="confirmar" data-screen-label="Registro">
+  <div class="wrap registro">
+    <div class="reveal" style="text-align:center;margin-bottom:34px;">
+      <span class="eyebrow" style="justify-content:center;">10 de noviembre &middot; Ciudad de México</span>
+      <h2 class="h-1" style="margin-top:16px;">Confirma <span class="serif-em">tu lugar.</span></h2>
+    </div>
+    <div class="form reveal d1">
+      <div class="form__head"><h3 class="h-3">Confirma tu lugar</h3><span class="form__sub">10 de noviembre</span></div>
+      <div data-destiny-form="lead" data-variant="beachhouse"
+           data-context="Beach House Evento · LP1"></div>
+      <p class="form__secure">Te confirmamos por WhatsApp con la dirección exacta.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 8 · PREGUNTAS FRECUENTES ══════════ -->
+<section class="section" data-screen-label="Preguntas frecuentes">
+  <div class="wrap">
+    <h2 class="h-1 reveal" style="text-align:center;">Preguntas <span class="serif-em">frecuentes.</span></h2>
+    <div class="preguntas reveal">
+      <details><summary>¿Tiene costo?</summary><p>No. La entrada es sin costo y con confirmación previa.</p></details>
+      <details><summary>¿Tengo que llevar algo?</summary><p>No. Solo tus preguntas.</p></details>
+      <details><summary>¿Puedo comprar desde México?</summary><p>Sí. No necesitas mudarte ni tener residencia; todo se firma a distancia.</p></details>
+      <details><summary>¿Y si no puedo asistir?</summary><p>Escríbenos por WhatsApp y te agendamos una sesión 1 a 1 con Oscar.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 9 · CIERRE ══════════ -->
+<section class="section" data-screen-label="Cierre" style="background:var(--ink-deep);">
+  <div class="wrap" style="text-align:center;">
+    <p class="cierre__linea reveal">Los lugares se asignan <span class="serif-em">en orden de confirmación.</span></p>
+    <div class="reveal d1" style="margin-top:38px;">
+      <a class="btn btn-gold" href="#confirmar">Confirmar mi lugar <span class="ar">&#8594;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PIE MÍNIMO — sin menú: ningún enlace compite con el registro ══════════ -->
+<footer class="foot" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot__top" style="grid-template-columns:1fr;">
+      <div class="foot__brand">
+        <img src="/assets/logo-light@2x.png" alt="Destiny Real Estate" style="height:42px;width:auto;margin-bottom:22px;" width="270" height="68" loading="lazy" decoding="async">
+        <p>Más de 25 años curando los activos inmobiliarios de mayor protección patrimonial en Miami para el inversionista mexicano exigente.</p>
+      </div>
+    </div>
+    <div class="foot__bot"><span>&copy; 2026 Destiny Real Estate. Todos los derechos reservados. &middot; <a href="/privacidad.html" style="color:inherit;text-decoration:underline;">Aviso de Privacidad</a> &middot; <a href="#" id="cookiePrefs" style="color:inherit;text-decoration:underline;">Preferencias de cookies</a></span><span>Miami &middot; FL &middot; USA — Ciudad de México &middot; MX</span></div>
+    <p class="foot__legal" style="margin-top:2px;font-size:12px;opacity:.6;max-width:90ch;">Beach House es un desarrollo de Turnberry y LeFrak. Renders ilustrativos; precios, disponibilidad y especificaciones sujetos a cambio sin previo aviso. Esto no es una oferta de venta donde la ley lo prohíba. Información con fines informativos; no constituye asesoría de inversión, fiscal ni legal personalizada.</p>
+  </div>
+</footer>
+
+<!-- CTA fijo en móvil: el tráfico de Instagram y Facebook llega en celular. -->
+<div class="lp-sticky"><a class="btn btn-gold" href="#confirmar">Confirmar mi lugar</a></div>
+
+<script>
+  /* Dos cosas mínimas, sin librerías:
+     1. la barra de navegación cambia a fondo claro al bajar,
+     2. las secciones aparecen al entrar en pantalla.
+     No se carga assets/data.js: esta landing no pinta catálogo. */
+  (function () {
+    var nav = document.getElementById("nav");
+    function alBajar() { if (nav) nav.classList.toggle("scrolled", window.scrollY > 40); }
+    alBajar();
+    window.addEventListener("scroll", alBajar, { passive: true });
+
+    var reveals = document.querySelectorAll(".reveal:not(.in)");
+    if (!("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(reveals, function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+    Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
+  })();
+</script>
+
+<!-- CAPA DE MEDICIÓN — el orden importa: tracking.js antes que forms.js.
+     forms.js v15 es la versión que trae la variante "beachhouse". -->
+<script src="/assets/tracking.js?v=10"></script>
+<script src="/assets/forms.js?v=15"></script>
+<!-- FIN CAPA DE MEDICIÓN -->
+</body>
+</html>

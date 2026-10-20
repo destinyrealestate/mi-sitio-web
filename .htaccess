@@ -2,6 +2,9 @@
 AddDefaultCharset UTF-8
 <IfModule mod_mime.c>
   AddType "text/html; charset=UTF-8" .html .htm
+  # El .ics de "Agregar al calendario" (gracias-beach-house): con este tipo
+  # el teléfono lo abre en el calendario en lugar de mostrarlo como texto.
+  AddType "text/calendar; charset=UTF-8" .ics
 </IfModule>
 
 # ============================================================
@@ -156,6 +159,16 @@ AddDefaultCharset UTF-8
   RewriteRule ^(sesion-cancun-lp2|sesion-cancun-lp3)$   $1.html   [L]
   RewriteRule ^(sesion-cancun-lp2|sesion-cancun-lp3)/$  /$1       [R=301,L]
 
+  # ----------------------------------------------------------
+  # Presentación privada de Beach House (CDMX, 10 de noviembre de 2026).
+  # Pauta BOFU desde el 3 de noviembre. La original y su gracias van
+  # limpias; las variantes A/B (noindex, canónica a la original) también.
+  # Cuando pase el evento, apuntar las tres a /proyectos/beach-house-by-turnberry.
+  # Ver BEACH-HOUSE-EVENTO.md.
+  # ----------------------------------------------------------
+  RewriteRule ^(beach-house-presentacion|beach-house-presentacion-lp2|beach-house-presentacion-lp3|gracias-beach-house)$   $1.html   [L]
+  RewriteRule ^(beach-house-presentacion|beach-house-presentacion-lp2|beach-house-presentacion-lp3|gracias-beach-house)/$  /$1       [R=301,L]
+
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
 
@@ -205,6 +218,8 @@ AddDefaultCharset UTF-8
   # descarta la query: el destino no arrastra ?p= ni ?z=.
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=mandarin-oriental(&|$)
   RewriteRule ^Propiedad\.html$ /proyectos/mandarin-oriental? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)(p|proj)=beach-house-by-turnberry(&|$)
+  RewriteRule ^Propiedad\.html$ /proyectos/beach-house-by-turnberry? [R=301,L]
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=house-of-wellness(&|$)
   RewriteRule ^Propiedad\.html$ /proyectos/house-of-wellness? [R=301,L]
   RewriteCond %{QUERY_STRING} (^|&)(p|proj)=bentley-residences-miami(&|$)

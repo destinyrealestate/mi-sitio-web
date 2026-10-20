@@ -322,6 +322,18 @@
          cerrada desde el registro y no hay que perseguir a nadie después. */
       opciones: ["8 de octubre", "9 de octubre"]
     },
+    /* ---- Presentación de Beach House · CDMX · 10 de noviembre de 2026 ----
+       WhatsApp con selector de país: el brief pide guardar el teléfono en
+       formato internacional (+52 y 10 dígitos) y saber el país del
+       contacto. El valor viaja ya armado ("+525512345678") en `telefono`,
+       y el país en extra.pais_telefono; ver campoHTML y payload. */
+    whatsapp_pais: {
+      tipo: "telpais", label: "WhatsApp", ph: "55 1234 5678",
+      req: true, err: "Ingresa tu WhatsApp a 10 dígitos.",
+      ladas: [["+52", "México"], ["+1", "Estados Unidos / Canadá"], ["+34", "España"],
+              ["+57", "Colombia"], ["+502", "Guatemala"], ["+506", "Costa Rica"],
+              ["+507", "Panamá"], ["+51", "Perú"], ["+56", "Chile"], ["+54", "Argentina"]]
+    },
     mensaje: {
       tipo: "textarea", label: "Mensaje (opcional)",
       ph: "Cuéntanos qué estás buscando", req: false, max: 600
@@ -410,6 +422,13 @@
       campos: ["nombre", "telefono", "email", "rango_sesion", "intereses", "dia_sesion"],
       meta: "Lead",
       gracias: "/gracias-cancun", cta: "Quiero mi lugar"
+    },
+    /* Presentación privada de Beach House (CDMX, 10-nov-2026). Hereda del
+       tipo `lead`: el brief pide que dispare Lead con form_type "lead". Tres
+       campos y nada más: cada campo extra baja la conversión. */
+    beachhouse: {
+      campos: ["nombre", "whatsapp_pais", "email"],
+      gracias: "/gracias-beach-house", cta: "Confirmar mi lugar"
     }
   };
 
@@ -639,6 +658,18 @@
         "<legend>" + etiqueta + "</legend>" +
         '<div class="opts">' + ops2 + "</div>" +
         '<span class="err" id="' + eid + '">' + esc(c.err || "Requerido.") + "</span></fieldset>";
+    } else if (c.tipo === "telpais") {
+      /* Lada + número en una sola fila. El <label> apunta al número, que es
+         lo que la persona escribe; el select lleva su propio aria-label. */
+      var ls = "";
+      for (var q = 0; q < c.ladas.length; q++) {
+        ls += '<option value="' + esc(c.ladas[q][0]) + '"' + (q === 0 ? " selected" : "") + ">" +
+          esc(c.ladas[q][1]) + " " + esc(c.ladas[q][0]) + "</option>";
+      }
+      control = '<div class="telpais">' +
+        '<select name="' + nombre + '_lada" aria-label="País del WhatsApp">' + ls + "</select>" +
+        '<input type="tel" id="' + fid + '" name="' + nombre + '" inputmode="numeric" autocomplete="tel-national"' +
+        (c.ph ? ' placeholder="' + esc(c.ph) + '"' : "") + ' maxlength="20"' + req + aria + "></div>";
     } else if (c.tipo === "textarea") {
       control = '<textarea id="' + fid + '" name="' + nombre + '" rows="3"' +
         (c.max ? ' maxlength="' + c.max + '"' : "") +
@@ -727,6 +758,12 @@
       return Array.prototype.map.call(marcados, function (n) { return n.value; }).join(", ");
     }
     var ctrl = form.querySelector('[name="' + nombre + '"]');
+    if (c && c.tipo === "telpais") {
+      /* Se devuelve ya en formato internacional: "+52" + 10 dígitos. */
+      var lada = form.querySelector('[name="' + nombre + '_lada"]');
+      var num = ctrl ? digitos(ctrl.value) : "";
+      return num ? (lada ? lada.value : "") + num : "";
+    }
     return ctrl ? ctrl.value.trim() : "";
   }
 
@@ -739,6 +776,19 @@
     if (nombre === "email") return /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v);
     if (nombre === "telefono") { var d = digitos(v); return d.length >= 10 && d.length <= 15; }
     if (nombre === "nombre") return v.length >= 2;
+    if (c.tipo === "telpais") {
+      // México: exactamente 10 dígitos. Otros países: de 6 a 12.
+      // La lada se busca en la lista, no con una regex: "+52" + "55…" se
+      // confundiría con una lada de tres dígitos.
+      for (var q = 0; q < c.ladas.length; q++) {
+        var l = c.ladas[q][0];
+        if (v.indexOf(l) !== 0) continue;
+        var n = v.length - l.length;
+        if (!/^\d+$/.test(v.slice(l.length))) return false;
+        return l === "+52" ? n === 10 : n >= 6 && n <= 12;
+      }
+      return false;
+    }
     return true;
   }
 
@@ -746,7 +796,7 @@
     var wrap = form.querySelector('.field[data-campo="' + nombre + '"]');
     if (!wrap) return;
     wrap.classList.toggle("error", !ok);
-    var ctrl = wrap.querySelector("input,select,textarea");
+    var ctrl = wrap.querySelector('input[type="tel"]') || wrap.querySelector("input,select,textarea");
     if (ctrl) {
       if (ok) ctrl.removeAttribute("aria-invalid");
       else ctrl.setAttribute("aria-invalid", "true");
@@ -792,7 +842,7 @@
 
       nombre: datos.nombre || null,
       email: datos.email || null,
-      telefono: datos.telefono || null,
+      telefono: datos.telefono || datos.whatsapp_pais || null,
       mensaje: datos.mensaje || null,
 
       desarrollo_slug: ctx.desarrollo_slug || null,
@@ -816,7 +866,14 @@
     for (var k in datos) {
       if (!Object.prototype.hasOwnProperty.call(datos, k)) continue;
       if (k === "nombre" || k === "email" || k === "telefono" || k === "mensaje") continue;
+      if (k === "whatsapp_pais") continue;  // ya viaja en `telefono`
       if (datos[k]) p.extra[k] = datos[k];
+    }
+    if (datos.whatsapp_pais) {
+      var sel = form.querySelector('[name="whatsapp_pais_lada"]');
+      if (sel && sel.selectedIndex >= 0) {
+        p.extra.pais_telefono = CAMPOS.whatsapp_pais.ladas[sel.selectedIndex][1];
+      }
     }
     return p;
   }
