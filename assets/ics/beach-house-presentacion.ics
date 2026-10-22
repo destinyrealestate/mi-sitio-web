@@ -5,9 +5,10 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:beach-house-presentacion-20261110@destiny.mx
-DTSTAMP:20261019T000000Z
-DTSTART:20261110T160000Z
-DTEND:20261110T180000Z
+DTSTAMP:20261022T000000Z
+DTSTART:20261111T160000Z
+DTEND:20261111T180000Z
+SEQUENCE:1
 SUMMARY:Presentación privada de Beach House · Destiny Real Estate
 LOCATION:Ciudad de México (la dirección exacta llega por WhatsApp)
 DESCRIPTION:Presentación privada de Beach House by Turnberry con Oscar Chapa.\nA partir de las 10:00 a. m.\nLa dirección exacta te la mandamos por WhatsApp.\nDudas: https://api.whatsapp.com/send?phone=525611659009

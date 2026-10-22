@@ -322,7 +322,7 @@
          cerrada desde el registro y no hay que perseguir a nadie después. */
       opciones: ["8 de octubre", "9 de octubre"]
     },
-    /* ---- Presentación de Beach House · CDMX · 10 de noviembre de 2026 ----
+    /* ---- Presentación de Beach House · CDMX · 11 de noviembre de 2026 ----
        WhatsApp con selector de país: el brief pide guardar el teléfono en
        formato internacional (+52 y 10 dígitos) y saber el país del
        contacto. El valor viaja ya armado ("+525512345678") en `telefono`,
@@ -430,7 +430,7 @@
       meta: "Lead",
       gracias: "/gracias-cancun", cta: "Quiero mi lugar"
     },
-    /* Presentación privada de Beach House (CDMX, 10-nov-2026). Hereda del
+    /* Presentación privada de Beach House (CDMX, 11-nov-2026). Hereda del
        tipo `lead`: el brief pide que dispare Lead con form_type "lead".
        Pocos campos: cada campo extra baja la conversión. */
     beachhouse: {

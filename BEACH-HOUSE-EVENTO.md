@@ -1,4 +1,4 @@
-# Landing del evento — Presentación privada de Beach House (CDMX, 10 nov 2026)
+# Landing del evento — Presentación privada de Beach House (CDMX, 11 nov 2026)
 
 Página para confirmar asistencia a la presentación presencial de Beach House by
 Turnberry. Público tibio (registrados TOFU-MOFU, interacción con anuncios, 50% de
@@ -17,7 +17,7 @@ de WhatsApp.
 | `beach-house-presentacion-lp2.html` | Variante A/B: el formulario dentro del hero y otra vez en el bloque 7 |
 | `beach-house-presentacion-lp3.html` | Variante A/B: un solo formulario, al cierre |
 | `gracias-beach-house.html` | Gracias: "Agregar al calendario" (.ics) + WhatsApp. URL: `/gracias-beach-house` (noindex) |
-| `assets/ics/beach-house-presentacion.ics` | Evento de calendario: 10-nov-2026, 10:00–12:00 hora CDMX, aviso 2 h antes |
+| `assets/ics/beach-house-presentacion.ics` | Evento de calendario: 11-nov-2026, 10:00–12:00 hora CDMX, aviso 2 h antes |
 | `assets/forms.js` | Variante `beachhouse` y el campo `whatsapp_pais` (selector de país) |
 | `assets/img/beachhouse/` | Renders (los mismos de la ficha `/proyectos/beach-house-by-turnberry`) |
 
@@ -99,7 +99,7 @@ El video opcional de Oscar (15 s) no está: no hay material.
    **Correo de confirmación al registrado (2026-10-19):** después del aviso interno
    hay un router con dos ramas: el PDF de guía/propiedad (sin cambios) y, solo si
    `bh_evento = "si"`, el correo "Tu lugar está apartado — Presentación de Beach
-   House, 10 de noviembre" con fecha, hora, lugar, botón al .ics y enlace a WhatsApp.
+   House, 11 de noviembre" con fecha, hora, lugar, botón al .ics y enlace a WhatsApp.
    Va con copia a camile@destiny.mx. Sale de carlos.cataneo@destiny.mx (la conexión de Outlook del escenario), así que
    las respuestas llegan ahí. El router hace falta porque en un flujo lineal un
    filtro que no pasa corta todo lo que sigue. Las demás landings no mandan correo
@@ -111,5 +111,5 @@ El video opcional de Oscar (15 s) no está: no hay material.
    o con una prueba desde un navegador normal).
 4. **Comprobar que el escenario de Make está ENCENDIDO** antes de mandar tráfico
    (apagado responde 410 y no se guarda nada).
-5. **Después del 10 de noviembre:** noindex en la LP1 y mandar las tres URLs a
+5. **Después del 11 de noviembre:** noindex en la LP1 y mandar las tres URLs a
    `/proyectos/beach-house-by-turnberry` desde `.htaccess`.

@@ -160,7 +160,7 @@ AddDefaultCharset UTF-8
   RewriteRule ^(sesion-cancun-lp2|sesion-cancun-lp3)/$  /$1       [R=301,L]
 
   # ----------------------------------------------------------
-  # Presentación privada de Beach House (CDMX, 10 de noviembre de 2026).
+  # Presentación privada de Beach House (CDMX, 11 de noviembre de 2026).
   # Pauta BOFU desde el 3 de noviembre. La original y su gracias van
   # limpias; las variantes A/B (noindex, canónica a la original) también.
   # Cuando pase el evento, apuntar las tres a /proyectos/beach-house-by-turnberry.
