@@ -68,10 +68,19 @@ Tipo `lead`: `generate_lead` en GTM y `Lead` en Meta, igual que Beach House.
 
 ## Pendientes fuera del sitio
 
-1. **Make (escenario 5871285):** variable `how_evento` (`form_variant =
-   "houseofwellness"`) con el mismo patrón que `bh_evento`: origen "Web House of
-   Wellness Evento", `dst_propiedad` "House of Wellness", asunto propio y rama de
-   confirmación al registrado (18 de noviembre, con copia a camile@destiny.mx).
+1. **Make (escenario 5871285) — HECHO el 2026-10-25.** En el módulo 2 se sumaron
+   `how_evento` y tres variables genéricas: `evento` ("si" para Beach House o
+   House of Wellness), `evento_nombre` y `evento_propiedad`. HubSpot, la nota y el
+   aviso interno ya leen esas (Beach House sale igual que antes). Con House of
+   Wellness: origen "Web House of Wellness Evento", `dst_propiedad` "House of
+   Wellness", asunto "Prospecto web House of Wellness Evento — [nombre]". El
+   router tiene una tercera rama (filtro `how_evento = si`): el correo "Tu lugar
+   está apartado — Presentación de House of Wellness, 18 de noviembre" con el
+   .ics y WhatsApp, con copia a camile@destiny.mx. La nota de HubSpot y el aviso
+   suman, para todos, `extra.asistentes`. **Falta probarlo con un envío real**
+   cuando las páginas estén en producción.
+   Para un tercer evento: agregar su `form_variant` a `evento`, `evento_nombre`
+   y `evento_propiedad`, una variable `xx_evento` y una rama más en el router.
 2. **Meta:** conversión personalizada "Confirmación evento House of Wellness"
    (Lead + URL contiene `gracias-house-of-wellness`).
 3. **Comprobar que el escenario de Make está encendido** antes de mandar tráfico.
