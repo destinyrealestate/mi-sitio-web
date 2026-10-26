@@ -85,9 +85,10 @@
   if (B && $("#homeBlogMain")) {
     const f = B.POSTS.slice(0, 5);
     // La portada va de fondo, detrás del texto. El velo lo pone el CSS.
+    // Siempre lazy: el blog está muy abajo y en eager le robaba ~480 KB al LCP.
     const cover = (p, eager) =>
       `<div class="fpost__img"><img src="${D.imgURL(p.img)}" alt="${p.title}"` +
-      ` loading="${eager ? "eager" : "lazy"}" decoding="async" referrerpolicy="no-referrer"` +
+      ` loading="lazy" decoding="async" referrerpolicy="no-referrer"` +
       ` onerror="this.parentNode.classList.add('noimg')"></div>`;
     const m = f[0];
     $("#homeBlogMain").innerHTML =
@@ -126,30 +127,59 @@
   }
 })();
 
-/* ---------- Hero: carrusel de proyectos premium de marca ---------- */
+/* ---------- Hero: carrusel de proyectos premium de marca ----------
+   La primera foto es la que mide Google como LCP. Antes se precargaban las
+   seis al arrancar (~1.3 MB en JPG) y le peleaban el ancho de banda en móvil.
+   Ahora el carrusel espera a que termine de cargar la página y sólo pide la
+   foto siguiente, en WebP y del ancho que necesita la pantalla. */
 (function () {
   var slides = [
-    ["assets/img/stregis-brickell/pool.jpg", "St. Regis Residences · Brickell"],
-    ["assets/img/mandarin/resortpool.jpg", "Mandarin Oriental · Brickell"],
-    ["assets/img/faena/infinitypool.jpg", "Faena Residences · Miami River"],
-    ["assets/img/fourseasons-grove/terrace.jpg", "Four Seasons · Coconut Grove"],
-    ["assets/img/cipriani/pool.jpg", "Cipriani Residences · Brickell"],
-    ["assets/img/delano/rooftoppool.jpg", "Delano · Downtown"]
+    ["assets/img/stregis-brickell/pool", "St. Regis Residences · Brickell"],
+    ["assets/img/mandarin/resortpool", "Mandarin Oriental · Brickell"],
+    ["assets/img/faena/infinitypool", "Faena Residences · Miami River"],
+    ["assets/img/fourseasons-grove/terrace", "Four Seasons · Coconut Grove"],
+    ["assets/img/cipriani/pool", "Cipriani Residences · Brickell"],
+    ["assets/img/delano/rooftoppool", "Delano · Downtown"]
   ];
   var a = document.getElementById("heroImg"),
       b = document.getElementById("heroImg2"),
       proj = document.getElementById("heroProj");
   if (!a || !b) return;
-  slides.forEach(function (s) { var i = new Image(); i.src = s[0]; }); // preload
+  var SRCSET = function (base) { return base + "-800.webp 800w, " + base + "-1280.webp 1280w, " + base + "-1920.webp 1600w"; };
   var idx = 0, top = a;
-  setInterval(function () {
-    idx = (idx + 1) % slides.length;
-    var next = (top === a) ? b : a;
-    var go = function () {
-      next.classList.add("is-on"); top.classList.remove("is-on");
-      top = next; if (proj) proj.textContent = slides[idx][1];
-    };
-    next.alt = slides[idx][1]; next.src = slides[idx][0];
-    if (next.complete && next.naturalWidth) go(); else next.onload = go;
-  }, 6000);
+  var load = function (img, i) { img.sizes = "100vw"; img.srcset = SRCSET(slides[i][0]); img.src = slides[i][0] + ".jpg"; };
+  var start = function () {
+    var pre = new Image(); load(pre, 1); // sólo la siguiente
+    setInterval(function () {
+      idx = (idx + 1) % slides.length;
+      var next = (top === a) ? b : a;
+      var go = function () {
+        next.classList.add("is-on"); top.classList.remove("is-on");
+        top = next; if (proj) proj.textContent = slides[idx][1];
+        var p = new Image(); load(p, (idx + 1) % slides.length);
+      };
+      next.alt = slides[idx][1]; load(next, idx);
+      if (next.complete && next.naturalWidth) go(); else next.onload = go;
+    }, 6000);
+  };
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start);
+})();
+
+/* ---------- Fondos de sección bajo demanda ----------
+   Las secciones .secbg traen su foto en data-bg (ruta sin extensión) en lugar
+   de un background-image en línea: así el navegador no descarga las seis al
+   abrir la página. Se pide la WebP del ancho adecuado cuando la sección está
+   a ~600 px de entrar en pantalla. */
+(function () {
+  var els = Array.prototype.slice.call(document.querySelectorAll("[data-bg]"));
+  if (!els.length) return;
+  var w = Math.min(window.innerWidth * (window.devicePixelRatio || 1), 1920);
+  var size = w <= 800 ? 800 : w <= 1280 ? 1280 : 1920;
+  var paint = function (el) { el.style.backgroundImage = "url('" + el.getAttribute("data-bg") + "-" + size + ".webp')"; el.removeAttribute("data-bg"); };
+  if (!("IntersectionObserver" in window)) { els.forEach(paint); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { paint(e.target); io.unobserve(e.target); } });
+  }, { rootMargin: "600px 0px" });
+  els.forEach(function (el) { io.observe(el); });
 })();
