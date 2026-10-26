@@ -1206,3 +1206,17 @@ p { text-wrap: pretty; }
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   white-space: pre-wrap; word-break: break-word; max-height: 340px; overflow: auto;
 }
+
+/* ============================================================
+   LCP — el texto del hero no arranca invisible
+   ============================================================
+   .reveal parte de opacity:0 y espera a que app.js le ponga .in. En el hero
+   eso dejaba el H1 oculto hasta que bajaban data.js, blog-data.js y app.js,
+   y Google no cuenta como pintado un elemento transparente: el LCP en móvil
+   llegaba a 13 s. Aquí el hero sólo se desliza; nunca está transparente. */
+.hero .reveal { opacity: 1; transform: none; transition: none; animation: heroUp .9s var(--ease) both; }
+.hero .reveal.d1 { animation-delay: .08s; }
+.hero .reveal.d2 { animation-delay: .16s; }
+.hero .reveal.d3 { animation-delay: .24s; }
+@keyframes heroUp { from { transform: translateY(26px); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hero .reveal { animation: none; } }
