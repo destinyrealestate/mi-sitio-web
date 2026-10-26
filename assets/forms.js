@@ -436,6 +436,12 @@
     beachhouse: {
       campos: ["nombre", "whatsapp_pais", "email", "asistentes"],
       gracias: "/gracias-beach-house", cta: "Confirmar mi lugar"
+    },
+    /* Presentación privada de House of Wellness (CDMX, 18-nov-2026). Mismo
+       formulario que Beach House; solo cambia la página de gracias. */
+    houseofwellness: {
+      campos: ["nombre", "whatsapp_pais", "email", "asistentes"],
+      gracias: "/gracias-house-of-wellness", cta: "Confirmar mi lugar"
     }
   };
 

@@ -2,7 +2,8 @@
 AddDefaultCharset UTF-8
 <IfModule mod_mime.c>
   AddType "text/html; charset=UTF-8" .html .htm
-  # El .ics de "Agregar al calendario" (gracias-beach-house): con este tipo
+  # El .ics de "Agregar al calendario" (gracias-beach-house y
+  # gracias-house-of-wellness): con este tipo
   # el teléfono lo abre en el calendario en lugar de mostrarlo como texto.
   AddType "text/calendar; charset=UTF-8" .ics
 </IfModule>
@@ -168,6 +169,15 @@ AddDefaultCharset UTF-8
   # ----------------------------------------------------------
   RewriteRule ^(beach-house-presentacion|beach-house-presentacion-lp2|beach-house-presentacion-lp3|gracias-beach-house)$   $1.html   [L]
   RewriteRule ^(beach-house-presentacion|beach-house-presentacion-lp2|beach-house-presentacion-lp3|gracias-beach-house)/$  /$1       [R=301,L]
+
+  # ----------------------------------------------------------
+  # Presentación privada de House of Wellness (CDMX, 18 de noviembre de 2026).
+  # Mismo esquema que Beach House: la original, sus variantes A/B (noindex,
+  # canónica a la original) y su gracias. Cuando pase el evento, apuntar las
+  # tres a /proyectos/house-of-wellness. Ver HOUSE-OF-WELLNESS-EVENTO.md.
+  # ----------------------------------------------------------
+  RewriteRule ^(house-of-wellness-presentacion|house-of-wellness-presentacion-lp2|house-of-wellness-presentacion-lp3|gracias-house-of-wellness)$   $1.html   [L]
+  RewriteRule ^(house-of-wellness-presentacion|house-of-wellness-presentacion-lp2|house-of-wellness-presentacion-lp3|gracias-house-of-wellness)/$  /$1       [R=301,L]
 
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)$   $1.html   [L]
   RewriteRule ^(gracias-preconstruccion|gracias-dolares|gracias-guia)/$  /$1       [R=301,L]
