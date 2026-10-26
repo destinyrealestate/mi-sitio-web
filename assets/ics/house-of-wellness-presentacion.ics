@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Destiny Real Estate//House of Wellness//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:house-of-wellness-presentacion-20261118@destiny.mx
+DTSTAMP:20261025T000000Z
+DTSTART:20261118T160000Z
+DTEND:20261118T180000Z
+SEQUENCE:0
+SUMMARY:Presentación privada de House of Wellness · Destiny Real Estate
+LOCATION:Ciudad de México (la dirección exacta llega por WhatsApp)
+DESCRIPTION:Presentación privada de House of Wellness (Brickell, Miami) con Oscar Chapa.\nA partir de las 10:00 a. m.\nLa dirección exacta te la mandamos por WhatsApp.\nDudas: https://api.whatsapp.com/send?phone=525611659009
+BEGIN:VALARM
+TRIGGER:-PT2H
+ACTION:DISPLAY
+DESCRIPTION:Presentación de House of Wellness
+END:VALARM
+END:VEVENT
+END:VCALENDAR

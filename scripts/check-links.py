@@ -48,7 +48,10 @@ RUTAS_LIMPIAS = {"/agenda", "/club", "/radar", "/scorecard", "/",
                  "/gracias-cancun",
                  # Presentación de Beach House, sus variantes A/B y su gracias
                  "/beach-house-presentacion", "/beach-house-presentacion-lp2",
-                 "/beach-house-presentacion-lp3", "/gracias-beach-house"}
+                 "/beach-house-presentacion-lp3", "/gracias-beach-house",
+                 # Presentación de House of Wellness, sus variantes A/B y su gracias
+                 "/house-of-wellness-presentacion", "/house-of-wellness-presentacion-lp2",
+                 "/house-of-wellness-presentacion-lp3", "/gracias-house-of-wellness"}
 
 # Fichas con URL limpia: /proyectos/{slug} → proyectos/{slug}.html (y zonas).
 # Las sirve una reescritura del .htaccess; aquí basta con que exista el HTML.
