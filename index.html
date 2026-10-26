@@ -2,17 +2,15 @@
 <html lang="es-MX">
 <head>
 <meta charset="UTF-8">
-<!-- ATRIBUCIÓN Y CONSENTIMIENTO — no mover: van antes de GA4, Meta y GTM.
-     Todos los <script> del sitio llevan defer: se ejecutan EN ORDEN de aparición
-     al terminar de leer el HTML, así consent.js sigue corriendo antes que tags.js
-     y tags.js antes que tracking.js. Si se quita defer a uno, hay que quitárselo a todos. -->
-<script defer src="/assets/consent.js?v=8"></script>
-<script defer src="/assets/attribution.js?v=8"></script>
+<!-- ATRIBUCIÓN Y CONSENTIMIENTO — en el home, consent.js, attribution.js y tags.js
+     NO se cargan aquí: los carga, en este mismo orden, el cargador del final de la
+     página (busca "CARGADOR POST-PINTURA"), después de que sale el primer cuadro.
+     Los comentarios marcadores se quedan para que scripts/patch-head.py no los
+     vuelva a inyectar. -->
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://connect.facebook.net">
 <link rel="dns-prefetch" href="https://t.contentsquare.net">
 <!-- FIN ATRIBUCIÓN Y CONSENTIMIENTO -->
-<script defer src="/assets/tags.js?v=9"></script>
 <meta name="facebook-domain-verification" content="b6zj21403nje9dd2sqyjg44cx73ohz" />
 
 
@@ -635,12 +633,49 @@
 
 <a class="wafloat" href="https://api.whatsapp.com/send?phone=525611659009&text=Hola%2C%20quiero%20invertir%20en%20Miami%20con%20Destiny.%20Me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n%20de%20claridad." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .9 1.7 1.1 2 1.3.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.4z"/></svg></a>
 
-<script defer src="assets/data.js?v=63"></script>
-<script defer src="assets/blog-data.js?v=64"></script>
-<script defer src="assets/app.js?v=12"></script>
-<!-- CAPA DE MEDICIÓN -->
-<script defer src="/assets/tracking.js?v=10"></script>
-<script defer src="/assets/forms.js?v=17"></script>
+<!-- CAPA DE MEDICIÓN — CARGADOR POST-PINTURA
+     El título del hero es el LCP. Con <script defer> el HTML se leía tan rápido que
+     todos los scripts (y GTM, Meta, Contentsquare, que inyecta tags.js) corrían ANTES
+     de la primera pintura, y PageSpeed los cobraba en el LCP simulado (11.8 s).
+     Aquí se espera a que salga el primer cuadro y se inyectan en el MISMO orden de
+     siempre: async=false hace que se ejecuten en el orden en que se agregan, así
+     consent.js sigue corriendo antes que tags.js y tags.js antes que tracking.js.
+     Al subir el ?v= de cualquiera de estos scripts, cámbialo en esta lista. -->
+<script>
+(function () {
+  var S = [
+    "/assets/consent.js?v=8",
+    "/assets/attribution.js?v=8",
+    "/assets/tags.js?v=9",
+    "assets/data.js?v=63",
+    "assets/blog-data.js?v=64",
+    "assets/app.js?v=12",
+    "/assets/tracking.js?v=10",
+    "/assets/forms.js?v=17"
+  ];
+  var done = false;
+  function go() {
+    if (done) return; done = true;
+    S.forEach(function (src) {
+      var e = document.createElement("script");
+      e.src = src; e.async = false;
+      document.body.appendChild(e);
+    });
+  }
+  // Se espera la primera pintura real (first-contentful-paint). Donde el navegador
+  // no la reporta, dos requestAnimationFrame garantizan que ya salió un cuadro.
+  // En una pestaña abierta en segundo plano no se pinta nada: el setTimeout es la red.
+  try {
+    var po = new PerformanceObserver(function (l) {
+      if (l.getEntriesByName("first-contentful-paint").length) { po.disconnect(); setTimeout(go, 0); }
+    });
+    po.observe({ type: "paint", buffered: true });
+  } catch (e) {
+    requestAnimationFrame(function () { requestAnimationFrame(function () { setTimeout(go, 0); }); });
+  }
+  setTimeout(go, 1500);
+})();
+</script>
 <!-- FIN CAPA DE MEDICIÓN -->
 </body>
 </html>
