@@ -73,6 +73,15 @@ OVERRIDES = {
     # el API no las devuelve; su portada ya está subida al blog. Al publicarse,
     # el blog manda la misma URL y estas líneas se pueden borrar.
     "house-of-wellness-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/house-of-wellness-brickell-analisis-800x560.jpg",
+    # Semanas 43 y 44 (publicadas el 2026-10-25). Cuatro van sin imagen destacada
+    # hasta que lleguen las de ChatGPT: mientras, una foto del banco local; al
+    # subir su portada en WordPress, borrar su línea. Beach House está programada
+    # (28 oct) y ya tiene portada en el blog: su línea sobra cuando se publique.
+    "invertir-en-miami-desde-mexico-tipo-de-cambio":  "assets/img/hero-bahia.jpg",
+    "seguro-condominio-florida-ho6-huracan":          "assets/img/hero-turquesa.jpg",
+    "tasas-hipotecarias-preconstruccion-miami-2026":  "assets/img/hero-living.jpg",
+    "apartar-tasa-credito-preconstruccion-miami":     "assets/img/blog-skyline2.jpg",
+    "beach-house-turnberry-sole-mia-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/beach-house-turnberry-sole-mia-analisis-800x560.jpg",
     "precio-congelado-preventa-miami":     "https://blog.destiny.mx/wp-content/uploads/2026/10/precio-congelado-preventa-miami-800x560.jpg",
 }
 

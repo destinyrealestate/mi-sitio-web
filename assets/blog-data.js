@@ -10,6 +10,12 @@ window.DESTINY_BLOG = (function () {
   //     Los que no lo llevan se leen con Articulo.html, que necesita su archivo
   //     en articles/<slug>.html; sin ese archivo la página dice "se está preparando".
   const ROWS = [
+    ["¿Se puede apartar la tasa del crédito en preconstrucción? Cuánto dura y qué sí se adelanta", "apartar-tasa-credito-preconstruccion-miami", 2026, "30 oct 2026", 9, 30, 1],
+    ["Beach House en SoLé Mia, North Miami: desde $855,000 frente a una laguna de 7 acres", "beach-house-turnberry-sole-mia-analisis", 2026, "28 oct 2026", 9, 28, 1],
+    ["Tasas al 7.32%: por qué en preconstrucción el crédito se pide hasta la entrega", "tasas-hipotecarias-preconstruccion-miami-2026", 2026, "26 oct 2026", 9, 26, 1],
+    ["Seguro de condominio en Florida: qué cubre el edificio y qué cubres tú", "seguro-condominio-florida-ho6-huracan", 2026, "23 oct 2026", 9, 23, 1],
+    ["Bentley Residences Sunny Isles: 630 millones prestados con más de la mitad vendida", "bentley-residences-prestamo-630-millones", 2026, "21 oct 2026", 9, 21, 1],
+    ["Invertir en Miami desde México con el dólar a 18: por qué pagar en partes te protege", "invertir-en-miami-desde-mexico-tipo-de-cambio", 2026, "19 oct 2026", 9, 19, 1],
     ["Tu precio se queda: cómo funciona el precio en la preventa en Miami", "precio-congelado-preventa-miami", 2026, "16 oct 2026", 9, 16, 1],
     ["House of Wellness Brickell: precios, plan de pagos y el bienestar incluido en tu cuota", "house-of-wellness-brickell-analisis", 2026, "14 oct 2026", 9, 14, 1],
     ["Los que más tienen compran en planos: qué nos enseñan los multimillonarios que llegaron a Miami", "multimillonarios-miami-compran-en-planos", 2026, "12 oct 2026", 9, 12, 1],
@@ -115,6 +121,12 @@ window.DESTINY_BLOG = (function () {
   // NO editar a mano el bloque de abajo: se reescribe completo. Si quieres
   // fijar la portada de un artículo, ponla en OVERRIDES dentro del script.
   const IMGS = { /* AUTO:INICIO */
+    "apartar-tasa-credito-preconstruccion-miami": "assets/img/blog-skyline2.jpg",
+    "beach-house-turnberry-sole-mia-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/beach-house-turnberry-sole-mia-analisis-800x560.jpg",
+    "tasas-hipotecarias-preconstruccion-miami-2026": "assets/img/hero-living.jpg",
+    "seguro-condominio-florida-ho6-huracan": "assets/img/hero-turquesa.jpg",
+    "bentley-residences-prestamo-630-millones": "https://blog.destiny.mx/wp-content/uploads/2026/10/bentley-residences-prestamo-630-millones-800x560.jpg",
+    "invertir-en-miami-desde-mexico-tipo-de-cambio": "assets/img/hero-bahia.jpg",
     "precio-congelado-preventa-miami": "https://blog.destiny.mx/wp-content/uploads/2026/10/precio-congelado-preventa-miami-800x560.jpg",
     "house-of-wellness-brickell-analisis": "https://blog.destiny.mx/wp-content/uploads/2026/10/house-of-wellness-brickell-analisis-800x560.jpg",
     "multimillonarios-miami-compran-en-planos": "https://blog.destiny.mx/wp-content/uploads/2026/10/multimillonarios-miami-compran-en-planos-800x560.jpg",
